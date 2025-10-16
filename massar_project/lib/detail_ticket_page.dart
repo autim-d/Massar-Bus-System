@@ -23,7 +23,7 @@ class DetailTicketPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             textDirection: TextDirection.rtl,
             children: [
-              Image.asset('assets/images/back.png', height: 28, width: 22),
+              Image.asset('assets/icons/back.png', height: 28, width: 22),
               const SizedBox(width: 8),
               const Text(
                 'تفاصيل التذكرة',
@@ -432,7 +432,7 @@ class DetailTicketPage extends StatelessWidget {
                           top: 20,
                           left: 30,
                           child: Image.asset(
-                            'assets/images/down.png',
+                            'assets/icons/down.png',
                             width: 20,
                             height: 15,
                           ),
