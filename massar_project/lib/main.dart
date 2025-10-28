@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'payment_success_page.dart';
 import 'edit_profile_screen.dart';
 import 'home.dart';
-
+import 'detail_ticket_page.dart';
 void main() {
   runApp(const MyApp());
 }
