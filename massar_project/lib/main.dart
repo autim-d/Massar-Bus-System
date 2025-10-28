@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'detail_ticket_page.dart';
 import 'payment_success_page.dart';
+import 'edit_profile_screen.dart';
+import 'home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,8 +34,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: const DetailTicketPage(),
+      //home: const DetailTicketPage(),
       //home:const PaymentSuccessPage(),
+      home: const HomePage(),
+     // home: const AccountScreen(),
     );
   }
 }

@@ -489,6 +489,7 @@ class DetailTicketPage extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
+                            // ignore: deprecated_member_use
                             color: Colors.black.withOpacity(0.05),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
