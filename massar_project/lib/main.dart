@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'payment_success_page.dart';
-import 'edit_profile_screen.dart';
-import 'home.dart';
-import 'detail_ticket_page.dart';
+import 'package:massar_project/Bawazir_Screens/Pages/spalsh.dart';
+
+// import 'package:massar_project/account_details_form_page.dart';
+// import 'payment_success_page.dart';
+// import 'edit_profile_screen.dart';
+// import 'home.dart';
+// import 'detail_ticket_page.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+//import 'package:flutter_svg/flutter_svg.dart'; 
+
 void main() {
+  Animate.restartOnHotReload = true; 
   runApp(const MyApp());
 }
 
@@ -13,32 +20,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: splash());
+    // return MaterialApp(
+    //   title: 'Masar Smart Transportation',
+    //   debugShowCheckedModeBanner: false,
+    //   theme: ThemeData(
+    //     fontFamily: 'ReadexPro',
+        
+    //     // Default font handles Arabic scripts well
+    //     primarySwatch: Colors.blue,
+    //   ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
       //home: const DetailTicketPage(),
       //home:const PaymentSuccessPage(),
-      home: const HomePage(),
+      
      // home: const AccountScreen(),
-    );
+    
   }
 }
 
