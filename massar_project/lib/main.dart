@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:massar_project/edit_photo_screen.dart';
 import 'payment_success_page.dart';
+// ignore: unused_import
 import 'edit_profile_screen.dart';
+// ignore: unused_import
 import 'home.dart';
+// ignore: unused_import
 import 'detail_ticket_page.dart';
 void main() {
   runApp(const MyApp());
@@ -36,7 +41,7 @@ class MyApp extends StatelessWidget {
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
       //home: const DetailTicketPage(),
       //home:const PaymentSuccessPage(),
-      home: const HomePage(),
+      home: const PaymentSuccessPage(),
      // home: const AccountScreen(),
     );
   }

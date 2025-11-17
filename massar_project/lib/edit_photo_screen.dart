@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'app_colors.dart';
 
 class EditPhotoScreen extends StatefulWidget {
   final String currentImage;
@@ -49,7 +50,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'تعديل الصورة',
-          toolbarColor: Colors.blue,
+          toolbarColor: AppColors.textEdit,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
@@ -73,7 +74,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
         ),
       ],
     );
-
+    
     if (croppedFile != null) {
       setState(() {
         imagePath = croppedFile.path;
