@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "969675850397",
+    "project_id": "massar-bus-system",
+    "storage_bucket": "massar-bus-system.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969675850397:android:9253976f2d8ab0d77fca74",
+        "android_client_info": {
+          "package_name": "com.example.massar_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969675850397-mckvc8fhk2nttv6r735p5t9boamojmi9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-vXMtbj77586Zdno2KVqoR2dlOtDhDFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969675850397-mckvc8fhk2nttv6r735p5t9boamojmi9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

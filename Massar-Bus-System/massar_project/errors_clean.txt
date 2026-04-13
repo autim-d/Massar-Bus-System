@@ -1,0 +1,31 @@
+﻿
+  error - The method 'DetailTicketPage' isn't defined for the type '_MainLayoutState' - 
+lib\core\navigation\main_layout.dart:21:5 - undefined_method
+  error - The values in a const list literal must be constants - lib\core\navigation\main_layout.dart:21:5 - 
+non_constant_list_element
+  error - The method 'DetailTicketPage' isn't defined for the type '_AcountState' - 
+lib\features\account\screens\account_screen.dart:97:85 - undefined_method
+  error - Target of URI doesn't exist: 'features/account/screens/edit_photo_screen.dart' - 
+lib\features\account\screens\edit_profile_screen.dart:5:8 - uri_does_not_exist
+  error - The method 'EditPhotoScreen' isn't defined for the type '_AccountScreenState' - 
+lib\features\account\screens\edit_profile_screen.dart:30:31 - undefined_method
+  error - Target of URI doesn't exist: 'app_colors.dart' - lib\features\account\screens\profile_screen.dart:4:8 - 
+uri_does_not_exist
+  error - Invalid constant value - lib\features\account\screens\profile_screen.dart:95:39 - invalid_constant
+  error - Undefined name 'AppColors' - lib\features\account\screens\profile_screen.dart:95:39 - undefined_identifier
+  error - Invalid constant value - lib\features\account\screens\profile_screen.dart:125:36 - invalid_constant
+  error - Undefined name 'AppColors' - lib\features\account\screens\profile_screen.dart:125:36 - undefined_identifier
+  error - Invalid constant value - lib\features\account\screens\profile_screen.dart:144:61 - invalid_constant
+  error - Undefined name 'AppColors' - lib\features\account\screens\profile_screen.dart:144:61 - undefined_identifier
+  error - The method 'DetailTicketPage' isn't defined for the type '_HomeState' - 
+lib\features\home\screens\home_screen.dart:120:85 - undefined_method
+  error - Target of URI doesn't exist: 'package:massar_project/ahmed/PaymentContinuationScreen%20copy.dart' - 
+lib\features\ticket\screens\order_summary_screen.dart:2:8 - uri_does_not_exist
+  error - The method 'PaymentContinuationScreen' isn't defined for the type '_OrdersummaryState' - 
+lib\features\ticket\screens\order_summary_screen.dart:469:81 - undefined_method
+  error - The method 'DetailTicketPage' isn't defined for the type 'PaymentSuccessPage' - 
+lib\features\ticket\screens\payment_success_screen.dart:189:55 - undefined_method
+  error - The method 'DetailTicketPage' isn't defined for the type '_TicketScreenState' - 
+lib\features\ticket\screens\ticket_list_screen.dart:104:85 - undefined_method
+
+
