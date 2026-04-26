@@ -1,17 +1,16 @@
-// lib/pages/VerificationMethodPage.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:massar_project/features/auth/screens/enter_code_screen.dart';
 
 
-// تأكد أن ملف EnterCodePage موجود في المسار التالي
-// import 'EnterCodePage.dart';
+// تأكد أن ملف EnterCodeScreen موجود في المسار التالي
+// import 'EnterCodeScreen.dart';
 
-class VerificationMethodPage extends StatelessWidget {
+class VerificationMethodScreen extends StatelessWidget {
   // نمرر رقم الهاتف لعرضه داخل البطاقة
   final String phoneNumber;
 
-  const VerificationMethodPage({super.key, required this.phoneNumber});
+  const VerificationMethodScreen({super.key, required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +78,8 @@ class VerificationMethodPage extends StatelessWidget {
                         // بطاقة واتساب قابلة للضغط
                         GestureDetector(
                           onTap: () {
-                            // عند الضغط ننتقل لصفحة EnterCodePage مع تمرير رقم الهاتف
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => EnterCodePage(phoneNumber: phoneNumber),
-                              ),
-                            );
+                            // عند الضغط ننتقل لصفحة EnterCodeScreen مع تمرير رقم الهاتف
+                            context.push('/otp', extra: phoneNumber);
                           },
                           child: Container(
                             width: double.infinity,

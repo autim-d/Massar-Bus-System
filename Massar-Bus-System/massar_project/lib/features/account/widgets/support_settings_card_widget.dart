@@ -7,13 +7,16 @@ class SupportSettingsCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.cardColor,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: AppColors.iconOf,
+          color: theme.dividerColor,
           width: 0.2,
         ),
       ),
@@ -29,35 +32,38 @@ class SupportSettingsCardWidget extends StatelessWidget {
                   const SizedBox(height: 7),
                   Text(
                     ' ${AppStrings.supportHelp} ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Divider(
+                  Divider(
                     thickness: 1,
-                    color: Color.fromARGB(92, 102, 112, 133),
+                    color: theme.dividerColor,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     '  ${AppStrings.appExperience} ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Divider(
+                  Divider(
                     height: 2,
-                    color: Color.fromARGB(80, 102, 112, 133),
+                    color: theme.dividerColor,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     ' ${AppStrings.settings}  ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:massar_project/core/constants/app_strings.dart';
-import 'package:massar_project/features/account/screens/profile_screen.dart';
 
 class AccountSettingsCardWidget extends StatelessWidget {
   const AccountSettingsCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.cardColor,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: AppColors.iconOf,
+          color: theme.dividerColor,
           width: 0.2,
         ),
       ),
@@ -29,33 +32,29 @@ class AccountSettingsCardWidget extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => const Profile(),
-                        ),
-                      );
+                      context.push('/account/profile');
                     },
                     child: Text(
                       ' ${AppStrings.myAccount} ',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: theme.textTheme.bodyLarge?.color,
                       ),
                     ),
                   ),
                   const SizedBox(height: 7),
-                  const Divider(
+                  Divider(
                     height: 4,
-                    color: Color.fromARGB(94, 102, 112, 133),
+                    color: theme.dividerColor,
                   ),
                   const SizedBox(height: 7),
                   Text(
                     ' ${AppStrings.saveLocation} ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 7),

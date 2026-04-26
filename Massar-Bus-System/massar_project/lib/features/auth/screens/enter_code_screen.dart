@@ -1,21 +1,19 @@
-// lib/pages/EnterCodePage.dart
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:massar_project/features/auth/screens/verification_method_screen.dart';
-import 'package:massar_project/features/home/screens/home_screen.dart';
+import 'package:flutter/gestures.dart';
+import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 
 
-class EnterCodePage extends StatefulWidget {
+class EnterCodeScreen extends StatefulWidget {
   final String phoneNumber;
-  const EnterCodePage({super.key, required this.phoneNumber});
+  const EnterCodeScreen({super.key, required this.phoneNumber});
 
   @override
-  State<EnterCodePage> createState() => _EnterCodePageState();
+  State<EnterCodeScreen> createState() => _EnterCodeScreenState();
 }
 
-class _EnterCodePageState extends State<EnterCodePage> {
+class _EnterCodeScreenState extends State<EnterCodeScreen> {
   final int fieldsCount = 4;
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
@@ -82,20 +80,15 @@ class _EnterCodePageState extends State<EnterCodePage> {
       // تأخير بسيط لتحسين الـ UX ثم التنقّل
       Future.delayed(const Duration(milliseconds: 250), () {
         if (!mounted) return;
-        // استبدل Home() باسم الصفحة الرئيسية في مشروعك إن اختلف
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => Home()),
-          (route) => false,
-        );
+        // استبدل HomeScreen() باسم الصفحة الرئيسية في مشروعك إن اختلف
+        context.go('/home');
       });
     }
   }
 
-  // إعادة الإرسال -> نعيد التوجيه إلى VerificationMethodPage
+  // إعادة الإرسال -> نعيد التوجيه إلى VerificationMethodScreen
   void _onResend() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => VerificationMethodPage(phoneNumber: widget.phoneNumber)),
-    );
+    context.pushReplacement('/verification', extra: widget.phoneNumber);
   }
 
   // بناء مربع رقم واحد

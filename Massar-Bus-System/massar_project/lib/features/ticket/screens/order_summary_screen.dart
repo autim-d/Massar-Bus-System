@@ -1,42 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
-import 'package:massar_project/features/ticket/screens/payment_continuation_screen.dart';
+import 'package:massar_project/features/home/models/trip_model.dart';
 
-class Ordersummary extends StatefulWidget {
-  const Ordersummary({super.key});
+// import '../models/trip_model.dart';
+
+class OrderSummaryScreen extends StatefulWidget {
+  final TripModel? trip;
+  const OrderSummaryScreen({super.key, this.trip});
 
   @override
-  State<Ordersummary> createState() => _OrdersummaryState();
+  State<OrderSummaryScreen> createState() => _OrderSummaryScreenState();
 }
 
-class _OrdersummaryState extends State<Ordersummary> {
+class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
+  late TripModel _trip;
+
+  @override
+  void initState() {
+    super.initState();
+    _trip = widget.trip ?? TripModel.sample();
+  }
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return SafeArea(
       child: Directionality(
         // <-- Important: RTL Layout
         textDirection: TextDirection.rtl,
 
         child: Scaffold(
-          backgroundColor: Color(0xffffffff),
+          backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: theme.appBarTheme.backgroundColor,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+              onPressed: () => context.pop(),
             ),
             title: Padding(
-              padding: EdgeInsetsGeometry.only(top: 17),
+              padding: const EdgeInsets.only(top: 17),
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsetsGeometry.only(left: 60, bottom: 20),
-                    child: const Text(
+                    padding: const EdgeInsets.only(left: 60, bottom: 20),
+                    child: Text(
                       "تذكرة اختيارك",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
+                        color: theme.textTheme.titleLarge?.color,
                       ),
                     ),
                   ),
@@ -49,20 +64,24 @@ class _OrdersummaryState extends State<Ordersummary> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(thickness: 1.5),
-                SizedBox(height: 35),
+                Divider(thickness: 1.5, color: theme.dividerColor),
+                const SizedBox(height: 35),
                 Padding(
-                  padding: EdgeInsetsGeometry.only(
+                  padding: const EdgeInsets.only(
                     right: 10,
                     left: 10,
                     bottom: 10,
                   ),
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     width: 375,
                     height: 400,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffE5D2D2), width: .7),
+                      color: theme.cardTheme.color,
+                      border: Border.all(
+                        color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xffE5D2D2),
+                        width: .7,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
@@ -72,45 +91,45 @@ class _OrdersummaryState extends State<Ordersummary> {
                         Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 4,
                               ),
-
                               child: Text(
-                                "اثنين, 18 سبتمبر 2025",
+                                _trip.date,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 16,
+                                  color: theme.textTheme.bodyLarge?.color,
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Padding(
-                          padding: EdgeInsetsGeometry.only(right: 10),
+                          padding: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.directions_bus,
                                 color: Color(0xff667085),
                               ),
-                              SizedBox(width: 6),
+                              const SizedBox(width: 6),
                               Text(
-                                "الباص 01 - الوصول في 15:30 الى الشرج  ",
-                                style: TextStyle(color: Color(0xff667085)),
+                                "${_trip.busName} - الوصول في ${_trip.arrivalTime} الى ${_trip.to}",
+                                style: const TextStyle(color: Color(0xff667085)),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsetsGeometry.only(right: 8),
+                              padding: const EdgeInsets.only(right: 8),
                               child: Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
                                   vertical: 4,
                                 ),
@@ -118,67 +137,73 @@ class _OrdersummaryState extends State<Ordersummary> {
                                   color: Colors.orange,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
-                                child: Text(
+                                child: const Text(
                                   "الاسرع",
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: Color(0xffE5D2D2)),
+                                border: Border.all(
+                                  color: theme.dividerColor,
+                                ),
                               ),
-                              child: Text("مختلط"),
+                              child: Text(
+                                "مختلط",
+                                style: TextStyle(color: theme.textTheme.bodyMedium?.color),
+                              ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
-                        Divider(thickness: .7, indent: 0, endIndent: 0),
+                        const SizedBox(height: 16),
+                        Divider(thickness: .7, indent: 0, endIndent: 0, color: theme.dividerColor),
                         Padding(
-                          padding: EdgeInsetsGeometry.only(right: 10),
+                          padding: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.location_on_sharp,
-                                color: AppColors.location,
+                                color: Color(0xFF12B76A),
                                 size: 31,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsetsGeometry.only(left: 10),
+                                    padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       "العمل",
                                       style: TextStyle(
-                                        color: Color(0xff667085),
+                                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                         fontSize: 14,
                                       ),
                                     ),
                                   ),
                                   Text(
-                                    "موقعك",
+                                    _trip.from,
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
+                                      color: theme.textTheme.bodyLarge?.color,
                                     ),
                                   ),
                                 ],
                               ),
-
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsGeometry.only(
+                          padding: const EdgeInsets.only(
                             right: 34,
                             bottom: 5,
                           ),
@@ -186,125 +211,138 @@ class _OrdersummaryState extends State<Ordersummary> {
                             width: 60,
                             height: 23,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xffEAECF0)),
+                              border: Border.all(color: theme.dividerColor),
                               borderRadius: BorderRadius.circular(15),
-                              color: Color(0xffF9FAFB),
+                              color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
                             ),
-                            child: Center(child: Text("10 دقائق")),
+                            child: Center(
+                              child: Text(
+                                "10 دقائق",
+                                style: TextStyle(fontSize: 10, color: theme.textTheme.bodySmall?.color),
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Padding(
-                          padding: EdgeInsetsGeometry.only(right: 10),
+                          padding: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.bus_alert_outlined,
-                                color: AppColors.iconOf,
+                                color: Color(0xFFE85C0D),
                                 size: 31,
                               ),
-                              SizedBox(width: 10),
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsGeometry.only(
-                                        left: 20,
-                                      ),
-                                      child: Text(
-                                        "الوقوف",
-                                        style: TextStyle(
-                                          color: Color(0xff667085),
-                                          fontSize: 14,
-                                        ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                    ),
+                                    child: Text(
+                                      "الوقوف",
+                                      style: TextStyle(
+                                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
+                                        fontSize: 14,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsGeometry.only(
-                                        left: 20,
-                                      ),
-                                      child: Text(
-                                        "الشرج",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
                                     ),
-                                    Container(
-                                      width: 60,
-                                      height: 23,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Color(0xffEAECF0),
-                                        ),
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Color(0xffF9FAFB),
-                                      ),
-                                      child: Center(child: Text("10 دقائق")),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: EdgeInsetsGeometry.only(right: 10),
-                          child: Row(
-                            children: [
-                              Icon(Icons.radio_button_on , color: const Color.fromARGB(255, 245, 153, 103),),
-                              SizedBox(width: 10),
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsGeometry.only(
-                                        left: 10,
-                                      ),
-                                      child: Text(
-                                        "اليوم",
-                                        style: TextStyle(
-                                          color: Color(0xff667085),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "الاثنين",
+                                    child: Text(
+                                      _trip.to,
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
+                                        color: theme.textTheme.bodyLarge?.color,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Container(
+                                    width: 60,
+                                    height: 23,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: theme.dividerColor,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "10 دقائق",
+                                        style: TextStyle(fontSize: 10, color: theme.textTheme.bodySmall?.color),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.radio_button_on, color: Color.fromARGB(255, 245, 153, 103)),
+                              const SizedBox(width: 10),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Text(
+                                      "اليوم",
+                                      style: TextStyle(
+                                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "الاثنين",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.textTheme.bodyLarge?.color,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Divider(
                   indent: 0,
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: const Text(
+                  child: Text(
                     "تتبع الباص ",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: theme.textTheme.titleLarge?.color,
+                    ),
                   ),
                 ),
 
@@ -316,8 +354,8 @@ class _OrdersummaryState extends State<Ordersummary> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsetsGeometry.only(left: 10, right: 10),
-                          child: Container(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: SizedBox(
                             width: 330,
                             height: 130,
                             child: Image.asset(
@@ -338,16 +376,20 @@ class _OrdersummaryState extends State<Ordersummary> {
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
                 ),
                 const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsetsGeometry.only(right: 10, left: 10),
+                  padding: const EdgeInsets.only(right: 10, left: 10),
                   child: Container(
                     width: 350,
                     height: 110,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffEAECF0), width: 2),
+                      color: theme.cardTheme.color,
+                      border: Border.all(
+                        color: theme.dividerColor,
+                        width: 2,
+                      ),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
@@ -356,7 +398,7 @@ class _OrdersummaryState extends State<Ordersummary> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: EdgeInsetsGeometry.only(
+                              padding: const EdgeInsets.only(
                                 right: 20,
                                 top: 10,
                               ),
@@ -365,29 +407,30 @@ class _OrdersummaryState extends State<Ordersummary> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 19,
+                                  color: theme.textTheme.titleLarge?.color,
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsetsGeometry.only(
+                            const Padding(
+                              padding: EdgeInsets.only(
                                 left: 20,
                                 top: 10,
                               ),
-                              child: Icon( Icons.edit_square,
-                                  color: AppColors.iconOf, size: 30),)
+                              child: Icon(Icons.edit_square, color: AppColors.iconOf, size: 30),
+                            )
                           ],
                         ),
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsetsGeometry.only(
+                              padding: const EdgeInsets.only(
                                 right: 20,
                                 top: 10,
                               ),
                               child: Text(
                                 "khalilabraheem053@gmail.com",
                                 style: TextStyle(
-                                  color: Color(0xff667085),
+                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                   fontSize: 16,
                                 ),
                               ),
@@ -397,14 +440,14 @@ class _OrdersummaryState extends State<Ordersummary> {
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsetsGeometry.only(
+                              padding: const EdgeInsets.only(
                                 right: 20,
                                 top: 10,
                               ),
                               child: Text(
                                 " 776463185 967+",
                                 style: TextStyle(
-                                  color: Color(0xff667085),
+                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                   fontSize: 16,
                                 ),
                               ),
@@ -422,35 +465,37 @@ class _OrdersummaryState extends State<Ordersummary> {
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
                 ),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.centerRight,
                         child: Text(
                           "تفاصيل الدفع",
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
+                            color: theme.textTheme.titleLarge?.color,
                           ),
                         ),
                       ),
 
                       const SizedBox(height: 10),
 
-                      _buildPriceRow("سعر التذكرة", " 10000 ريال يمني"),
-                      const Divider(height: 15),
-                      _buildPriceRow("الحماية", " 10000 ريال يمني"),
-                      const Divider(height: 15),
-                      _buildPriceRow("راحة", " 10000 ريال يمني"),
+                      _buildPriceRow(context, "سعر التذكرة", " ${_trip.price.toInt()} ريال يمني"),
+                      Divider(height: 15, color: theme.dividerColor),
+                      _buildPriceRow(context, "الحماية", " 1000 ريال يمني"), // Sample dynamic add-on text could go here
+                      Divider(height: 15, color: theme.dividerColor),
+                      _buildPriceRow(context, "راحة", " 1000 ريال يمني"),
 
                       _buildPriceRow(
+                        context,
                         "الإجمالي",
-                        " 30000 ريال يمني",
+                        " ${(_trip.price + 2000).toInt()} ريال يمني",
                         isTotal: true,
                       ),
                     ],
@@ -460,13 +505,14 @@ class _OrdersummaryState extends State<Ordersummary> {
             ),
           ),
 
-          bottomNavigationBar: Padding(
+          bottomNavigationBar: Container(
+            color: theme.scaffoldBackgroundColor,
             padding: const EdgeInsets.all(16),
             child: SizedBox(
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (builder)=>PaymentContinuationScreen()));
+                  context.push('/tickets/payment');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.mainButton,
@@ -487,7 +533,9 @@ class _OrdersummaryState extends State<Ordersummary> {
     );
   }
 
-  Widget _buildPriceRow(String title, String amount, {bool isTotal = false}) {
+  Widget _buildPriceRow(BuildContext context, String title, String amount, {bool isTotal = false}) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -495,7 +543,9 @@ class _OrdersummaryState extends State<Ordersummary> {
           Text(
             title,
             style: TextStyle(
-              color: isTotal ? Colors.black : Color(0xff667085),
+              color: isTotal
+                  ? theme.textTheme.bodyLarge?.color
+                  : (isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085)),
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.w600 : FontWeight.w400,
             ),
@@ -506,7 +556,7 @@ class _OrdersummaryState extends State<Ordersummary> {
             style: TextStyle(
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w400,
-              color: isTotal ? AppColors.textEdit : Colors.black,
+              color: isTotal ? AppColors.textEdit : theme.textTheme.bodyLarge?.color,
             ),
           ),
         ],

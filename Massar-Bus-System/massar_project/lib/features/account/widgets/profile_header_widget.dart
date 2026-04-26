@@ -7,6 +7,7 @@ class ProfileHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 20, top: 10),
       child: Row(
@@ -23,19 +24,19 @@ class ProfileHeaderWidget extends StatelessWidget {
               children: [
                 Text(
                   DummyData.userName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textSave,
+                    color: theme.textTheme.bodyLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   DummyData.userEmail,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.textSave,
+                    color: theme.textTheme.bodyMedium?.color,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

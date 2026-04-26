@@ -1,729 +1,491 @@
 import 'package:flutter/material.dart';
-import 'package:massar_project/features/home/screens/home_screen.dart';
-import 'package:massar_project/features/ticket/screens/order_summary_screen.dart';
-import 'package:massar_project/features/ticket/screens/detail_ticket_screen.dart';
-import 'package:massar_project/features/account/screens/account_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:massar_project/core/theme/app_colors.dart';
 
-class TicketScreen extends StatefulWidget {
-  const TicketScreen({super.key});
-
+class TicketListScreen extends StatefulWidget {
+  const TicketListScreen({super.key});
   @override
-  State<TicketScreen> createState() => _TicketScreenState();
+  State<TicketListScreen> createState() => _TicketListScreenState();
 }
 
-class _TicketScreenState extends State<TicketScreen> {
-  int _currentIndex = 1;
-  final List status = [
-    {"name": "جميع الحالات"},
-    {"name": "جميع انواع الرحلات "},
-    {"name": "جميع انواع الباصات"},
-    {"name": "كل التواريخ "},
+class _TicketListScreenState extends State<TicketListScreen> {
+  final List<Map<String, dynamic>> savedPlaces = [
+    {'label': 'بيتنا', 'icon': Icons.home},
+    {'label': 'مكتبي', 'icon': Icons.work},
+    {'label': 'أحمد', 'icon': Icons.person},
   ];
+
+  final List<String> recentSearches = [
+    'Monumen Nasional',
+    'Central Park Mall',
+    'Stasiun Gambir',
+  ];
+
+  static const Color primaryBlue = Color(0xFF2563EB);
+  static const double _cardRadius = 14.0;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+    final horizontalPadding = w * 0.06;
+    final bannerHeight = h * 0.49;
+
+    return Directionality(
+      textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-          ),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            selectedItemColor: Color(0xff1570EF),
-            unselectedItemColor: Color(0xff667085),
-            showUnselectedLabels: true,
-
-            items: [
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (builder) => Home()),
-                    ),
-                  },
-                  icon: Icon(
-                    Icons.home,
-                    color: _currentIndex == 0
-                        ? Color(0xff1570EF)
-                        : Color(0xff667085),
-                  ),
-
-                  // icon: SvgPicture.asset(
-                  //   'assets/icons/account.svg',
-                  //   width: 24,
-                  //   height: 24,
-                  // ),
-                ),
-                label: "الصفحة الرئيسية",
-              ),
-              BottomNavigationBarItem(
-                // icon: SvgPicture.asset(
-                //   'assets/icons/myticket.svg',
-                //   width: 24,
-                //   height: 24,
-                // ),
-                icon: IconButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (builder) => TicketScreen()),
-                    ),
-                  },
-                  icon: Icon(
-                    Icons.description_outlined,
-                    color: _currentIndex == 1
-                        ? Color(0xff1570EF)
-                        : Color(0xff667085),
-                  ),
-                ),
-                label: "تذكرتي",
-              ),
-
-              BottomNavigationBarItem(
-                icon: Transform.translate(
-                  offset: Offset(0, -15),
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color(0xff1570EF),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) => const DetailTicketScreen(),
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.confirmation_number,
-                        color: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: bannerHeight,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
+                      ),
+                      child: Image.asset(
+                        'assets/images/Background3.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ),
-                label: "شراء",
-              ),
-
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.mediation_rounded,
-                  color: _currentIndex == 3
-                      ? Color(0xff1570EF)
-                      : Color(0xff667085),
-                ),
-
-                label: "الترويج",
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  color: _currentIndex == 4
-                      ? Color(0xff1570EF)
-                      : Color(0xff667085),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (builder) => Acount()),
-                    ),
-                  },
-                  icon: Icon(Icons.person_2_rounded),
-                ),
-                label: "الحساب",
-              ),
-            ],
-          ),
-        ),
-
-        body: Padding(
-          padding: EdgeInsetsGeometry.only(bottom: 40),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsetsGeometry.only(
-                    top: 70,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: Container(
-                    width: 399,
-                    height: 57,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Color(0xffE5D2D2), width: .7),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.only(right: 0, top: 5),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.search),
-                        ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalPadding,
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsGeometry.only(top: 20),
-                  child: SizedBox(
-                    height: 30,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return MaterialButton(
-                          onPressed: () {},
-                          child: Container(
-                            width: 97,
-                            height: 34,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Color(0xffE5D2D2),
-                                width: .7,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                status[index]['name'],
-                                style: TextStyle(
-                                  color: Color(0xff565353),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30),
-                Padding(
-                  padding: EdgeInsetsGeometry.only(left: 10, right: 10),
-                  child: Container(
-                    width: 375,
-                    height: 220,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Color(0xffE5D2D2), width: .7),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-
-                    child: Container(
-                      padding: EdgeInsets.all(10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          /// ---------------- السطر الأول: التاريخ ----------------
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                child: Text(
-                                  "اثنين, 18 سبتمبر 2025",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color(0xffECFDF3),
-                                  border: Border.all(color: Color(0xffABEFC6)),
-                                ),
-                                child: Text(
-                                  "نشط",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 10,
-                                    color: Color(0xff067647),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          const SizedBox(height: 190),
+                          Text(
+                            'صباح الخير يا خليل',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'air',
+                              fontSize: w * 0.053,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textSave,
+                            ),
                           ),
-
-                          ///-----------------///
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsGeometry.only(right: 8),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    "الاسرع",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Color(0xffE5D2D2)),
-                                ),
-                                child: Text("مزج"),
-                              ),
-                            ],
-                          ),
-
-                          ///-----------------///
-                          SizedBox(height: 16),
-
-                          /// ---------------- السطر الثاني: التوقف الحالي + الوجهة ----------------
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsGeometry.only(right: 4),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.place,
-                                      color: Colors.green,
-                                      size: 20,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Container(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "التوقف الحالي",
-                                            style: TextStyle(
-                                              color: Color(0xff667085),
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                          Text(
-                                            "الإنشاءات",
-                                            style: TextStyle(fontSize: 15),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsGeometry.only(right: 13),
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 4),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 5,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                          255,
-                                          236,
-                                          236,
-                                          236,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                      child: const Text(
-                                        'الوقت المقدر : 30 دقيقة',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color.fromARGB(
-                                            221,
-                                            54,
-                                            45,
-                                            45,
-                                          ),
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsetsGeometry.only(
-                                            right: 4,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.place,
-                                                color: Colors.orange,
-                                                size: 20,
-                                              ),
-                                              SizedBox(width: 4),
-                                              Container(
-                                                child: Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsGeometry.only(
-                                                            left: 30,
-                                                          ),
-                                                      child: Text(
-                                                        "الوجهة",
-                                                        style: TextStyle(
-                                                          color: Color(
-                                                            0xff667085,
-                                                          ),
-                                                          fontSize: 10,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "المتضررين",
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 16),
-
-                          SizedBox(height: 16),
-
-                          /// ---------------- السطر الرابع: الباص ----------------
-                          Padding(
-                            padding: EdgeInsetsGeometry.only(right: 0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.directions_bus,
-                                  color: Color(0xff667085),
-                                ),
-                                SizedBox(width: 1),
-                                Text(
-                                  "الباص 01 -الوصول الساعة 15:30 في محطة المتضررين",
-                                  style: TextStyle(color: Color(0xff667085)),
-                                ),
-                              ],
+                          const SizedBox(height: 6),
+                          Text(
+                            'أتمنى أن يكون يومك مشرقًا\nمثل الشمس',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'AirStripArabic',
+                              fontSize: w * 0.034,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              height: 1.1,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                SizedBox(height: 30),
-                Padding(
-                  padding: EdgeInsetsGeometry.only(left: 10, right: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 375,
-                        height: 270,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Color(0xffE5D2D2),
-                            width: .7,
+              ),
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      horizontalPadding,
+                      bannerHeight - 40,
+                      horizontalPadding,
+                      28,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 90),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: theme.cardTheme.color,
+                            borderRadius: BorderRadius.circular(_cardRadius),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.04),
+                                blurRadius: 10,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                           ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-
-                        child: Container(
-                          padding: EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              /// ---------------- السطر الأول: التاريخ ----------------
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    // padding: EdgeInsets.symmetric(
-                                    //   horizontal: 8,
-                                    //   vertical: 4,
-                                    // ),
-                                    child: Text(
-                                      "اثنين, 18 سبتمبر 2025",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Color(0xffFFFAEB),
-                                      border: Border.all(
-                                        color: Color(0xffFEDF89),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "في انتظار الدفع",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              ///-----------------///
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsGeometry.only(right: 8),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        "الاسرع",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(
-                                        color: Color(0xffE5D2D2),
-                                      ),
-                                    ),
-                                    child: Text("مزج"),
-                                  ),
-                                ],
-                              ),
-
-                              ///-----------------///
-                              SizedBox(height: 16),
-
-                              /// ---------------- السطر الثاني: التوقف الحالي + الوجهة ----------------
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsGeometry.only(right: 5),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.place,
-                                          color: Colors.green,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 4),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "التوقف الحالي",
-                                              style: TextStyle(
-                                                color: Color(0xff667085),
-                                                fontSize: 10,
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(_cardRadius),
+                                  topRight: Radius.circular(_cardRadius),
+                                ),
+                                child: Container(
+                                  height: 120,
+                                  color: isDark
+                                      ? Colors.white.withOpacity(0.05)
+                                      : Colors.grey.shade100,
+                                  child: Stack(
+                                    children: [
+                                      Positioned.fill(
+                                        child: Image.asset(
+                                          'assets/images/map.png',
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(
+                                            color: isDark
+                                                ? Colors.white.withOpacity(0.05)
+                                                : Colors.grey.shade100,
+                                            child: const Center(
+                                              child: Icon(
+                                                Icons.map,
+                                                size: 48,
+                                                color: Colors.grey,
                                               ),
                                             ),
-                                            Text(
-                                              "الإنشاءات",
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsGeometry.only(right: 13),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 5),
-                                        Container(
-                                          height: 20,
-                                          width: 50,
+                                      ),
+                                      Positioned(
+                                        left: 20,
+                                        top: 18,
+                                        child: Container(
+                                          width: 16,
+                                          height: 16,
                                           decoration: BoxDecoration(
-                                            color: Color(0xffF9FAFB),
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
+                                            color: const Color(0xFF2E9BFF),
+                                            shape: BoxShape.circle,
                                             border: Border.all(
-                                              color: Color(0xffE5D2D2),
+                                              color: Colors.white,
+                                              width: 3,
                                             ),
                                           ),
-                                          child: Text(
-                                            "  30 دقيقة",
-                                            style: TextStyle(fontSize: 10),
-                                          ),
                                         ),
-                                        SizedBox(width: 8),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsGeometry.only(
-                                                right: 10,
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.place,
-                                                    color: Colors.orange,
-                                                    size: 20,
-                                                  ),
-                                                  SizedBox(width: 4),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsGeometry.only(
-                                                                left: 30,
-                                                              ),
-                                                          child: Text(
-                                                            "الوجهة",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                0xff667085,
-                                                              ),
-                                                              fontSize: 10,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          "المتضررين",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              SizedBox(height: 20),
-
-                              /// ---------------- السطر الرابع: الباص ----------------
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.directions_bus,
-                                    color: Color(0xff667085),
-                                  ),
-                                  SizedBox(width: 2),
-                                  Text(
-                                    "الباص 01 -الوصول  15:30 في محطة المتضررين",
-                                    style: TextStyle(color: Color(0xff667085)),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 20),
-
-                              SizedBox(height: 10),
-                              SizedBox(
-                                width: 355,
-                                height: 45,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Ordersummary(),
                                       ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xff1570EF),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    elevation: 0,
+                                    ],
                                   ),
-                                  child: Text(
-                                    "نهاية الدفع 00:24:40",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14.0,
+                                  vertical: 12.0,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      'موقعك الحالي',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontFamily: 'AirStripArabic',
+                                        fontSize: w * 0.038,
+                                        fontWeight: FontWeight.w700,
+                                        color: theme.textTheme.bodyLarge?.color,
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'المساكن · فوق، مدينة الملا · حضرموت',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontFamily: 'AirStripArabic',
+                                        fontSize: w * 0.032,
+                                        color: theme.textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 14),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 14,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.cardTheme.color,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.03),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: isDark
+                                        ? Colors.white.withOpacity(0.05)
+                                        : Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.chevron_left,
+                                      color: theme.iconTheme.color,
+                                    ),
+                                    onPressed: () {
+                                      context.push('/home/location');
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'ابحث عن وجهة',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontFamily: 'AirStripArabic',
+                                          fontSize: w * 0.036,
+                                          fontWeight: FontWeight.w700,
+                                          color: theme.textTheme.bodyLarge?.color,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 12,
+                                            height: 12,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.orange,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Expanded(
+                                            child: Text(
+                                              'حدد الموقع',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                fontFamily: 'AirStripArabic',
+                                                fontSize: w * 0.032,
+                                                color: theme.textTheme.bodyMedium?.color,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                          decoration: BoxDecoration(
+                            color: theme.cardTheme.color,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.03),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                'الموقع المحفوظ',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontFamily: 'AirStripArabic',
+                                  fontSize: w * 0.036,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textSave,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                height: 48,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: savedPlaces.length + 1,
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(width: 10),
+                                  itemBuilder: (context, idx) {
+                                    if (idx < savedPlaces.length) {
+                                      final item = savedPlaces[idx];
+                                      return InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: isDark
+                                                ? Colors.white.withOpacity(0.05)
+                                                : Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            border: Border.all(
+                                              color: isDark
+                                                  ? Colors.white.withOpacity(0.1)
+                                                  : Colors.grey.shade200,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                item['icon'] as IconData,
+                                                size: 18,
+                                                color: primaryBlue,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                item['label'] as String,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: theme.textTheme.bodyLarge?.color,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          width: 44,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            color: theme.cardTheme.color,
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: isDark
+                                                  ? Colors.white.withOpacity(0.1)
+                                                  : Colors.grey.shade200,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.02,
+                                                ),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 18,
+                                            color: theme.iconTheme.color,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.cardTheme.color,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.03),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'عمليات البحث السابقة الخاصة بك',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontFamily: 'AirStripArabic',
+                                    fontSize: w * 0.034,
+                                    fontWeight: FontWeight.w700,
+                                    color: theme.textTheme.bodyLarge?.color,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Column(
+                                children: recentSearches.map((place) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal: 6,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            place,
+                                            style: TextStyle(
+                                              fontSize: w * 0.034,
+                                              color: theme.textTheme.bodyMedium?.color,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          Icons.access_time,
+                                          size: 18,
+                                          color: theme.iconTheme.color?.withOpacity(0.5),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 36),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

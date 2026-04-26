@@ -1,17 +1,16 @@
-// lib/pages/phone_login.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:massar_project/features/auth/screens/verification_method_screen.dart';
+import 'package:go_router/go_router.dart';
 
 
-class phonelogin extends StatefulWidget {
-  const phonelogin({super.key});
+class PhoneLoginScreen extends StatefulWidget {
+  const PhoneLoginScreen({super.key});
 
   @override
-  State<phonelogin> createState() => _phoneloginState();
+  State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
 }
 
-class _phoneloginState extends State<phonelogin> {
+class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneCtrl = TextEditingController();
   
@@ -73,9 +72,7 @@ class _phoneloginState extends State<phonelogin> {
 
     // ننتقل بعد تأخير قصير حتى يرى المستخدم الـ Snackbar
     Future.delayed(const Duration(milliseconds: 450), () {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const VerificationMethodPage(phoneNumber: '777777777',)),
-      );
+      context.push('/verification', extra: fullNumber);
     });
   } else {
     // إظهار الأخطاء إن وُجدت

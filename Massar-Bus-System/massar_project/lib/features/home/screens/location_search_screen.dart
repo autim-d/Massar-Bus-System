@@ -1,169 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:massar_project/features/ticket/screens/order_summary_screen.dart';
-import 'package:massar_project/core/theme/app_colors.dart';
-//import 'package:flutter/services.dart';
-//import 'app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/theme/app_colors.dart';
+import '../widgets/components/location_input_connector.dart';
+import '../providers/search_location_provider.dart';
+import '../models/location_model.dart';
 
-class LocationSearchPage extends StatelessWidget {
-  const LocationSearchPage({super.key});
+class LocationSearchScreen extends ConsumerStatefulWidget {
+  const LocationSearchScreen({super.key});
+
+  @override
+  ConsumerState<LocationSearchScreen> createState() => _LocationSearchScreenState();
+}
+
+class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
+  late TextEditingController originController;
+  late TextEditingController destinationController;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = ref.read(searchLocationProvider);
+    originController = TextEditingController(text: state.currentLocation?.name ?? '');
+    destinationController = TextEditingController(text: state.destination?.name ?? '');
+  }
+
+  @override
+  void dispose() {
+    originController.dispose();
+    destinationController.dispose();
+    super.dispose();
+  }
+
+  void _onDestinationSubmitted(String value) {
+    // Basic mock update
+    if (value.isNotEmpty) {
+      ref.read(searchLocationProvider.notifier).updateDestination(
+        LocationModel(id: 'dest_1', name: value),
+      );
+      // Navigate to results
+      context.push('/home/results');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(onPressed: () {
-            Navigator.pop(context);
-          }, icon: Icon(Icons.close)),
-          title: Text(
-            "اين تريد الذهاب ؟",
-            style: TextStyle(fontWeight: FontWeight.w600),
+    final theme = Theme.of(context);
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          appBar: AppBar(
+            backgroundColor: theme.appBarTheme.backgroundColor,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.close, color: theme.iconTheme.color),
+              onPressed: () => context.pop(),
+            ),
+            title: Text(
+              "اين تريد الذهاب ؟",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: theme.textTheme.titleLarge?.color,
+              ),
+            ),
           ),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 375,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Color(0xffF9FAFB),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color(0xffD0D5DD), width: 1.5),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LocationInputConnector(
+                  originController: originController,
+                  destinationController: destinationController,
+                  onDestinationSubmitted: _onDestinationSubmitted,
                 ),
-                child: Column(
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 13, 0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.my_location,
-                            color: Color(0xff101828),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsGeometry.only(right: 18),
-                            child: Text(
-                              "موقعك الحالي",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: AppColors.textPrimary
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    _buildQuickActionChip(
+                      context,
+                      icon: Icons.bookmark,
+                      label: "حفظ الموقع",
+                      onTap: () {},
                     ),
-                    SizedBox(height: 20),
-                    Divider(height: 10, indent: 30, endIndent: 30),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color:AppColors.textSecondary,
-                          ),
-                          hintText: "البحث عن وجهة",
-                          hintStyle: TextStyle(color: Colors.grey),
-                        ),
-                      ),
+                    const SizedBox(width: 12),
+                    _buildQuickActionChip(
+                      context,
+                      icon: Icons.business_center,
+                      label: "مكاتب التخزين",
+                      onTap: () {},
                     ),
                   ],
                 ),
-              ),
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                MaterialButton(
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 146,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xffF9FAFB),
-                          border: Border.all(color: Colors.grey, width: 0.5),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon( 
-                              Icons.business_center,
-                              size: 24,
-                              color: Color(0xff344054),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsGeometry.only(right: 10),
-                              child: Text(
-                                "مكاتب التخزين ",
-                                style: TextStyle(
-                                  color: AppColors.textPrimary,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Ordersummary(),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 146,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xffF9FAFB),
-                          border: Border.all(color: Colors.grey, width: 0.5),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.bookmark,
-                              size: 24,
-                              color: Color(0xff344054),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsGeometry.only(right: 15),
-                              child: Text(
-                                "حفظ الموقع",
-                                style: TextStyle(
-                                  color: AppColors.textPrimary,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
-            Divider(
-              height: 51,
-              thickness: 4,
-              color: const Color.fromARGB(15, 0, 0, 0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickActionChip(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: theme.cardTheme.color,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: theme.textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              icon,
+              size: 18,
+              color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
             ),
           ],
         ),

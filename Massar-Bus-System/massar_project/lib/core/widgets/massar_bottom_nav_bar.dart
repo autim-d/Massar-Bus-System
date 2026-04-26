@@ -12,19 +12,30 @@ class MassarBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedColor = isDark ? const Color(0xff98A2B3) : const Color(0xff667085);
+
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      height: 85,
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1D2939) : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black12,
+            blurRadius: 6,
+          )
+        ],
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         selectedFontSize: 12,
         unselectedFontSize: 12,
         selectedItemColor: const Color(0xff1570EF),
-        unselectedItemColor: const Color(0xff667085),
+        unselectedItemColor: unselectedColor,
         showUnselectedLabels: true,
         items: [
           _buildStandardItem(Icons.home, "الرئيسية"),
@@ -44,14 +55,21 @@ class MassarBottomNavBar extends StatelessWidget {
   BottomNavigationBarItem _buildCenterActionItem() {
     return BottomNavigationBarItem(
       icon: Transform.translate(
-        offset: const Offset(0, -15),
+        offset: const Offset(0, -20),
         child: Container(
-          padding: const EdgeInsets.all(5),
-          decoration: const BoxDecoration(
-            color: Color(0xff1570EF),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: const Color(0xff1570EF),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xff1570EF).withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          child: const Icon(Icons.confirmation_number, color: Colors.white),
+          child: const Icon(Icons.confirmation_number, color: Colors.white, size: 28),
         ),
       ),
       label: "شراء",

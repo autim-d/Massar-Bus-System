@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:massar_project/core/constants/app_strings.dart';
 import 'package:massar_project/core/constants/dummy_data.dart';
 import 'package:massar_project/features/account/controllers/profile_controller.dart';
 
-class Profile extends ConsumerWidget {
-  const Profile({super.key});
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key});
 
   void _editField(BuildContext context, WidgetRef ref, String title, String currentValue, String fieldKey) {
     TextEditingController controller = TextEditingController(text: currentValue);
@@ -26,13 +27,13 @@ class Profile extends ConsumerWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               child: const Text(AppStrings.cancel),
             ),
             ElevatedButton(
               onPressed: () {
                 ref.read(profileControllerProvider.notifier).updateField(fieldKey, controller.text);
-                Navigator.pop(context);
+                context.pop();
               },
               child: const Text(AppStrings.save),
             ),
@@ -42,7 +43,8 @@ class Profile extends ConsumerWidget {
     );
   }
 
-  Widget _buildRow(String title, String value, VoidCallback onEdit) {
+  Widget _buildRow(BuildContext context, String title, String value, VoidCallback onEdit) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
       child: Row(
@@ -54,10 +56,10 @@ class Profile extends ConsumerWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: theme.textTheme.titleLarge?.color),
                 ),
                 const SizedBox(height: 4),
-                Text(value, style: const TextStyle(fontSize: 15)),
+                Text(value, style: TextStyle(fontSize: 15, color: theme.textTheme.bodyLarge?.color)),
               ],
             ),
           ),
@@ -75,14 +77,21 @@ class Profile extends ConsumerWidget {
     // Watch the profile state
     final profileState = ref.watch(profileControllerProvider);
     final profileNotifier = ref.read(profileControllerProvider.notifier);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.myAccount)),
+      appBar: AppBar(
+        title: const Text(AppStrings.myAccount),
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        elevation: 0,
+        iconTheme: theme.iconTheme,
+        titleTextStyle: theme.appBarTheme.titleTextStyle,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 10),
-            const SizedBox(child: Divider(height: 1)),
+            Divider(height: 1, color: theme.dividerColor),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,12 +100,12 @@ class Profile extends ConsumerWidget {
                     padding: const EdgeInsets.only(right: 10, left: 10),
                     child: Column(
                       children: [
-                        const Text(
+                        Text(
                           AppStrings.myPhoto,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.textPrimary,
+                            color: theme.textTheme.bodyLarge?.color,
                           ),
                         ),
                         const SizedBox(height: 5),
@@ -120,37 +129,37 @@ class Profile extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const Divider(thickness: 1),
+            Divider(thickness: 1, color: theme.dividerColor),
             const SizedBox(height: 7),
 
-            _buildRow(AppStrings.nameLabel, profileState.name, () {
+            _buildRow(context, AppStrings.nameLabel, profileState.name, () {
               _editField(context, ref, AppStrings.nameLabel, profileState.name, 'name');
             }),
             SizedBox(
               width: 335,
-              child: Divider(height: 4, color: Theme.of(context).dividerColor.withOpacity(0.4)),
+              child: Divider(height: 4, color: theme.dividerColor.withOpacity(0.4)),
             ),
             const SizedBox(height: 7),
 
-            _buildRow(AppStrings.emailLabel, profileState.email, () {
+            _buildRow(context, AppStrings.emailLabel, profileState.email, () {
               _editField(context, ref, AppStrings.emailLabel, profileState.email, 'email');
             }),
             SizedBox(
               width: 335,
-              child: Divider(height: 4, color: Theme.of(context).dividerColor.withOpacity(0.4)),
+              child: Divider(height: 4, color: theme.dividerColor.withOpacity(0.4)),
             ),
             const SizedBox(height: 7),
 
-            _buildRow(AppStrings.genderLabel, profileState.gender, () {
+            _buildRow(context, AppStrings.genderLabel, profileState.gender, () {
               _editField(context, ref, AppStrings.genderLabel, profileState.gender, 'gender');
             }),
             SizedBox(
               width: 335,
-              child: Divider(thickness: 1, height: 4, color: Theme.of(context).dividerColor.withOpacity(0.4)),
+              child: Divider(thickness: 1, height: 4, color: theme.dividerColor.withOpacity(0.4)),
             ),
             const SizedBox(height: 7),
 
-            _buildRow(AppStrings.phoneLabel, profileState.phone, () {
+            _buildRow(context, AppStrings.phoneLabel, profileState.phone, () {
               _editField(context, ref, AppStrings.phoneLabel, profileState.phone, 'phone');
             }),
           ],

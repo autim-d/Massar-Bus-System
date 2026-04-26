@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -8,6 +9,9 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final TextDirection? textDirection;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final bool? enabled;
 
   const CustomTextField({
     Key? key,
@@ -18,10 +22,16 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.textDirection,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.enabled,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -30,35 +40,74 @@ class CustomTextField extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontFamily: 'air', // Your custom font
+              fontFamily: 'ReadexPro',
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade800,
+              color: isDark ? const Color(0xFFD0D5DD) : const Color(0xFF344054),
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         TextFormField(
           controller: controller,
           obscureText: isObscure,
           keyboardType: keyboardType,
-          textDirection: textDirection ?? TextDirection.rtl,
+          textDirection: textDirection,
+          enabled: enabled,
+          style: TextStyle(
+            fontFamily: 'ReadexPro',
+            fontSize: 14,
+            color: theme.textTheme.bodyLarge?.color,
+          ),
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: const TextStyle(fontFamily: 'air'),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            hintStyle: TextStyle(
+              fontFamily: 'ReadexPro',
+              color: theme.textTheme.bodyMedium?.color,
+              fontSize: 14,
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: isDark ? const Color(0xFF1D2939) : Colors.white,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+              borderSide: BorderSide(
+                  color: isDark
+                      ? Colors.white.withOpacity(0.1)
+                      : const Color(0xFFD0D5DD),
+                  width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF2563EB), width: 1.5),
+              borderSide:
+                  const BorderSide(color: AppColors.primaryBlue, width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
+            ),
+            errorStyle: const TextStyle(
+              fontFamily: 'ReadexPro',
+              fontSize: 12,
+              color: Colors.red,
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                  color: isDark
+                      ? Colors.white.withOpacity(0.05)
+                      : const Color(0xFFEAECF0),
+                  width: 1),
             ),
           ),
-          validator: validator ?? (v) => v!.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+          validator: validator,
         ),
       ],
     );

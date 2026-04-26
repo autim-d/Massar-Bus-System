@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class EditPhotoScreen extends StatefulWidget {
   final String currentImage;
@@ -97,7 +98,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
         ),
         body: Column(
@@ -160,7 +161,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                       child: const Text(
                         'إلغاء',
                         style: TextStyle(color: Colors.black, fontSize: 16),
@@ -177,7 +178,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () => Navigator.pop(context, imagePath),
+                      onPressed: () => context.pop(imagePath),
                       child: const Text(
                         'حفظ',
                         style: TextStyle(color: Colors.white, fontSize: 16),

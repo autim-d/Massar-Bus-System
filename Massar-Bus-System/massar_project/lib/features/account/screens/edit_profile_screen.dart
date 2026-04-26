@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:massar_project/features/account/screens/edit_photo_screen.dart';
+import 'package:go_router/go_router.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   String firstName = "عدنان";
   String lastName = "البيتي";
   String phoneNumber = "+967 774 393 235";
@@ -22,12 +22,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   //-------------------------------------------------
   void _openEditPhotoPage() async {
-    final newImage = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditPhotoScreen(currentImage: profileImage),
-      ),
-    );
+    final newImage = await context.push('/account/edit-photo', extra: profileImage);
 
     if (newImage != null && newImage is String) {
       setState(() {
@@ -37,6 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   //-------------------------------------------------
+  //-------------------------------------------------
   void _openEditNameSheet() {
     _firstController.text = firstName;
     _lastController.text = lastName;
@@ -45,13 +41,14 @@ class _AccountScreenState extends State<AccountScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).cardTheme.color,
       // ignore: deprecated_member_use
       barrierColor: Colors.black.withOpacity(0.4),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
+        final theme = Theme.of(context);
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Directionality(
@@ -71,35 +68,37 @@ class _AccountScreenState extends State<AccountScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const SizedBox(width: 40),
-                        const Text(
+                        Text(
                           'اسمك',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: theme.textTheme.titleLarge?.color,
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.close),
+                          icon: Icon(Icons.close, color: theme.iconTheme.color),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    const Text('الاسم الأول'),
+                    Text('الاسم الأول', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _firstController,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: theme.inputDecorationTheme.fillColor ?? theme.cardTheme.color,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 10,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 223, 220, 220),
+                          borderSide: BorderSide(
+                            color: theme.dividerColor,
                             width: 1,
                           ),
                         ),
@@ -113,22 +112,23 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text('الاسم الأخير'),
+                    Text('الاسم الأخير', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _lastController,
                       enabled: !noLastName,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: theme.inputDecorationTheme.fillColor ?? theme.cardTheme.color,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 10,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 223, 220, 220),
+                          borderSide: BorderSide(
+                            color: theme.dividerColor,
                             width: 1,
                           ),
                         ),
@@ -145,6 +145,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       children: [
                         Checkbox(
                           value: noLastName,
+                          activeColor: Colors.blue,
                           onChanged: (value) {
                             setModalState(() {
                               noLastName = value ?? false;
@@ -152,7 +153,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             });
                           },
                         ),
-                        const Text('ليس لدي اسم أخير'),
+                        Text('ليس لدي اسم أخير', style: TextStyle(color: theme.textTheme.bodyMedium?.color)),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -172,7 +173,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             lastName =
                                 noLastName ? '' : _lastController.text.trim();
                           });
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         },
                         child: const Text(
                           'حفظ',
@@ -197,13 +198,14 @@ class _AccountScreenState extends State<AccountScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).cardTheme.color,
       // ignore: deprecated_member_use
       barrierColor: Colors.black.withOpacity(0.4),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
+        final theme = Theme.of(context);
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Directionality(
@@ -223,27 +225,32 @@ class _AccountScreenState extends State<AccountScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.close),
+                          icon: Icon(Icons.close, color: theme.iconTheme.color),
                           onPressed: () => Navigator.pop(context),
                         ),
-                        const Text(
+                        Text(
                           'رقمك',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: theme.textTheme.titleLarge?.color,
                           ),
                         ),
                         const SizedBox(width: 40),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    const Text('تعديل رقم الجوال'),
+                    Text('تعديل رقم الجوال', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
                     TextField(
                       controller: _phoneController,
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      decoration: InputDecoration(
                         filled: true,
-                        fillColor: Color(0xFFF8F8F8),
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                        fillColor: theme.inputDecorationTheme.fillColor ?? theme.cardTheme.color,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: theme.dividerColor),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -282,20 +289,21 @@ class _AccountScreenState extends State<AccountScreen> {
   //-------------------------------------------------
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             'حسابي',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(color: theme.textTheme.titleLarge?.color, fontWeight: FontWeight.bold),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: theme.appBarTheme.backgroundColor,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+            onPressed: () => context.pop(),
           ),
           titleSpacing: -10,
         ),
@@ -304,14 +312,14 @@ class _AccountScreenState extends State<AccountScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(height: 1, color: Colors.grey[300]),
+              Container(height: 1, color: theme.dividerColor),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'صورتي',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: theme.textTheme.bodyLarge?.color),
                   ),
                   TextButton(
                     onPressed: _openEditPhotoPage,
@@ -332,14 +340,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(height: 1, color: Colors.grey[300]),
+              Container(height: 1, color: theme.dividerColor),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'اسمك',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: theme.textTheme.bodyLarge?.color),
                   ),
                   TextButton(
                     onPressed: _openEditNameSheet,
@@ -352,17 +360,17 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               Text(
                 lastName.isEmpty ? firstName : '$firstName $lastName',
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(fontSize: 16, color: theme.textTheme.bodyLarge?.color),
               ),
               const SizedBox(height: 8),
-              Container(height: 1, color: Colors.grey[300]),
+              Container(height: 1, color: theme.dividerColor),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'رقم الجوال',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: theme.textTheme.bodyLarge?.color),
                   ),
                   TextButton(
                     onPressed: _openEditPhoneSheet,
@@ -375,7 +383,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               Text(
                 phoneNumber,
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(fontSize: 16, color: theme.textTheme.bodyLarge?.color),
               ),
             ],
           ),

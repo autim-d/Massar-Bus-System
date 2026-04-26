@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:massar_project/features/ticket/screens/detail_ticket_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 
-class PaymentSuccessPage extends StatelessWidget {
-  const PaymentSuccessPage({super.key});
+class PaymentSuccessScreen extends StatelessWidget {
+  const PaymentSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -183,13 +183,9 @@ class PaymentSuccessPage extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) =>
-                                    const DetailTicketScreen(),
-                              ),
-                            );
+                            // Using push here to keep it on top of the payment flow or go to tickets branch?
+                            // Actually, DetailTicketScreen is a sub-route of /tickets
+                            context.push('/tickets/detail');
                           },
                           child: Text(
                             'عرض التذكرة',
