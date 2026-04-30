@@ -1,24 +1,70 @@
 import 'package:flutter/material.dart';
 
-class QuickActionSection extends StatelessWidget {
-  const QuickActionSection({Key? key}) : super(key: key);
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../../../core/repositories/station_repository.dart';
+import '../../../../core/models/station_model.dart';
+
+class QuickActionSection extends ConsumerStatefulWidget {
+  final Position? currentPosition;
+
+  const QuickActionSection({Key? key, this.currentPosition}) : super(key: key);
+
+  @override
+  ConsumerState<QuickActionSection> createState() => _QuickActionSectionState();
+}
+
+class _QuickActionSectionState extends ConsumerState<QuickActionSection> {
+  late Future<List<StationModel>> _stationsFuture;
+  final List<String> fallbackPlaces = [
+    "الشافعي", "إبن سينا", "المساكن", "مستشفى النور", 
+    "العمودي المتضررين", "رئاسة الجامعة", "أبراج بن محفوظ", 
+    "باعبود", "الجسر", "الشرج"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _stationsFuture = ref.read(stationRepositoryProvider).getStations();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Only one example location provided in mockup: "المساكن"
-    // Duplicating it to show horizontal scrolling capability
-    final List<String> places = ['المساكن', 'المساكن', 'المساكن'];
-
     return SizedBox(
       height: 72,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        scrollDirection: Axis.horizontal,
-        reverse: true, // Right-to-left scrolling behavior usually desired for RTL
-        itemCount: places.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          return _QuickActionChip(placeName: places[index]);
+      child: FutureBuilder<List<StationModel>>(
+        future: _stationsFuture,
+        builder: (context, snapshot) {
+          List<String> displayPlaces = fallbackPlaces.take(3).toList();
+
+          if (snapshot.hasData && snapshot.data != null) {
+            final stations = List<StationModel>.from(snapshot.data!);
+            if (widget.currentPosition != null) {
+              stations.sort((a, b) {
+                final distA = Geolocator.distanceBetween(
+                  widget.currentPosition!.latitude, widget.currentPosition!.longitude, 
+                  a.latitude, a.longitude
+                );
+                final distB = Geolocator.distanceBetween(
+                  widget.currentPosition!.latitude, widget.currentPosition!.longitude, 
+                  b.latitude, b.longitude
+                );
+                return distA.compareTo(distB);
+              });
+            }
+            displayPlaces = stations.take(3).map((e) => e.name).toList();
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            scrollDirection: Axis.horizontal,
+            reverse: true, // Right-to-left scrolling behavior usually desired for RTL
+            itemCount: displayPlaces.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              return _QuickActionChip(placeName: displayPlaces[index]);
+            },
+          );
         },
       ),
     );

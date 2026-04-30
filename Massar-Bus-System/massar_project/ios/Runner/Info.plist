@@ -41,6 +41,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to show the nearest stations on the map.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to show the nearest stations.</string>
+	<key>NSInternetUsageDescription</key>
+	<string>We need internet access to load maps and routes.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

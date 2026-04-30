@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/custom_text_field.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../location_fun.dart';
+import '../../core/constants/api_constants.dart';
 
 class SearchBusScreen extends StatefulWidget {
   const SearchBusScreen({Key? key}) : super(key: key);
@@ -13,6 +16,77 @@ class SearchBusScreen extends StatefulWidget {
 class _SearchBusScreenState extends State<SearchBusScreen> {
   final TextEditingController _fromController = TextEditingController();
   final TextEditingController _toController = TextEditingController();
+  
+  final List<String> fallbackPlaces = [
+    "الشافعي", "إبن سينا", "المساكن", "مستشفى النور", 
+    "العمودي المتضررين", "رئاسة الجامعة", "أبراج بن محفوظ", 
+    "باعبود", "الجسر", "الشرج"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentLocation();
+  }
+
+  Future<void> _fetchCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    
+    if (permission == LocationPermission.deniedForever) return;
+
+    final position = await Geolocator.getCurrentPosition();
+    final neighborhood = await getCurrentNeighborhood(position, ApiConstants.mapboxPublicToken);
+    
+    if (mounted) {
+      setState(() {
+        _fromController.text = neighborhood;
+      });
+    }
+  }
+
+  void _showDestinationBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: fallbackPlaces.length,
+            itemBuilder: (context, index) {
+              final place = fallbackPlaces[index];
+              return ListTile(
+                leading: const Icon(Icons.location_on, color: AppColors.primaryBlue),
+                title: Text(
+                  place,
+                  style: const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w500),
+                ),
+                onTap: () {
+                  setState(() {
+                    _toController.text = place;
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +126,15 @@ class _SearchBusScreenState extends State<SearchBusScreen> {
                     controller: _fromController,
                     hintText: 'موقعك الحالي',
                     label: 'من',
+                    readOnly: true,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _toController,
                     hintText: 'ابحث عن وجهة',
                     label: 'إلى',
+                    readOnly: true,
+                    onTap: _showDestinationBottomSheet,
                   ),
                 ],
               ),
