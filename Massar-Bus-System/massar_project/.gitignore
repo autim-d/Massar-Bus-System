@@ -47,4 +47,6 @@ node_modules/
 
 # Secrets
 .env
-**/android/local.properties
+.vscode/
+**/android/local.properties
+
