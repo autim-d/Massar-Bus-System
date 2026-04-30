@@ -5,6 +5,10 @@ import 'package:massar_project/features/home/models/bus_search_criteria.dart';
 import 'package:massar_project/features/home/providers/search_location_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/primary_button.dart';
+import '../../core/widgets/custom_text_field.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../location_fun.dart';
+import '../../core/constants/api_constants.dart';
 
 class SearchBusScreen extends ConsumerStatefulWidget {
   const SearchBusScreen({Key? key}) : super(key: key);
@@ -14,6 +18,12 @@ class SearchBusScreen extends ConsumerStatefulWidget {
 }
 
 class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
+  final List<String> fallbackPlaces = [
+    "الشافعي", "إبن سينا", "المساكن", "مستشفى النور", 
+    "العمودي المتضررين", "رئاسة الجامعة", "أبراج بن محفوظ", 
+    "باعبود", "الجسر", "الشرج"
+  ];
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -60,7 +70,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
                   _buildLocationSelector(
                     label: 'إلى',
                     value: locationState.destination?.name ?? 'ابحث عن وجهة',
-                    onTap: () => context.push('/home/location', extra: false),
+                    onTap: () => _showDestinationBottomSheet(context),
                   ),
                 ],
               ),
@@ -133,6 +143,38 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDestinationBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: fallbackPlaces.length,
+            itemBuilder: (context, index) {
+              final place = fallbackPlaces[index];
+              return ListTile(
+                leading: const Icon(Icons.location_on, color: AppColors.primaryBlue),
+                title: Text(
+                  place,
+                  style: const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w500),
+                ),
+                onTap: () {
+                  // Update destination via the Riverpod provider
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
