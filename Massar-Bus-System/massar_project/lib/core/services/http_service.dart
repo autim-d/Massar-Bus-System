@@ -45,4 +45,30 @@ class HttpService {
       body: body != null ? jsonEncode(body) : null,
     );
   }
+
+  Future<http.Response> delete(String url) async {
+    final headers = await _getHeaders();
+    return await http.delete(Uri.parse(url), headers: headers);
+  }
+
+  // دعم رفع الملفات
+  Future<http.Response> multipart(
+    String url, {
+    required String filePath,
+    String fieldName = 'avatar',
+    String method = 'POST',
+  }) async {
+    final token = await _authService.getIdToken();
+    final request = http.MultipartRequest(method, Uri.parse(url));
+
+    request.headers.addAll({
+      'Accept': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    });
+
+    request.files.add(await http.MultipartFile.fromPath(fieldName, filePath));
+
+    final streamedResponse = await request.send();
+    return await http.Response.fromStream(streamedResponse);
+  }
 }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../auth/bloc/auth_bloc.dart';
+import '../../auth/bloc/auth_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 
@@ -62,33 +66,41 @@ class _TicketListScreenState extends State<TicketListScreen> {
                       padding: EdgeInsets.symmetric(
                         horizontal: horizontalPadding,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 190),
-                          Text(
-                            'صباح الخير يا خليل',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'air',
-                              fontSize: w * 0.053,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textSave,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'أتمنى أن يكون يومك مشرقًا\nمثل الشمس',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'AirStripArabic',
-                              fontSize: w * 0.034,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              height: 1.1,
-                            ),
-                          ),
-                        ],
+                      child: BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          String name = 'زائر';
+                          if (state is AuthAuthenticated) {
+                            name = state.user?.firstName ?? 'مستخدم مسار';
+                          }
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 190),
+                              Text(
+                                'صباح الخير يا $name',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'air',
+                                  fontSize: w * 0.053,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.textSave,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'أتمنى أن يكون يومك مشرقًا\nمثل الشمس',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'AirStripArabic',
+                                  fontSize: w * 0.034,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  height: 1.1,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -141,17 +153,19 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                           fit: BoxFit.cover,
                                           errorBuilder: (_, __, ___) =>
                                               Container(
-                                            color: isDark
-                                                ? Colors.white.withOpacity(0.05)
-                                                : Colors.grey.shade100,
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.map,
-                                                size: 48,
-                                                color: Colors.grey,
+                                                color: isDark
+                                                    ? Colors.white.withOpacity(
+                                                        0.05,
+                                                      )
+                                                    : Colors.grey.shade100,
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.map,
+                                                    size: 48,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
                                         ),
                                       ),
                                       Positioned(
@@ -201,7 +215,8 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                       style: TextStyle(
                                         fontFamily: 'AirStripArabic',
                                         fontSize: w * 0.032,
-                                        color: theme.textTheme.bodyMedium?.color,
+                                        color:
+                                            theme.textTheme.bodyMedium?.color,
                                       ),
                                     ),
                                   ],
@@ -263,7 +278,8 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                           fontFamily: 'AirStripArabic',
                                           fontSize: w * 0.036,
                                           fontWeight: FontWeight.w700,
-                                          color: theme.textTheme.bodyLarge?.color,
+                                          color:
+                                              theme.textTheme.bodyLarge?.color,
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -285,7 +301,10 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                               style: TextStyle(
                                                 fontFamily: 'AirStripArabic',
                                                 fontSize: w * 0.032,
-                                                color: theme.textTheme.bodyMedium?.color,
+                                                color: theme
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.color,
                                               ),
                                             ),
                                           ),
@@ -351,7 +370,9 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                             ),
                                             border: Border.all(
                                               color: isDark
-                                                  ? Colors.white.withOpacity(0.1)
+                                                  ? Colors.white.withOpacity(
+                                                      0.1,
+                                                    )
                                                   : Colors.grey.shade200,
                                             ),
                                           ),
@@ -367,7 +388,10 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                                 item['label'] as String,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w700,
-                                                  color: theme.textTheme.bodyLarge?.color,
+                                                  color: theme
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color,
                                                 ),
                                               ),
                                             ],
@@ -387,7 +411,9 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                             ),
                                             border: Border.all(
                                               color: isDark
-                                                  ? Colors.white.withOpacity(0.1)
+                                                  ? Colors.white.withOpacity(
+                                                      0.1,
+                                                    )
                                                   : Colors.grey.shade200,
                                             ),
                                             boxShadow: [
@@ -461,7 +487,10 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                             place,
                                             style: TextStyle(
                                               fontSize: w * 0.034,
-                                              color: theme.textTheme.bodyMedium?.color,
+                                              color: theme
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
                                             ),
                                           ),
                                         ),
@@ -469,7 +498,8 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                         Icon(
                                           Icons.access_time,
                                           size: 18,
-                                          color: theme.iconTheme.color?.withOpacity(0.5),
+                                          color: theme.iconTheme.color
+                                              ?.withOpacity(0.5),
                                         ),
                                       ],
                                     ),

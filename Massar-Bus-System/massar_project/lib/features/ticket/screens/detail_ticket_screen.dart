@@ -14,6 +14,23 @@ class DetailTicketScreen extends ConsumerWidget {
     final ticket = ref.watch(ticketProvider);
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // إذا لم تكن هناك تذكرة محددة بعد
+    if (ticket == null) {
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text('تذكرتك'),
+            backgroundColor: Colors.white,
+            elevation: 0,
+          ),
+          body: const Center(
+            child: Text('لا توجد تذكرة محددة', style: TextStyle(fontSize: 16)),
+          ),
+        ),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -67,3 +84,4 @@ class DetailTicketScreen extends ConsumerWidget {
     );
   }
 }
+

@@ -8,6 +8,7 @@ import 'package:massar_project/features/account/widgets/profile_header_widget.da
 import 'package:massar_project/features/account/widgets/account_settings_card_widget.dart';
 import 'package:massar_project/features/account/widgets/support_settings_card_widget.dart';
 import 'package:massar_project/features/account/widgets/guest_profile_placeholder.dart';
+import 'package:massar_project/features/account/models/user_model.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -17,6 +18,8 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  UserModel? _lastUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +34,12 @@ class _AccountScreenState extends State<AccountScreen> {
             );
           }
 
+          if (state is AuthAuthenticated) {
+            _lastUser = state.user;
+          } else if (state is ProfileUpdateSuccess) {
+            _lastUser = state.user;
+          }
+
           return SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -42,11 +51,15 @@ class _AccountScreenState extends State<AccountScreen> {
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
-                      const Positioned(
+                      Positioned(
                         left: 20,
                         right: 20,
                         top: 45,
-                        child: ProfileHeaderWidget(),
+                        child: ProfileHeaderWidget(
+                          name: _lastUser != null ? '${_lastUser!.firstName} ${_lastUser!.lastName}' : null,
+                          email: _lastUser?.email,
+                          imageUrl: _lastUser?.profileImage,
+                        ),
                       ),
                     ],
                   ),

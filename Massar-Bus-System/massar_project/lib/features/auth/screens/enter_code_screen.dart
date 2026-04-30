@@ -2,22 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
+// تأكد من أن مسار الاستدعاء هذا يطابق مكان ملف auth_repository.dart في مشروعك
+import 'package:massar_project/repositories/auth_repository.dart';
 
-
-class EnterCodeScreen extends StatefulWidget {
+class EnterCodeScreen extends ConsumerStatefulWidget {
   final String phoneNumber;
   const EnterCodeScreen({super.key, required this.phoneNumber});
 
   @override
-  State<EnterCodeScreen> createState() => _EnterCodeScreenState();
+  ConsumerState<EnterCodeScreen> createState() => _EnterCodeScreenState();
 }
 
-class _EnterCodeScreenState extends State<EnterCodeScreen> {
+class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
   final int fieldsCount = 4;
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
   bool _isPasting = false;
+
+  // إضافة متغير لإدارة حالة التحميل أثناء انتظار رد السيرفر
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -42,6 +47,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
   }
 
   void _onFieldChanged(int index) {
+    if (_isLoading) return; // منع أي تفاعل أثناء التحميل
+
     final text = _controllers[index].text;
 
     if (text.length > 1 && !_isPasting) {
@@ -62,46 +69,75 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       return;
     }
 
-    // إذا أدخل حرفًا انتقل للفوكس التالي
     if (text.isNotEmpty) {
       if (index + 1 < fieldsCount) {
         _focusNodes[index + 1].requestFocus();
       } else {
-        // الحقل الأخير معبأ -> محاولة الإرسال التلقائي
         _trySubmit();
       }
     }
   }
 
-  // محاولة الإرسال إن اكتملت الحقول
-  void _trySubmit() {
+  // --- دالة الربط الفعلية مع السيرفر ---
+  void _trySubmit() async {
     final code = _controllers.map((c) => c.text).join();
+
     if (code.length == fieldsCount && RegExp(r'^\d+$').hasMatch(code)) {
-      // تأخير بسيط لتحسين الـ UX ثم التنقّل
-      Future.delayed(const Duration(milliseconds: 250), () {
-        if (!mounted) return;
-        // استبدل HomeScreen() باسم الصفحة الرئيسية في مشروعك إن اختلف
-        context.go('/home');
+      // إخفاء لوحة المفاتيح
+      FocusScope.of(context).unfocus();
+
+      setState(() {
+        _isLoading = true; // تفعيل حالة التحميل
       });
+
+      // استدعاء Repository للتحقق من الرمز
+      final authRepo = ref.read(authRepositoryProvider);
+      final isSuccess = await authRepo.verifyOtp(widget.phoneNumber, code);
+
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false; // إيقاف حالة التحميل بعد وصول الرد
+      });
+
+      if (isSuccess) {
+        // نجح التحقق! التوجيه إلى الصفحة الرئيسية
+        context.go('/home');
+      } else {
+        // فشل التحقق، إظهار رسالة خطأ
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'رمز التأكيد غير صحيح، يرجى المحاولة مرة أخرى.',
+              style: TextStyle(fontFamily: 'Cairo'),
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        // تفريغ الخانات وإعادة التركيز للمربع الأول ليعيد المستخدم المحاولة
+        for (var c in _controllers) {
+          c.clear();
+        }
+        _focusNodes[0].requestFocus();
+      }
     }
   }
 
-  // إعادة الإرسال -> نعيد التوجيه إلى VerificationMethodScreen
   void _onResend() {
+    if (_isLoading) return; // منع إعادة الإرسال أثناء التحميل
     context.pushReplacement('/verification', extra: widget.phoneNumber);
   }
 
-  // بناء مربع رقم واحد
   Widget _buildBox(int index, double boxSize) {
     return SizedBox(
       width: boxSize,
       height: boxSize,
       child: RawKeyboardListener(
-        focusNode: FocusNode(), // listening to backspace
+        focusNode: FocusNode(),
         onKey: (event) {
           if (event is RawKeyDownEvent &&
               event.logicalKey == LogicalKeyboardKey.backspace) {
-            // لو الخانة الحالية فارغة نرجع للخانة السابقة
             if (_controllers[index].text.isEmpty && index > 0) {
               _focusNodes[index - 1].requestFocus();
               _controllers[index - 1].text = '';
@@ -114,11 +150,16 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           maxLength: 1,
+          enabled: !_isLoading, // تعطيل الخانة تماماً أثناء الاتصال بالسيرفر
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(1),
           ],
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.grey.shade900),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Colors.grey.shade900,
+          ),
           decoration: InputDecoration(
             counterText: '',
             filled: true,
@@ -133,12 +174,10 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               borderSide: BorderSide(color: AppColors.mainButton, width: 1.6),
             ),
           ),
-          // onChanged يُستخدم أيضاً لالتقاط الحذف عبر واجهات الهواتف حيث لا تعمل RawKeyboard
           onChanged: (v) {
             if (v.isEmpty && index > 0) {
               _focusNodes[index - 1].requestFocus();
             }
-            // _onFieldChanged سيتم استدعاؤه عبر listener على الـ controller
           },
         ),
       ),
@@ -148,11 +187,9 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
   @override
   Widget build(BuildContext context) {
     final phone = widget.phoneNumber;
-    // ignore: unused_local_variable
-    final w = MediaQuery.of(context).size.width;
     final horizontalPadding = 24.0;
-    final boxSize = 58.0; // مطابق للصورة
-    final boxSpacing = 12.0; // المسافة بين الصناديق
+    final boxSize = 58.0;
+    final boxSpacing = 12.0;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -172,29 +209,32 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 6),
-
                 const Text(
                   'أدخل رمز التأكيد',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                 ),
-
                 const SizedBox(height: 8),
-
-                Text(
+                const Text(
                   'لقد أرسلنا رسالة إلى رقمك',
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   phone,
-                  style: const TextStyle(fontSize: 14, color: AppColors.secondaryColor, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.secondaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-
                 const SizedBox(height: 28),
 
-                // صف الحقول بأبعاد وتباعد مطابقين
+                // صف الحقول
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(fieldsCount, (i) {
@@ -204,26 +244,35 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                     );
                   }),
                 ),
+                const SizedBox(height: 32),
 
-                const SizedBox(height: 22),
-
-                Center(
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                      children: [
-                        const TextSpan(text: 'لم تستلم الرسالة؟ '),
-                        TextSpan(
-                          text: 'أعد الإرسال',
-                          style: const TextStyle(color: AppColors.textEdit, fontWeight: FontWeight.w700),
-                          recognizer: TapGestureRecognizer()..onTap = _onResend,
+                // عرض مؤشر التحميل أثناء الانتظار، أو زر إعادة الإرسال
+                if (_isLoading)
+                  const CircularProgressIndicator(color: AppColors.mainButton)
+                else
+                  Center(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade700,
                         ),
-                      ],
+                        children: [
+                          const TextSpan(text: 'لم تستلم الرسالة؟ '),
+                          TextSpan(
+                            text: 'أعد الإرسال',
+                            style: const TextStyle(
+                              color: AppColors.textEdit,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = _onResend,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-
                 const Spacer(),
               ],
             ),

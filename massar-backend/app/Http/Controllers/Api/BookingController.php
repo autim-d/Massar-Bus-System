@@ -19,6 +19,8 @@ class BookingController extends Controller
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
+            'passenger_name' => 'nullable|string|max:255',
+            'passenger_phone' => 'nullable|string|max:20',
         ]);
 
         $basePrice = 50.00;
@@ -34,9 +36,29 @@ class BookingController extends Controller
             'service_fee' => $serviceFee,
             'total_amount' => $total,
             'status' => 'pending',
+            'passenger_name' => $request->passenger_name,
+            'passenger_phone' => $request->passenger_phone,
             'purchased_at' => null,
         ]);
 
         return new BookingResource($booking->load('trip.route', 'trip.bus'));
+    }
+
+    /**
+     * جلب آخر تذكرة نشطة للمستخدم
+     */
+    public function getActiveTicket(Request $request)
+    {
+        $booking = $request->user()->bookings()
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->with(['trip.bus', 'trip.route.originStation', 'trip.route.destinationStation'])
+            ->latest()
+            ->first();
+
+        if (!$booking) {
+            return response()->json(['data' => null]);
+        }
+
+        return new BookingResource($booking);
     }
 }

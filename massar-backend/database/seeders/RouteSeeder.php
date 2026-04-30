@@ -11,19 +11,21 @@ class RouteSeeder extends Seeder
 {
     public function run(): void
     {
-        $riyadh = Station::where('city', 'Riyadh')->first();
-        $jeddah = Station::where('city', 'Jeddah')->first();
-        $dammam = Station::where('city', 'Dammam')->first();
-        $makkah = Station::where('city', 'Makkah')->first();
+        $sanaa = Station::where('city', 'صنعاء')->first();
+        $aden = Station::where('city', 'عدن')->first();
+        $taiz = Station::where('city', 'تعز')->first();
+        $ibb = Station::where('city', 'إب')->first();
 
-        if ($riyadh && $jeddah && $dammam && $makkah) {
+        if ($sanaa && $aden && $taiz && $ibb) {
             $routes = [
-                ['origin' => $riyadh->id, 'destination' => $dammam->id, 'duration' => 240],
-                ['origin' => $dammam->id, 'destination' => $riyadh->id, 'duration' => 240],
-                ['origin' => $riyadh->id, 'destination' => $jeddah->id, 'duration' => 600],
-                ['origin' => $jeddah->id, 'destination' => $riyadh->id, 'duration' => 600],
-                ['origin' => $jeddah->id, 'destination' => $makkah->id, 'duration' => 60],
-                ['origin' => $makkah->id, 'destination' => $jeddah->id, 'duration' => 60],
+                ['origin' => $sanaa->id, 'destination' => $aden->id, 'duration' => 420], // ~7 hours
+                ['origin' => $aden->id, 'destination' => $sanaa->id, 'duration' => 420],
+                ['origin' => $sanaa->id, 'destination' => $taiz->id, 'duration' => 300], // ~5 hours
+                ['origin' => $taiz->id, 'destination' => $sanaa->id, 'duration' => 300],
+                ['origin' => $taiz->id, 'destination' => $aden->id, 'duration' => 180], // ~3 hours
+                ['origin' => $aden->id, 'destination' => $taiz->id, 'duration' => 180],
+                ['origin' => $ibb->id, 'destination' => $sanaa->id, 'duration' => 120],  // ~2 hours
+                ['origin' => $sanaa->id, 'destination' => $ibb->id, 'duration' => 120],
             ];
 
             foreach ($routes as $r) {

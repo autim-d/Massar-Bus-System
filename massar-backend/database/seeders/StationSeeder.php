@@ -11,10 +11,10 @@ class StationSeeder extends Seeder
     public function run(): void
     {
         $stations = [
-            ['name' => 'Riyadh Main Station', 'city' => 'Riyadh', 'latitude' => 24.7136, 'longitude' => 46.6753],
-            ['name' => 'Jeddah Central Station', 'city' => 'Jeddah', 'latitude' => 21.4858, 'longitude' => 39.1925],
-            ['name' => 'Dammam Eastern Station', 'city' => 'Dammam', 'latitude' => 26.4207, 'longitude' => 50.0888],
-            ['name' => 'Makkah Holy Station', 'city' => 'Makkah', 'latitude' => 21.3891, 'longitude' => 39.8579],
+            ['name' => 'صنعاء - المحطة الرئيسية', 'city' => 'صنعاء', 'latitude' => 15.3694, 'longitude' => 44.1910],
+            ['name' => 'عدن - المحطة المركزية', 'city' => 'عدن', 'latitude' => 12.7855, 'longitude' => 45.0186],
+            ['name' => 'تعز - المحطة الغربية', 'city' => 'تعز', 'latitude' => 13.5794, 'longitude' => 44.0116],
+            ['name' => 'إب - محطة الجبل', 'city' => 'إب', 'latitude' => 13.9743, 'longitude' => 44.1730],
         ];
 
         foreach ($stations as $station) {

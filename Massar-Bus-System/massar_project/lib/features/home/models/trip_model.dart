@@ -10,6 +10,8 @@ class TripModel {
   final String type; // e.g., 'مختلط', 'عائلي'
   final bool isFastest;
   final bool isCheapest;
+  final String? passengerName;
+  final String? passengerPhone;
 
   TripModel({
     required this.id,
@@ -23,9 +25,34 @@ class TripModel {
     this.type = 'مختلط',
     this.isFastest = false,
     this.isCheapest = false,
+    this.passengerName,
+    this.passengerPhone,
   });
 
-  // Dummy helper to generate a sample trip
+  /// Factory لتحويل بيانات API (TripResource) إلى TripModel
+  factory TripModel.fromJson(Map<String, dynamic> json) {
+    return TripModel(
+      id: json['id']?.toString() ?? '',
+      busName: json['busName'] ?? 'باص مسار',
+      date: json['date'] ?? '',
+      departureTime: json['departureTime'] ?? '',
+      arrivalTime: json['arrivalTime'] ?? '',
+      from: json['fromStation']?['name'] ?? '',
+      to: json['toStation']?['name'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      type: (json['isMixed'] == true)
+          ? 'مختلط'
+          : (json['isLadiesOnly'] == true)
+              ? 'عائلي'
+              : (json['isMenOnly'] == true)
+                  ? 'رجال فقط'
+                  : 'مختلط',
+      isFastest: json['isFastest'] ?? false,
+      isCheapest: json['isCheapest'] ?? false,
+    );
+  }
+
+  /// Factory لبيانات عرض تجريبي (يمكن إزالته لاحقاً)
   factory TripModel.sample() {
     return TripModel(
       id: 'TRP-101',
@@ -38,6 +65,27 @@ class TripModel {
       price: 10000,
       type: 'مختلط',
       isFastest: true,
+    );
+  }
+
+  TripModel copyWith({
+    String? passengerName,
+    String? passengerPhone,
+  }) {
+    return TripModel(
+      id: id,
+      busName: busName,
+      date: date,
+      departureTime: departureTime,
+      arrivalTime: arrivalTime,
+      from: from,
+      to: to,
+      price: price,
+      type: type,
+      isFastest: isFastest,
+      isCheapest: isCheapest,
+      passengerName: passengerName ?? this.passengerName,
+      passengerPhone: passengerPhone ?? this.passengerPhone,
     );
   }
 }

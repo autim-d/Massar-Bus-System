@@ -19,6 +19,8 @@ class BookingResource extends JsonResource
             'booking_code' => $this->booking_code,
             'trip' => new TripResource($this->whenLoaded('trip')),
             'status' => $this->status,
+            'passenger_name' => $this->passenger_name,
+            'passenger_phone' => $this->passenger_phone,
             'pricing' => [
                 'ticket_price' => (float) $this->ticket_price,
                 'protection_price' => (float) $this->protection_price,

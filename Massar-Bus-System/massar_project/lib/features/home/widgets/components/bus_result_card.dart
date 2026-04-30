@@ -6,10 +6,14 @@ import 'route_timeline.dart';
 
 class BusResultCard extends StatelessWidget {
   final BusTicketModel ticket;
+  final String? passengerName;
+  final String? passengerPhone;
 
   const BusResultCard({
     Key? key,
     required this.ticket,
+    this.passengerName,
+    this.passengerPhone,
   }) : super(key: key);
 
   @override
@@ -19,7 +23,12 @@ class BusResultCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/home/ticket-details', extra: ticket);
+        context.push('/home/ticket-details', 
+          extra: ticket.copyWith(
+            passengerName: passengerName,
+            passengerPhone: passengerPhone,
+          )
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),

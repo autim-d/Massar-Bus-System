@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:massar_project/core/constants/dummy_data.dart';
 
 class ProfileState {
   final File? image;
@@ -12,10 +11,10 @@ class ProfileState {
 
   ProfileState({
     this.image,
-    this.name = DummyData.userName,
-    this.email = DummyData.userEmail,
-    this.gender = DummyData.userGender,
-    this.phone = DummyData.userPhone,
+    this.name = '',
+    this.email = '',
+    this.gender = '',
+    this.phone = '',
   });
 
   ProfileState copyWith({
@@ -40,7 +39,21 @@ class ProfileController extends Notifier<ProfileState> {
 
   @override
   ProfileState build() {
+    // يبدأ فارغاً - يتم تعبئته من AuthBloc عند تحميل الشاشة
     return ProfileState();
+  }
+
+  /// تحديث البيانات من كائن المستخدم القادم من الباك أند
+  void syncFromUser({
+    required String name,
+    required String email,
+    required String phone,
+  }) {
+    state = state.copyWith(
+      name: name,
+      email: email,
+      phone: phone,
+    );
   }
 
   Future<void> pickImage() async {

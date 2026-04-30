@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-
-// تأكد أن ملف EnterCodeScreen موجود في المسار التالي
-// import 'EnterCodeScreen.dart';
+// استيراد الـ Bloc والـ Events/States
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 
 class VerificationMethodScreen extends StatelessWidget {
-  // نمرر رقم الهاتف لعرضه داخل البطاقة
   final String phoneNumber;
 
   const VerificationMethodScreen({super.key, required this.phoneNumber});
@@ -17,151 +18,185 @@ class VerificationMethodScreen extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     final horizontalPadding = w * 0.06;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              // AppBar مخصص خفيف (سطر علوي به زر رجوع)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
-                child: Row(
-                  children: [
-                    // زر الرجوع (السهم إلى اليسار)
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back, size: 24),
-                    ),
-                    const Spacer(),
-                  ],
+    // استخدام BlocListener لمراقبة رد السيرفر بعد طلب الإرسال
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is OtpSentSuccess) {
+          // إذا نجح السيرفر في الإرسال، ننتقل لشاشة إدخال الكود
+          context.push('/otp', extra: phoneNumber);
+        } else if (state is AuthError) {
+          // إظهار خطأ في حال فشل الاتصال بالسيرفر
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                // AppBar مخصص خفيف
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.arrow_back, size: 24),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
                 ),
-              ),
 
-              // المحتوى الوسطي
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-
-                        // العنوان
-                        Text(
-                          'طريقة التحقق',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'air', // تأكد من تعريف الخط في pubspec
-                            fontSize: w * 0.062,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.grey.shade900,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // الوصف الصغير
-                        Text(
-                          'إختر طريقة التحقق من المذكورة أدناه',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'air',
-                            fontSize: w * 0.036,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        const SizedBox(height: 28),
-
-                        // بطاقة واتساب قابلة للضغط
-                        GestureDetector(
-                          onTap: () {
-                            // عند الضغط ننتقل لصفحة EnterCodeScreen مع تمرير رقم الهاتف
-                            context.push('/otp', extra: phoneNumber);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.grey.shade300, width: 1),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.03),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalPadding,
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          Text(
+                            'طريقة التحقق',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'air',
+                              fontSize: w * 0.062,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.grey.shade900,
                             ),
-                            child: Row(
-                              children: [
-                                // أيقونة واتساب على اليمين (لأن الصفحة RTL)
-                                Container(
-                                  width: 44,
-                                  height: 44,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'إختر طريقة التحقق من المذكورة أدناه',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'air',
+                              fontSize: w * 0.036,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 28),
+
+                          // بطاقة واتساب (مربوطة الآن بالباك أند)
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              final isLoading = state is AuthLoading;
+
+                              return GestureDetector(
+                                onTap: isLoading
+                                    ? null
+                                    : () {
+                                        // إرسال طلب للباك أند لإرسال الرمز عبر واتساب
+                                        context.read<AuthBloc>().add(
+                                          SendOtpRequested(phone: phoneNumber),
+                                        );
+                                      },
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF25D366), // whatsapp green
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Bootstrap.whatsapp, // من icons_plus
-                                      color: Colors.white,
-                                      size: 22,
+                                    color: isLoading
+                                        ? Colors.grey.shade100
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 1,
                                     ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.03),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
                                   ),
-                                ),
-
-                                const SizedBox(width: 12),
-
-                                // نص الوسم (واتساب إلى) والرقم أسفله
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        'واتساب إلى',
-                                        style: TextStyle(
-                                          fontFamily: 'air',
-                                          fontSize: w * 0.038,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.grey.shade800,
+                                      Container(
+                                        width: 44,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF25D366),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Center(
+                                          child: isLoading
+                                              ? const SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        color: Colors.white,
+                                                        strokeWidth: 2,
+                                                      ),
+                                                )
+                                              : const Icon(
+                                                  Bootstrap.whatsapp,
+                                                  color: Colors.white,
+                                                  size: 22,
+                                                ),
                                         ),
                                       ),
-                                      const SizedBox(height: 6),
-                                      // الرقم أسفل الوسم كما طلبت
-                                      Text(
-                                        phoneNumber,
-                                        style: TextStyle(
-                                          fontFamily: 'air',
-                                          fontSize: w * 0.034,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey.shade700,
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start, // تعديل ليتناسب مع RTL بشكل أفضل
+                                          children: [
+                                            Text(
+                                              'واتساب إلى',
+                                              style: TextStyle(
+                                                fontFamily: 'air',
+                                                fontSize: w * 0.038,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.grey.shade800,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              phoneNumber,
+                                              style: TextStyle(
+                                                fontFamily: 'air',
+                                                fontSize: w * 0.034,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16,
+                                        color: Colors.grey,
                                       ),
                                     ],
                                   ),
                                 ),
-
-                                // سهم بسيط على اليسار (يشير إلى أن البطاقة قابلة للضغط)
-                                const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // أي محتوى إضافي (إتركه فارغاً أو أضف خيارات أخرى)
-                      ],
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

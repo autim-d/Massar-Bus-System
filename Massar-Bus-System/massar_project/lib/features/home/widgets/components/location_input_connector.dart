@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 class LocationInputConnector extends StatelessWidget {
   final TextEditingController originController;
   final TextEditingController destinationController;
+  final FocusNode originFocusNode;
+  final FocusNode destinationFocusNode;
+  final VoidCallback onOriginTap;
+  final VoidCallback onDestinationTap;
   final Function(String) onDestinationSubmitted;
 
   const LocationInputConnector({
     Key? key,
     required this.originController,
     required this.destinationController,
+    required this.originFocusNode,
+    required this.destinationFocusNode,
+    required this.onOriginTap,
+    required this.onDestinationTap,
     required this.onDestinationSubmitted,
   }) : super(key: key);
 
@@ -41,6 +49,8 @@ class LocationInputConnector extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: originController,
+                    focusNode: originFocusNode,
+                    onTap: onOriginTap,
                     decoration: InputDecoration(
                       hintText: 'موقعك الحالي',
                       hintStyle: TextStyle(
@@ -105,6 +115,8 @@ class LocationInputConnector extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: destinationController,
+                    focusNode: destinationFocusNode,
+                    onTap: onDestinationTap,
                     onSubmitted: onDestinationSubmitted,
                     decoration: InputDecoration(
                       hintText: 'البحث عن وجهة',

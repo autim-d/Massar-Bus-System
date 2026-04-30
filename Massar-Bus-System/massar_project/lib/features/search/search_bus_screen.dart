@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:massar_project/features/home/models/bus_search_criteria.dart';
+import 'package:massar_project/features/home/providers/search_location_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/primary_button.dart';
-import '../../core/widgets/custom_text_field.dart';
 
-class SearchBusScreen extends StatefulWidget {
+class SearchBusScreen extends ConsumerStatefulWidget {
   const SearchBusScreen({Key? key}) : super(key: key);
 
   @override
-  State<SearchBusScreen> createState() => _SearchBusScreenState();
+  ConsumerState<SearchBusScreen> createState() => _SearchBusScreenState();
 }
 
-class _SearchBusScreenState extends State<SearchBusScreen> {
-  final TextEditingController _fromController = TextEditingController();
-  final TextEditingController _toController = TextEditingController();
-
+class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final locationState = ref.watch(searchLocationProvider);
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -42,35 +44,50 @@ class _SearchBusScreenState extends State<SearchBusScreen> {
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: theme.dividerColor,
-                ),
+                border: Border.all(color: theme.dividerColor),
               ),
               child: Column(
                 children: [
-                  CustomTextField(
-                    controller: _fromController,
-                    hintText: 'موقعك الحالي',
+                  _buildLocationSelector(
                     label: 'من',
+                    value: locationState.currentLocation?.name ?? 'موقعك الحالي',
+                    onTap: () => context.push('/home/location', extra: true),
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    controller: _toController,
-                    hintText: 'ابحث عن وجهة',
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Divider(),
+                  ),
+                  _buildLocationSelector(
                     label: 'إلى',
+                    value: locationState.destination?.name ?? 'ابحث عن وجهة',
+                    onTap: () => context.push('/home/location', extra: false),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
             PrimaryButton(
-              label: 'البحث عن موقع',
+              label: 'البحث عن باص',
               onPressed: () {
-                // Perform search
+                if (locationState.currentLocation != null &&
+                    locationState.destination != null) {
+                  final criteria = BusSearchCriteria(
+                    from: locationState.currentLocation!.name,
+                    to: locationState.destination!.name,
+                    fromId: locationState.currentLocation!.id,
+                    toId: locationState.destination!.id,
+                    date: DateTime.now(),
+                  );
+                  context.push('/home/results', extra: criteria);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('يرجى تحديد محطة الانطلاق والوصول')),
+                  );
+                }
               },
             ),
             const SizedBox(height: 24),
-            // Placeholder for saved locations
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -89,20 +106,17 @@ class _SearchBusScreenState extends State<SearchBusScreen> {
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: theme.dividerColor,
-                ),
+                border: Border.all(color: theme.dividerColor),
               ),
               child: Row(
                 children: [
                   Icon(Icons.location_on, color: theme.iconTheme.color),
                   const SizedBox(width: 12),
-                  Text(
+                  const Text(
                     'المساكن',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
-                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   const Spacer(),
@@ -114,6 +128,41 @@ class _SearchBusScreenState extends State<SearchBusScreen> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationSelector({
+    required String label,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                color: theme.textTheme.bodySmall?.color,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
           ],

@@ -404,12 +404,12 @@ class PaymentMethodScreen extends StatelessWidget {
                   ),
 
                   // Price Breakdown
-                  const Padding(
-                    padding: EdgeInsets.all(16),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
                     child: PriceBreakdownColumn(
-                      ticketPrice: 10000,
-                      protectionFee: 10000,
-                      serviceFee: 10000,
+                      ticketPrice: ticket.price,
+                      protectionFee: 200, // Sample convenience fee
+                      serviceFee: 300,    // Sample service fee
                     ),
                   ),
                 ],
@@ -427,7 +427,9 @@ class PaymentMethodScreen extends StatelessWidget {
                       onPressed: isLoading
                           ? null
                           : () {
-                              context.read<CheckoutBloc>().add(ProcessPaymentRequested());
+                              context.read<CheckoutBloc>().add(
+                                    ProcessPaymentRequested(tripId: ticket.id),
+                                  );
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff1570EF),

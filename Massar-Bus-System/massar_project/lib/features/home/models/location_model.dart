@@ -9,12 +9,12 @@ class LocationModel {
     this.description,
   });
 
-  // Example factory for future API integration
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String?,
+      // يأتي id من Laravel كـ int أو String، نحوّله دائماً لـ String
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      description: json['description']?.toString(),
     );
   }
 }

@@ -1,9 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_event.dart';
+import 'package:massar_project/features/auth/bloc/auth_state.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 
 class EditPhotoScreen extends StatefulWidget {
   final String currentImage;
@@ -17,69 +23,83 @@ class EditPhotoScreen extends StatefulWidget {
 class _EditPhotoScreenState extends State<EditPhotoScreen> {
   late String imagePath;
   late bool isAsset;
+  late bool isNetwork;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    imagePath = widget.currentImage;
+    _resetImage(widget.currentImage);
+  }
+
+  void _resetImage(String path) {
+    imagePath = path;
     isAsset = imagePath.startsWith('assets/');
+    isNetwork = imagePath.startsWith('http');
   }
 
-  // نسخ صورة الـ assets إلى ملف مؤقت
-  Future<File> _copyAssetToFile(String assetPath) async {
-    final byteData = await rootBundle.load(assetPath);
-    final tempDir = await getTemporaryDirectory();
-    final tempFile = File('${tempDir.path}/${assetPath.split('/').last}');
-    await tempFile.writeAsBytes(byteData.buffer.asUint8List());
-    return tempFile;
-  }
-
-  // دالة قص الصورة
-  Future<void> _cropImage() async {
-    File file;
-
-    if (isAsset) {
-      // إذا كانت صورة من assets، انسخها مؤقتاً
-      file = await _copyAssetToFile(imagePath);
-    } else {
-      file = File(imagePath);
-    }
-
-    final croppedFile = await ImageCropper().cropImage(
-      sourcePath: file.path,
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'تعديل الصورة',
-          toolbarColor: Colors.blue,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9,
-          ],
-        ),
-        IOSUiSettings(
-          title: 'تعديل الصورة',
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9,
-          ],
-        ),
-      ],
-    );
-
-    if (croppedFile != null) {
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
       setState(() {
-        imagePath = croppedFile.path;
+        imagePath = pickedFile.path;
         isAsset = false;
+        isNetwork = false;
       });
+      _cropImage();
+    }
+  }
+
+  Future<File> _prepareFileForCropping() async {
+    if (isAsset) {
+      final byteData = await rootBundle.load(imagePath);
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = File('${tempDir.path}/${imagePath.split('/').last}');
+      await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+      return tempFile;
+    } else if (isNetwork) {
+      final response = await http.get(Uri.parse(imagePath));
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = File('${tempDir.path}/temp_avatar.jpg');
+      await tempFile.writeAsBytes(response.bodyBytes);
+      return tempFile;
+    } else {
+      return File(imagePath);
+    }
+  }
+
+  Future<void> _cropImage() async {
+    try {
+      final file = await _prepareFileForCropping();
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'تعديل الصورة',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            title: 'تعديل الصورة',
+            aspectRatioLockEnabled: true,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          imagePath = croppedFile.path;
+          isAsset = false;
+          isNetwork = false;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ في معالجة الصورة: $e')),
+      );
     }
   }
 
@@ -87,109 +107,126 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: const Text(
-            'اضبط صورتك',
-            style: TextStyle(color: Colors.black),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => context.pop(),
-          ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // الصورة
-                    Container(
-                      width: 260,
-                      height: 260,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[300],
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: isAsset
-                          ? Image.asset(imagePath, fit: BoxFit.cover)
-                          : Image.file(File(imagePath), fit: BoxFit.cover),
-                    ),
-                    // أيقونة القلم
-                    Positioned(
-                      bottom: 8,
-                      right: 8,
-                      child: GestureDetector(
-                        onTap: _cropImage,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+      child: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is ProfileUpdateSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('تم تحديث الصورة بنجاح'), backgroundColor: Colors.green),
+            );
+            context.pop();
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+
+          return Scaffold(
+            backgroundColor: Colors.black,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              title: const Text('ضبط صورتك', style: TextStyle(color: Colors.black, fontFamily: 'Cairo')),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                onPressed: isLoading ? null : () => context.pop(),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.photo_library, color: Colors.blue),
+                  onPressed: isLoading ? null : _pickImage,
+                  tooltip: 'اختيار صورة جديدة',
                 ),
-              ),
+              ],
             ),
-            // أزرار الإلغاء والحفظ
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 280,
+                          height: 280,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey[900],
+                            border: Border.all(color: Colors.white24, width: 2),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: isAsset
+                              ? Image.asset(imagePath, fit: BoxFit.cover)
+                              : isNetwork
+                                  ? Image.network(
+                                      imagePath,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 50, color: Colors.red),
+                                    )
+                                  : Image.file(File(imagePath), fit: BoxFit.cover),
                         ),
-                      ),
-                      onPressed: () => context.pop(),
-                      child: const Text(
-                        'إلغاء',
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                      ),
+                        if (!isLoading)
+                          Positioned(
+                            bottom: 12,
+                            right: 12,
+                            child: FloatingActionButton.small(
+                              onPressed: _cropImage,
+                              child: const Icon(Icons.crop),
+                            ),
+                          ),
+                        if (isLoading)
+                          Container(
+                            width: 280,
+                            height: 280,
+                            color: Colors.black54,
+                            child: const Center(child: CircularProgressIndicator(color: Colors.white)),
+                          ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Colors.white24),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                          ),
+                          onPressed: isLoading ? null : () => context.pop(),
+                          child: const Text('إلغاء', style: TextStyle(fontFamily: 'Cairo')),
                         ),
                       ),
-                      onPressed: () => context.pop(imagePath),
-                      child: const Text(
-                        'حفظ',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                          ),
+                          onPressed: (isLoading || isAsset || isNetwork)
+                              ? null
+                              : () {
+                                  context.read<AuthBloc>().add(UpdateAvatarRequested(imagePath: imagePath));
+                                },
+                          child: isLoading
+                              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                              : const Text('حفظ كصورة شخصية', style: TextStyle(color: Colors.white, fontFamily: 'Cairo')),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

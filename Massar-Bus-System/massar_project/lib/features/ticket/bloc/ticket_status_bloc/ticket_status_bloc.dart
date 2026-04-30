@@ -2,12 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'ticket_status_event.dart';
 import 'ticket_status_state.dart';
 import '../../models/ticket_status_model.dart';
+import 'package:massar_project/core/repositories/booking_repository.dart';
 
 export 'ticket_status_event.dart';
 export 'ticket_status_state.dart';
 
 class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
-  TicketStatusBloc() : super(TicketStatusInitial()) {
+  final BookingRepository _bookingRepository;
+
+  TicketStatusBloc(this._bookingRepository) : super(TicketStatusInitial()) {
     on<LoadTicketStatuses>(_onLoadTicketStatuses);
     on<FilterTicketsRequested>(_onFilterTicketsRequested);
   }
@@ -17,60 +20,23 @@ class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
     Emitter<TicketStatusState> emit,
   ) async {
     emit(TicketStatusLoading());
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 600));
+    
+    try {
+      final bookingsJson = await _bookingRepository.getBookings();
+      final tickets = bookingsJson.map((json) => TicketStatusModel.fromJson(json)).toList();
 
-    final mockTickets = [
-      TicketStatusModel(
-        id: '1',
-        date: 'أكتوبر 20، 2024',
-        state: TicketState.pendingPayment,
-        from: 'مدينة المكلا - حضرموت',
-        to: 'المهرة',
-        busName: 'البراق',
-        ticketNumber: '11162',
-        seatCount: 'مقعادين',
-        departureTime: '10:00 صباحاً',
-        arrivalTime: '2:00 مساءاً',
-        price: '40,000 ر.ي',
-        tags: const ['الاسرع', 'VIP'],
-        paymentDeadline: DateTime.now().add(const Duration(minutes: 24, seconds: 40)),
-      ),
-      const TicketStatusModel(
-        id: '2',
-        date: 'أكتوبر 15، 2024',
-        state: TicketState.active,
-        from: 'صنعاء',
-        to: 'عدن',
-        busName: 'النقل الجماعي',
-        ticketNumber: '12882',
-        seatCount: 'مقعد واحد',
-        departureTime: '8:00 صباحاً',
-        arrivalTime: '4:00 مساءاً',
-        price: '25,000 ر.ي',
-        tags: ['مكيف', 'عائلي'],
-      ),
-      const TicketStatusModel(
-        id: '3',
-        date: 'سبتمبر 30، 2024',
-        state: TicketState.completed,
-        from: 'تعز',
-        to: 'إب',
-        busName: 'الراحة',
-        ticketNumber: '99281',
-        seatCount: '3 مقاعد',
-        departureTime: '1:00 مساءاً',
-        arrivalTime: '3:30 مساءاً',
-        price: '15,000 ر.ي',
-        tags: [],
-      ),
-    ];
-
-    emit(TicketStatusLoaded(
-      allTickets: mockTickets,
-      filteredTickets: mockTickets,
-      activeFilter: 'جميع الحالات',
-    ));
+      emit(TicketStatusLoaded(
+        allTickets: tickets,
+        filteredTickets: tickets,
+        activeFilter: 'جميع الحالات',
+      ));
+    } catch (e) {
+      emit(const TicketStatusLoaded(
+        allTickets: [],
+        filteredTickets: [],
+        activeFilter: 'جميع الحالات',
+      ));
+    }
   }
 
   void _onFilterTicketsRequested(

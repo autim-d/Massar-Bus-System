@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import 'package:massar_project/features/ticket/widgets/components/animated_success_modal.dart';
 
-class TicketDetailsScreen extends StatelessWidget {
+class TicketDetailsScreen extends StatefulWidget {
   final BusTicketModel ticket;
 
   const TicketDetailsScreen({
@@ -19,13 +19,28 @@ class TicketDetailsScreen extends StatelessWidget {
   });
 
   @override
+  State<TicketDetailsScreen> createState() => _TicketDetailsScreenState();
+}
+
+class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
+  late String? passengerName;
+  late String? passengerPhone;
+
+  @override
+  void initState() {
+    super.initState();
+    passengerName = widget.ticket.passengerName;
+    passengerPhone = widget.ticket.passengerPhone;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     // Determine a sample convenience fee based on ticket price (e.g. fixed 200)
     const double convenienceFee = 200.0;
-    final double totalPrice = ticket.price + convenienceFee;
+    final double totalPrice = widget.ticket.price + convenienceFee;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -79,7 +94,7 @@ class TicketDetailsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Section 1: Detailed Ticket Card
-                DetailedTicketCard(ticket: ticket),
+                DetailedTicketCard(ticket: widget.ticket),
                 const SizedBox(height: 32),
 
                 // Section 2: Map Tracking
@@ -87,7 +102,16 @@ class TicketDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Section 3: Passenger Info
-                const PassengerInfoCard(),
+                PassengerInfoCard(
+                  initialName: passengerName,
+                  initialPhone: passengerPhone,
+                  onChanged: (name, phone) {
+                    setState(() {
+                      passengerName = name;
+                      passengerPhone = phone;
+                    });
+                  },
+                ),
                 const SizedBox(height: 32),
 
                 // Section 4: Promo Banner
@@ -118,7 +142,7 @@ class TicketDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${ticket.price.toInt()} ريال يمني',
+                      '${widget.ticket.price.toInt()} ريال يمني',
                       style: TextStyle(
                         fontSize: 14,
                         color: theme.textTheme.bodyLarge?.color,
@@ -181,7 +205,7 @@ class TicketDetailsScreen extends StatelessWidget {
                 GuestActionInterceptor(
                   onTap: () {
                     // Navigate to Payment Method
-                    context.push('/tickets/payment', extra: ticket);
+                    context.push('/tickets/payment', extra: widget.ticket);
                   },
                   child: Container(
                     width: double.infinity,
@@ -207,7 +231,13 @@ class TicketDetailsScreen extends StatelessWidget {
                 GuestActionInterceptor(
                   onTap: () {
                     // Handle temporary booking via BLoC
-                    context.read<CheckoutBloc>().add(ProcessTemporaryBookingRequested());
+                    context.read<CheckoutBloc>().add(
+                          ProcessTemporaryBookingRequested(
+                            tripId: widget.ticket.id,
+                            passengerName: passengerName,
+                            passengerPhone: passengerPhone,
+                          ),
+                        );
                   },
                   child: BlocBuilder<CheckoutBloc, CheckoutState>(
                     builder: (context, state) {

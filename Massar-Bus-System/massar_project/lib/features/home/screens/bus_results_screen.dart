@@ -1,136 +1,163 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:massar_project/features/home/widgets/components/date_price_selector_item.dart';
 import '../providers/bus_search_provider.dart';
-import '../providers/search_location_provider.dart';
 import '../widgets/components/bus_result_card.dart';
-import '../widgets/components/date_price_selector_item.dart';
+import '../models/bus_search_criteria.dart';
 
 class BusResultsScreen extends ConsumerStatefulWidget {
-  const BusResultsScreen({super.key});
+  final BusSearchCriteria? criteria;
+
+  const BusResultsScreen({super.key, this.criteria});
 
   @override
   ConsumerState<BusResultsScreen> createState() => _BusResultsScreenState();
 }
 
 class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
-  DateTime selectedDate = DateTime.now();
+  late BusSearchCriteria searchCriteria;
+
+  @override
+  void initState() {
+    super.initState();
+    searchCriteria =
+        widget.criteria ??
+        BusSearchCriteria(from: '', to: '', date: DateTime.now());
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final ticketsAsync = ref.watch(busSearchProvider);
-    final locationState = ref.watch(searchLocationProvider);
-    final destinationName =
-        locationState.destination?.name ?? 'Monumen Nasional';
+
+    // تم التعديل هنا: تمرير criteria إلى الـ Provider لجلب بيانات التاريخ المحدد
+    final ticketsAsync = ref.watch(busSearchProvider(searchCriteria));
 
     return Directionality(
-      textDirection:
-          TextDirection.ltr, // To match the mock exact english/arabic mixed layout
+      textDirection: TextDirection.rtl, // تغيير الاتجاه للعربية
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: isDark ? const Color(0xFF1D2939) : Colors.white,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.close,
-                color: isDark ? Colors.white : Colors.black),
+            icon: const Icon(Icons.close),
             onPressed: () => context.pop(),
           ),
-          title: Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE85C0D),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      destinationName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: theme.textTheme.bodyLarge?.color,
-                      ),
-                    ),
-                    Text(
-                      'RT.5/RW.2, Gambir, Central Jakarta City...',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: theme.textTheme.bodyMedium?.color,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          title: const Text(
+            'نتائج البحث',
+            style: TextStyle(fontFamily: 'air', fontSize: 16),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.tune,
-                  color: isDark ? Colors.white : Colors.black),
-              onPressed: () {},
-            ),
-          ],
         ),
         body: Column(
           children: [
-            // Date Selector (Horizontal List)
+            // شريط اختيار التاريخ
             Container(
               color: isDark ? const Color(0xFF1D2939) : Colors.white,
-              height: 70,
+              height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 7,
+                itemCount: 14, // عرض أسبوعين
                 itemBuilder: (context, index) {
                   final date = DateTime.now().add(Duration(days: index));
                   return DatePriceSelectorItem(
                     date: date,
-                    price: 10000,
-                    isSelected: date.day == selectedDate.day,
+                    price: 2500, // يمكن جلب السعر الأدنى من الباك أند لاحقاً
+                    isSelected:
+                        date.day == searchCriteria.date.day &&
+                        date.month == searchCriteria.date.month &&
+                        date.year == searchCriteria.date.year,
                     onTap: () {
                       setState(() {
-                        selectedDate = date;
+                        searchCriteria = BusSearchCriteria(
+                          from: searchCriteria.from,
+                          to: searchCriteria.to,
+                          fromId: searchCriteria.fromId,
+                          toId: searchCriteria.toId,
+                          date: date,
+                          passengerName: searchCriteria.passengerName,
+                          passengerPhone: searchCriteria.passengerPhone,
+                        );
                       });
-                      // Normally we'd fetch new results here via Riverpod
-                      // ref.refresh(busSearchProvider);
+                      // تم التعديل هنا: تحديث المزود بالتاريخ الجديد
+                      ref.invalidate(busSearchProvider(searchCriteria));
                     },
                   );
                 },
               ),
             ),
 
-            // Bus Results
+            // عرض نتائج الحافلات من الباك أند
             Expanded(
               child: ticketsAsync.when(
                 data: (tickets) {
                   if (tickets.isEmpty) {
-                    return const Center(child: Text('No buses found.'));
+                    return _buildEmptyState();
                   }
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.all(16),
                     itemCount: tickets.length,
                     itemBuilder: (context, index) {
-                      return BusResultCard(ticket: tickets[index]);
+                      return BusResultCard(
+                        ticket: tickets[index],
+                        passengerName: searchCriteria.passengerName,
+                        passengerPhone: searchCriteria.passengerPhone,
+                      );
                     },
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF1570EF))),
-                error: (error, stack) => Center(child: Text('Error: $error')),
+                // حالة التحميل (Loading)
+                loading: () => const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF1570EF)),
+                ),
+                // حالة الخطأ (Error)
+                error: (error, stack) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'حدث خطأ أثناء جلب الرحلات',
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            ref.invalidate(busSearchProvider(searchCriteria)),
+                        child: const Text('إعادة المحاولة'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.directions_bus_filled_outlined,
+            size: 64,
+            color: Colors.grey.shade300,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'لا توجد رحلات متاحة في هذا التاريخ',
+            style: TextStyle(fontFamily: 'air'),
+          ),
+        ],
       ),
     );
   }
