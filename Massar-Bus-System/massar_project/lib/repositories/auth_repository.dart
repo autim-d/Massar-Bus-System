@@ -226,6 +226,7 @@ class AuthRepository {
         body: {
           'first_name': firstName,
           'last_name': lastName,
+          'email': email,
           'phone_number': phone,
         },
       );

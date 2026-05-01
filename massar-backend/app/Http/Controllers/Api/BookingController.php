@@ -23,14 +23,16 @@ class BookingController extends Controller
             'passenger_phone' => 'nullable|string|max:20',
         ]);
 
-        $basePrice = 50.00;
-        $protectionPrice = 10.00;
-        $serviceFee = 5.00;
+        $trip = \App\Models\Trip::findOrFail($request->trip_id);
+        
+        $basePrice = $trip->price;
+        $protectionPrice = 200.00; // Fixed for now, but could be dynamic
+        $serviceFee = 300.00;    // Fixed for now, but could be dynamic
         $total = $basePrice + $protectionPrice + $serviceFee;
 
         $booking = $request->user()->bookings()->create([
             'trip_id' => $request->trip_id,
-            'booking_code' => 'MAS-' . time() . rand(100, 999),
+            'booking_code' => 'MAS-' . strtoupper(bin2hex(random_bytes(4))), // More professional code
             'ticket_price' => $basePrice,
             'protection_price' => $protectionPrice,
             'service_fee' => $serviceFee,
@@ -40,6 +42,14 @@ class BookingController extends Controller
             'passenger_phone' => $request->passenger_phone,
             'purchased_at' => null,
         ]);
+
+        // إرسال إشعار للمستخدم
+        $request->user()->notify(new \App\Notifications\GeneralNotification(
+            'حجز جديد',
+            "تم إنشاء حجزك بنجاح للرحلة المتجهة إلى {$trip->route->destinationStation->name}. يرجى إتمام الدفع.",
+            'booking_created',
+            ['booking_id' => $booking->id, 'booking_code' => $booking->booking_code]
+        ));
 
         return new BookingResource($booking->load('trip.route', 'trip.bus'));
     }

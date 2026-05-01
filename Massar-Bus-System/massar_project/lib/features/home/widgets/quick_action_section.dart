@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../auth/bloc/auth_bloc.dart';
+import '../../auth/bloc/auth_state.dart';
 
 class QuickActionSection extends StatelessWidget {
   const QuickActionSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Only one example location provided in mockup: "المساكن"
-    // Duplicating it to show horizontal scrolling capability
-    final List<String> places = ['المساكن', 'المساكن', 'المساكن'];
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        List<String> places = [];
 
-    return SizedBox(
-      height: 72,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        scrollDirection: Axis.horizontal,
-        reverse: true, // Right-to-left scrolling behavior usually desired for RTL
-        itemCount: places.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          return _QuickActionChip(placeName: places[index]);
-        },
-      ),
+        if (state is AuthAuthenticated && state.suggestedStations != null) {
+          places = state.suggestedStations!
+              .map((s) => s['name'] as String)
+              .toList();
+        }
+
+        if (places.isEmpty) {
+          // Fallback placeholders if no data yet
+          places = ['المساكن', 'المكلا', 'الشحر'];
+        }
+
+        return SizedBox(
+          height: 72,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            scrollDirection: Axis.horizontal,
+            reverse:
+                true, // Right-to-left scrolling behavior usually desired for RTL
+            itemCount: places.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              return _QuickActionChip(placeName: places[index]);
+            },
+          ),
+        );
+      },
     );
   }
 }

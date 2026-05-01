@@ -13,16 +13,25 @@ import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/bloc/auth_event.dart'; // تأكد من استيراد ملف الأحداث
 import '../../auth/bloc/auth_state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // ─── استدعاء الحدث (Triggering the Event) ───
-    // نقوم باستدعاء جلب بيانات المستخدم فور دخول الشاشة
-    // لضمان تحديث الاسم وعدد الإشعارات من الباك أند
-    context.read<AuthBloc>().add(GetUserDataEvent());
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // جلب بيانات المستخدم مرة واحدة عند الدخول للشاشة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthBloc>().add(GetUserDataEvent());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Directionality(
       textDirection:
           TextDirection.rtl, // ضمان دعم اللغة العربية من اليمين لليسار

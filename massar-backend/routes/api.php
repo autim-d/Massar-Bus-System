@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\NotificationController;
 
 // ─── 1. مسارات المصادقة (Auth Routes) ───────────────────────────────────────
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -26,6 +27,12 @@ Route::middleware('firebase.auth')->group(function () {
     // بيانات الصفحة الرئيسية (الاسم، الإشعارات، والتذكرة النشطة)
     // هذا المسار هو الذي سيعطي البيانات لـ HomeScreen
     Route::get('/home/dashboard', [UserController::class, 'getDashboardData']);
+
+    // Notifications
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('notifications/{id}', [NotificationController::class, 'destroy']);
 
     // الملف الشخصي
     Route::get('/user/profile', [UserController::class, 'profile']);

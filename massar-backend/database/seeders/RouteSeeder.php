@@ -11,32 +11,51 @@ class RouteSeeder extends Seeder
 {
     public function run(): void
     {
-        $sanaa = Station::where('city', 'صنعاء')->first();
-        $aden = Station::where('city', 'عدن')->first();
-        $taiz = Station::where('city', 'تعز')->first();
-        $ibb = Station::where('city', 'إب')->first();
+        $stations = Station::all();
+        $cities = $stations->pluck('city')->unique();
 
-        if ($sanaa && $aden && $taiz && $ibb) {
-            $routes = [
-                ['origin' => $sanaa->id, 'destination' => $aden->id, 'duration' => 420], // ~7 hours
-                ['origin' => $aden->id, 'destination' => $sanaa->id, 'duration' => 420],
-                ['origin' => $sanaa->id, 'destination' => $taiz->id, 'duration' => 300], // ~5 hours
-                ['origin' => $taiz->id, 'destination' => $sanaa->id, 'duration' => 300],
-                ['origin' => $taiz->id, 'destination' => $aden->id, 'duration' => 180], // ~3 hours
-                ['origin' => $aden->id, 'destination' => $taiz->id, 'duration' => 180],
-                ['origin' => $ibb->id, 'destination' => $sanaa->id, 'duration' => 120],  // ~2 hours
-                ['origin' => $sanaa->id, 'destination' => $ibb->id, 'duration' => 120],
-            ];
+        // 1. Create routes between all stations in the same city (Neighborhoods)
+        foreach ($cities as $city) {
+            $cityStations = $stations->where('city', $city);
+            foreach ($cityStations as $origin) {
+                foreach ($cityStations as $destination) {
+                    if ($origin->id !== $destination->id) {
+                        Route::firstOrCreate(
+                            ['origin_station_id' => $origin->id, 'destination_station_id' => $destination->id],
+                            ['estimated_duration_minutes' => 15] // Default neighborhood duration
+                        );
+                    }
+                }
+            }
+        }
 
-            foreach ($routes as $r) {
+        // 2. Inter-city routes (Major connections)
+        $majorConnections = [
+            ['from' => 'صنعاء - المحطة الرئيسية', 'to' => 'عدن - المحطة المركزية', 'duration' => 480],
+            ['from' => 'عدن - المحطة المركزية', 'to' => 'صنعاء - المحطة الرئيسية', 'duration' => 480],
+            ['from' => 'صنعاء - المحطة الرئيسية', 'to' => 'تعز - جولة القصر', 'duration' => 300],
+            ['from' => 'تعز - جولة القصر', 'to' => 'صنعاء - المحطة الرئيسية', 'duration' => 300],
+            ['from' => 'صنعاء - المحطة الرئيسية', 'to' => 'مأرب - المحطة المركزية', 'duration' => 240],
+            ['from' => 'مأرب - المحطة المركزية', 'to' => 'صنعاء - المحطة الرئيسية', 'duration' => 240],
+            ['from' => 'عدن - المحطة المركزية', 'to' => 'المكلا - المحطة المركزية', 'duration' => 600],
+            ['from' => 'المكلا - المحطة المركزية', 'to' => 'عدن - المحطة المركزية', 'duration' => 600],
+            ['from' => 'المكلا - المحطة المركزية', 'to' => 'سيئون - المحطة العامة', 'duration' => 360],
+            ['from' => 'سيئون - المحطة العامة', 'to' => 'المكلا - المحطة المركزية', 'duration' => 360],
+            ['from' => 'المكلا - المحطة المركزية', 'to' => 'الشحر - محطة السوق', 'duration' => 60],
+            ['from' => 'عدن - المحطة المركزية', 'to' => 'تعز - جولة القصر', 'duration' => 180],
+            ['from' => 'تعز - جولة القصر', 'to' => 'عدن - المحطة المركزية', 'duration' => 180],
+            ['from' => 'الشحر - محطة السوق', 'to' => 'المكلا - المحطة المركزية', 'duration' => 60],
+        ];
+
+        $stationsByName = $stations->keyBy('name');
+        foreach ($majorConnections as $r) {
+            $origin = $stationsByName->get($r['from']);
+            $dest = $stationsByName->get($r['to']);
+
+            if ($origin && $dest) {
                 Route::firstOrCreate(
-                    [
-                        'origin_station_id' => $r['origin'],
-                        'destination_station_id' => $r['destination'],
-                    ],
-                    [
-                        'estimated_duration_minutes' => $r['duration']
-                    ]
+                    ['origin_station_id' => $origin->id, 'destination_station_id' => $dest->id],
+                    ['estimated_duration_minutes' => $r['duration']]
                 );
             }
         }

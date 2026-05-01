@@ -37,6 +37,7 @@ class TripSeeder extends Seeder
                     ],
                     [
                         'arrival_time' => $arrival,
+                        'price' => 10000.00,
                         'status' => 'scheduled'
                     ]
                 );

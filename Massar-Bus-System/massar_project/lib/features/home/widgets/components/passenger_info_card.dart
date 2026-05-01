@@ -110,16 +110,25 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
               const SizedBox(height: 8),
               BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
-                  if (state is AuthAuthenticated && 
-                      nameController.text.isEmpty && 
-                      (widget.initialName == null || widget.initialName!.isEmpty)) {
-                    // Pre-fill if authenticated and nothing was provided in search
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted && nameController.text.isEmpty) {
-                        nameController.text = state.name;
-                        phoneController.text = state.user?.phoneNumber ?? '';
-                      }
-                    });
+                  if (state is AuthAuthenticated) {
+                    final authName = state.name;
+                    final authPhone = state.user?.phoneNumber ?? '';
+                    
+                    // Pre-fill if current text is empty OR it's just the email and we have a real name now
+                    if (nameController.text.isEmpty || 
+                       (nameController.text.contains('@') && !authName.contains('@'))) {
+                      
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          if (nameController.text != authName) {
+                            nameController.text = authName;
+                          }
+                          if (phoneController.text.isEmpty && authPhone.isNotEmpty) {
+                            phoneController.text = authPhone;
+                          }
+                        }
+                      });
+                    }
                   }
                   return const SizedBox.shrink();
                 },

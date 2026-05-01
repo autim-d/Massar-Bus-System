@@ -24,6 +24,7 @@ class AuthAuthenticated extends AuthState {
   final String avatarUrl;
   final UserModel? user;
   final Map<String, dynamic>? activeTicket;
+  final List<dynamic>? suggestedStations;
 
   const AuthAuthenticated({
     this.name = '',
@@ -31,20 +32,32 @@ class AuthAuthenticated extends AuthState {
     this.avatarUrl = '',
     this.user,
     this.activeTicket,
+    this.suggestedStations,
   });
 
-  factory AuthAuthenticated.fromModel(UserModel user, {Map<String, dynamic>? activeTicket}) {
+  factory AuthAuthenticated.fromModel(
+    UserModel user, {
+    Map<String, dynamic>? activeTicket,
+    List<dynamic>? suggestedStations,
+  }) {
+    String fullName = '${user.firstName} ${user.lastName}'.trim();
+    if (fullName.isEmpty) {
+      fullName = user.email.split('@').first;
+    }
+    
     return AuthAuthenticated(
-      name: '${user.firstName} ${user.lastName}',
+      name: fullName,
       email: user.email,
       avatarUrl: user.profileImage,
       user: user,
       activeTicket: activeTicket,
+      suggestedStations: suggestedStations,
     );
   }
 
   @override
-  List<Object?> get props => [name, email, avatarUrl, user, activeTicket];
+  List<Object?> get props =>
+      [name, email, avatarUrl, user, activeTicket, suggestedStations];
 }
 
 // --- الحالة التي كانت ناقصة وتسببت في الخطأ ---

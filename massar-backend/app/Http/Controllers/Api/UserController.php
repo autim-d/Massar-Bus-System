@@ -62,6 +62,15 @@ class UserController extends Controller
             ];
         }
 
+        // جلب بعض المحطات المقترحة (مثلاً أشهر الوجهات)
+        $suggestedStations = \App\Models\Station::limit(5)->get()->map(function($station) {
+            return [
+                'id' => $station->id,
+                'name' => $station->name,
+                'city' => $station->city,
+            ];
+        });
+
         return response()->json([
             'status' => 'success',
             'user' => [
@@ -75,6 +84,7 @@ class UserController extends Controller
                 'unread_notifications_count' => $user->unreadNotificationsCount ?? 0,
             ],
             'activeTicket' => $activeTicketData,
+            'suggestedStations' => $suggestedStations,
         ]);
     }
 
