@@ -6,6 +6,7 @@ import 'package:massar_project/core/services/http_service.dart';
 import 'package:massar_project/features/account/models/user_model.dart';
 import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:massar_project/features/auth/signInWithGoogle.dart';
 
 // إنشاء مزود (Provider) للـ Repository
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -19,7 +20,7 @@ class AuthRepository {
   AuthRepository(this._httpService);
 
   final String _baseUrl = Platform.isAndroid
-      ? 'http://10.0.0.109:8000/api'
+      ? 'http://10.128.81.152:8000/api'
       : 'http://127.0.0.1:8000/api';
 
   // ==========================================
@@ -38,10 +39,11 @@ class AuthRepository {
         final profileData = jsonDecode(profileResponse.body);
         return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': profileData['user']};
       } else {
-        return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': {
-          'email': userCredential.user?.email,
-          'first_name': userCredential.user?.displayName ?? 'مستخدم',
-        }};
+        // Fix: Return success false to avoid silent failures
+        return {
+          'success': false,
+          'message': 'فشل في استرداد بيانات الملف الشخصي من الخادم (الرمز: ${profileResponse.statusCode}).',
+        };
       }
     } on FirebaseAuthException catch (e) {
       return {
@@ -52,6 +54,57 @@ class AuthRepository {
       return {
         'success': false,
         'message': 'تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً.',
+      };
+    }
+  }
+
+  // ==========================================
+  // 1.5. دالة تسجيل الدخول عبر جوجل (Google Login)
+  // ==========================================
+  Future<Map<String, dynamic>> loginWithGoogle() async {
+    try {
+      final userCredential = await signInWithGoogle();
+      if (userCredential == null) {
+        return {'success': false, 'message': 'تم إلغاء تسجيل الدخول عبر جوجل.'};
+      }
+
+      // بعد تسجيل الدخول عبر Firebase بنجاح، نحتاج لمزامنة بيانات الحساب مع Laravel
+      final String firstName = userCredential.user?.displayName?.split(' ').first ?? 'مستخدم';
+      final String lastName = userCredential.user?.displayName?.split(' ').skip(1).join(' ') ?? '';
+      final String email = userCredential.user?.email ?? '';
+      final String phone = userCredential.user?.phoneNumber ?? '';
+
+      final profileResponse = await _httpService.put(
+        '$_baseUrl/user/profile',
+        body: {
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone_number': phone,
+        },
+      );
+
+      Map<String, dynamic> userData = {
+        'first_name': firstName,
+        'last_name': lastName,
+        'email': email,
+        'phone_number': phone,
+      };
+
+      if (profileResponse.statusCode == 200) {
+        final profileData = jsonDecode(profileResponse.body);
+        userData = profileData['user'] ?? userData;
+        return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': userData};
+      } else {
+        return {
+          'success': false,
+          'message': 'فشل مزامنة بيانات حساب جوجل مع الخادم (الرمز: ${profileResponse.statusCode}).',
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'حدث خطأ أثناء الاتصال بجوجل: $e',
       };
     }
   }
@@ -241,9 +294,13 @@ class AuthRepository {
       if (profileResponse.statusCode == 200) {
           final profileData = jsonDecode(profileResponse.body);
           userData = profileData['user'] ?? userData;
+          return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': userData};
+      } else {
+          return {
+            'success': false,
+            'message': 'فشل مزامنة بيانات الحساب مع الخادم (الرمز: ${profileResponse.statusCode}).',
+          };
       }
-
-      return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': userData};
     } on FirebaseAuthException catch (e) {
       return {
         'success': false,

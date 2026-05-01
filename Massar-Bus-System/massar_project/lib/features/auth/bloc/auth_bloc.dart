@@ -21,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UpdateAvatarRequested>(_onUpdateAvatarRequested);
     on<GetUserDataEvent>(_onGetUserData);
     on<LogoutRequested>(_onLogoutRequested);
+    on<GoogleLoginRequested>(_onGoogleLoginRequested);
   }
 
   // ===========================================================================
@@ -231,6 +232,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthInitial());
     } catch (e) {
       emit(AuthError(message: e.toString()));
+    }
+  }
+
+  // ===========================================================================
+  // 10. معالجة حدث تسجيل الدخول عبر جوجل
+  // ===========================================================================
+  Future<void> _onGoogleLoginRequested(
+    GoogleLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+    try {
+      final result = await authRepository.loginWithGoogle();
+      if (result['success'] == true && result['user'] != null) {
+        final user = UserModel.fromJson(result['user']);
+        emit(AuthAuthenticated.fromModel(user));
+      } else {
+        emit(AuthError(message: result['message'] ?? 'فشل تسجيل الدخول باستخدام جوجل.'));
+      }
+    } catch (e) {
+      emit(const AuthError(message: 'تعذر تسجيل الدخول عبر جوجل.'));
     }
   }
 }

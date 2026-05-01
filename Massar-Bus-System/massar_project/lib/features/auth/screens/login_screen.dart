@@ -256,8 +256,99 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 32),
 
-                      // ... [باقي الكود الخاص بك (Google Login, Guest Login) كما هو بدون تغيير] ...
-                      // [تم اختصاره هنا لتوضيح التعديلات الأساسية]
+                      Row(
+                        children: [
+                          Expanded(child: Divider(color: theme.dividerColor)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              'أو الاستمرار باستخدام',
+                              style: TextStyle(
+                                fontFamily: 'ReadexPro',
+                                color: theme.textTheme.bodyMedium?.color,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          Expanded(child: Divider(color: theme.dividerColor)),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildSocialButton(
+                            icon: Brand(Brands.google),
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    context.read<AuthBloc>().add(const GoogleLoginRequested());
+                                  },
+                          ),
+                          const SizedBox(width: 20),
+                          _buildSocialButton(
+                            icon: Icon(
+                              Icons.phone_android,
+                              color: isDark ? Colors.white : Colors.black,
+                              size: 28,
+                            ),
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    context.pushNamed('phoneLogin');
+                                  },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                context.read<AuthBloc>().add(const GuestLoginRequested());
+                              },
+                        child: Text(
+                          'المتابعة كزائر',
+                          style: TextStyle(
+                            fontFamily: 'ReadexPro',
+                            fontSize: 16,
+                            color: theme.textTheme.bodyLarge?.color,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'ليس لديك حساب؟ ',
+                            style: TextStyle(
+                              fontFamily: 'ReadexPro',
+                              fontSize: 14,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    context.pushNamed('signup');
+                                  },
+                            child: Text(
+                              'إنشاء حساب',
+                              style: TextStyle(
+                                fontFamily: 'ReadexPro',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: isDark
+                                    ? const Color(0xFF5491F5)
+                                    : const Color(0xFF1570EF),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -266,6 +357,32 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSocialButton({required Widget icon, required VoidCallback? onTap}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1D2939) : Colors.white,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFEAECF0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(child: icon),
+      ),
     );
   }
 }

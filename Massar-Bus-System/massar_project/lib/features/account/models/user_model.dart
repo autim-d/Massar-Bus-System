@@ -45,9 +45,9 @@ class UserModel {
     try {
       if (avatarUrl.isNotEmpty && Platform.isAndroid) {
         if (avatarUrl.contains('127.0.0.1')) {
-          avatarUrl = avatarUrl.replaceAll('127.0.0.1', '10.0.0.109');
+          avatarUrl = avatarUrl.replaceAll('127.0.0.1', '10.128.81.152');
         } else if (avatarUrl.contains('localhost')) {
-          avatarUrl = avatarUrl.replaceAll('localhost', '10.0.0.109');
+          avatarUrl = avatarUrl.replaceAll('localhost', '10.128.81.152');
         }
       }
     } catch (_) {}

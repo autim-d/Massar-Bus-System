@@ -104,3 +104,22 @@ class UpdateAvatarRequested extends AuthEvent {
 class GetUserDataEvent extends AuthEvent {
   const GetUserDataEvent();
 }
+
+class CompleteRegistrationRequested extends AuthEvent {
+  final String phoneNumber;
+  final String gender;
+  final String location;
+
+  const CompleteRegistrationRequested({
+    required this.phoneNumber,
+    required this.gender,
+    required this.location,
+  });
+
+  @override
+  List<Object> get props => [phoneNumber, gender, location];
+}
+
+class GoogleLoginRequested extends AuthEvent {
+  const GoogleLoginRequested();
+}
