@@ -4,18 +4,57 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
 import 'package:massar_project/features/auth/bloc/auth_state.dart';
 
-class PassengerInfoCard extends StatelessWidget {
-  const PassengerInfoCard({super.key});
+class PassengerInfoCard extends StatefulWidget {
+  final String? initialName;
+  final String? initialPhone;
+  final Function(String name, String phone)? onChanged;
+
+  const PassengerInfoCard({
+    super.key,
+    this.initialName,
+    this.initialPhone,
+    this.onChanged,
+  });
+
+  @override
+  State<PassengerInfoCard> createState() => _PassengerInfoCardState();
+}
+
+class _PassengerInfoCardState extends State<PassengerInfoCard> {
+  late TextEditingController nameController;
+  late TextEditingController phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.initialName);
+    phoneController = TextEditingController(text: widget.initialPhone);
+
+    nameController.addListener(_notifyChanges);
+    phoneController.addListener(_notifyChanges);
+  }
+
+  void _notifyChanges() {
+    widget.onChanged?.call(nameController.text, phoneController.text);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'الاسم المطلوب',
+          'اسم العميل',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -40,73 +79,61 @@ class PassengerInfoCard extends StatelessWidget {
               ),
             ],
           ),
-          child: BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              String name = 'زائر';
-              String email = '';
-              String phone = '';
-
-              if (state is AuthAuthenticated) {
-                name = state.name;
-                email = state.email;
-                // Since AuthAuthenticated currently doesn't store phone, we use a placeholder or read it if available.
-                phone = '+967 776463185';
-              } else if (state is AuthGuest) {
-                name = 'ضيف (زائر)';
-                email = 'يرجى تسجيل الدخول للحجز';
-                phone = '';
-              }
-
-              return Row(
-                children: [
-                  Icon(
-                    LucideIcons.edit2,
-                    color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
-                    size: 20,
+          child: Column(
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'الاسم الكامل',
+                  hintText: 'أدخل الاسم الكامل',
+                  prefixIcon: const Icon(LucideIcons.user),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: theme.dividerColor),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: theme.textTheme.bodyLarge?.color,
-                            fontFamily: 'ReadexPro',
-                          ),
-                        ),
-                        if (email.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            email,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
-                              fontFamily: 'ReadexPro',
-                            ),
-                          ),
-                        ],
-                        if (phone.isNotEmpty) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            phone,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
-                              fontFamily: 'ReadexPro',
-                            ),
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ],
-                      ],
-                    ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'رقم الهاتف',
+                  hintText: '7xxxxxxxx',
+                  prefixIcon: const Icon(LucideIcons.phone),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: theme.dividerColor),
                   ),
-                ],
-              );
-            },
+                ),
+              ),
+              const SizedBox(height: 8),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthAuthenticated) {
+                    final authName = state.name;
+                    final authPhone = state.user?.phoneNumber ?? '';
+                    
+                    // Pre-fill if current text is empty OR it's just the email and we have a real name now
+                    if (nameController.text.isEmpty || 
+                       (nameController.text.contains('@') && !authName.contains('@'))) {
+                      
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          if (nameController.text != authName) {
+                            nameController.text = authName;
+                          }
+                          if (phoneController.text.isEmpty && authPhone.isNotEmpty) {
+                            phoneController.text = authPhone;
+                          }
+                        }
+                      });
+                    }
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ],
           ),
         ),
       ],

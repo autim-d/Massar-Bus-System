@@ -9,8 +9,10 @@ import 'package:massar_project/core/widgets/guest_action_interceptor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import 'package:massar_project/features/ticket/widgets/components/animated_success_modal.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_event.dart';
 
-class TicketDetailsScreen extends StatelessWidget {
+class TicketDetailsScreen extends StatefulWidget {
   final BusTicketModel ticket;
 
   const TicketDetailsScreen({
@@ -19,13 +21,28 @@ class TicketDetailsScreen extends StatelessWidget {
   });
 
   @override
+  State<TicketDetailsScreen> createState() => _TicketDetailsScreenState();
+}
+
+class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
+  late String? passengerName;
+  late String? passengerPhone;
+
+  @override
+  void initState() {
+    super.initState();
+    passengerName = widget.ticket.passengerName;
+    passengerPhone = widget.ticket.passengerPhone;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Determine a sample convenience fee based on ticket price (e.g. fixed 200)
-    const double convenienceFee = 200.0;
-    final double totalPrice = ticket.price + convenienceFee;
+    // Determine a dynamic convenience fee based on ticket price (e.g. 5%)
+    final double convenienceFee = widget.ticket.price * 0.05;
+    final double totalPrice = widget.ticket.price + convenienceFee;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -58,7 +75,7 @@ class TicketDetailsScreen extends StatelessWidget {
         ),
         body: BlocListener<CheckoutBloc, CheckoutState>(
           listener: (context, state) {
-            if (state is CheckoutSuccess && state.isTemporaryBooking) {
+            if (state is CheckoutSuccess) {
               showAnimatedSuccessModal(
                 context: context,
                 title: "تم الحجز بنجاح",
@@ -66,7 +83,12 @@ class TicketDetailsScreen extends StatelessWidget {
                 paymentMethod: state.session.paymentMethod,
                 transactionDate: state.session.transactionDate,
                 onViewTicket: () {
-                  context.go('/tickets/my-ticket', extra: state.session);
+                  if (state.isTemporaryBooking) {
+                    // تحديث بيانات المستخدم (عدد الإشعارات) فوراً بعد الحجز الناجح
+                    context.read<AuthBloc>().add(GetUserDataEvent());
+                    
+                    context.go('/tickets/my-ticket', extra: state.session);
+                  }
                 },
               );
             } else if (state is CheckoutError) {
@@ -79,7 +101,7 @@ class TicketDetailsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Section 1: Detailed Ticket Card
-                DetailedTicketCard(ticket: ticket),
+                DetailedTicketCard(ticket: widget.ticket),
                 const SizedBox(height: 32),
 
                 // Section 2: Map Tracking
@@ -87,7 +109,16 @@ class TicketDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Section 3: Passenger Info
-                const PassengerInfoCard(),
+                PassengerInfoCard(
+                  initialName: passengerName,
+                  initialPhone: passengerPhone,
+                  onChanged: (name, phone) {
+                    setState(() {
+                      passengerName = name;
+                      passengerPhone = phone;
+                    });
+                  },
+                ),
                 const SizedBox(height: 32),
 
                 // Section 4: Promo Banner
@@ -118,7 +149,7 @@ class TicketDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${ticket.price.toInt()} ريال يمني',
+                      '${widget.ticket.price.toInt()} ريال يمني',
                       style: TextStyle(
                         fontSize: 14,
                         color: theme.textTheme.bodyLarge?.color,
@@ -179,10 +210,15 @@ class TicketDetailsScreen extends StatelessWidget {
 
                 // Action Buttons
                 GuestActionInterceptor(
-                  onTap: () {
-                    // Navigate to Payment Method
-                    context.push('/tickets/payment', extra: ticket);
-                  },
+                    onTap: () {
+                      // Navigate to Payment Method
+                      context.push('/tickets/payment', 
+                        extra: widget.ticket.copyWith(
+                          passengerName: passengerName,
+                          passengerPhone: passengerPhone,
+                        )
+                      );
+                    },
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -207,7 +243,13 @@ class TicketDetailsScreen extends StatelessWidget {
                 GuestActionInterceptor(
                   onTap: () {
                     // Handle temporary booking via BLoC
-                    context.read<CheckoutBloc>().add(ProcessTemporaryBookingRequested());
+                    context.read<CheckoutBloc>().add(
+                          ProcessTemporaryBookingRequested(
+                            tripId: widget.ticket.id,
+                            passengerName: passengerName,
+                            passengerPhone: passengerPhone,
+                          ),
+                        );
                   },
                   child: BlocBuilder<CheckoutBloc, CheckoutState>(
                     builder: (context, state) {

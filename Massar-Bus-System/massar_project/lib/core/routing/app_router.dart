@@ -23,6 +23,7 @@ import 'package:massar_project/features/home/screens/bus_results_screen.dart';
 import 'package:massar_project/features/home/screens/ticket_details_screen.dart';
 import 'package:massar_project/features/home/models/trip_model.dart';
 import 'package:massar_project/features/home/models/bus_ticket_model.dart';
+import 'package:massar_project/features/home/models/bus_search_criteria.dart';
 import 'package:massar_project/features/ticket/models/checkout_session_model.dart';
 
 // ─── Tickets & Booking Flow ──────────────────────────────────────────────────
@@ -169,7 +170,9 @@ final GoRouter appRouter = GoRouter(
                   pageBuilder: (context, state) => MassarTransitions.parallaxSlideUp(
                     context: context,
                     state: state,
-                    child: const LocationSearchScreen(),
+                    child: LocationSearchScreen(
+                      isOriginInitialFocus: state.extra as bool? ?? true,
+                    ),
                   ),
                 ),
                 GoRoute(
@@ -178,7 +181,9 @@ final GoRouter appRouter = GoRouter(
                   pageBuilder: (context, state) => MassarTransitions.slideLeft(
                     context: context,
                     state: state,
-                    child: const BusResultsScreen(),
+                    child: BusResultsScreen(
+                      criteria: state.extra as BusSearchCriteria?,
+                    ),
                   ),
                 ),
                 GoRoute(
@@ -249,7 +254,9 @@ final GoRouter appRouter = GoRouter(
                   pageBuilder: (context, state) => MassarTransitions.elasticReveal(
                     context: context,
                     state: state,
-                    child: const PaymentSuccessScreen(),
+                    child: PaymentSuccessScreen(
+                      session: state.extra as CheckoutSessionModel?,
+                    ),
                   ),
                 ),
               ],

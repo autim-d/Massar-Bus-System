@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_state.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:massar_project/features/home/models/trip_model.dart';
 
@@ -381,81 +384,72 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10),
-                  child: Container(
-                    width: 350,
-                    height: 110,
-                    decoration: BoxDecoration(
-                      color: theme.cardTheme.color,
-                      border: Border.all(
-                        color: theme.dividerColor,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      String name = _trip.passengerName ?? 'خليل سيلان';
+                      String email = 'khalilabraheem053@gmail.com';
+                      String phone = _trip.passengerPhone ?? '776463185 967+';
+
+                      if (state is AuthAuthenticated) {
+                        if (_trip.passengerName == null) {
+                          name = '${state.user?.firstName} ${state.user?.lastName}';
+                        }
+                        email = state.user?.email ?? '';
+                        if (_trip.passengerPhone == null) {
+                          phone = state.user?.phoneNumber ?? '';
+                        }
+                      }
+
+                      return Container(
+                        width: 350,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.cardTheme.color,
+                          border: Border.all(
+                            color: theme.dividerColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                "خليل سيلان",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 19,
-                                  color: theme.textTheme.titleLarge?.color,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 19,
+                                      color: theme.textTheme.titleLarge?.color,
+                                    ),
+                                  ),
                                 ),
+                                const Icon(Icons.edit_square, color: AppColors.iconOf, size: 30),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              email,
+                              style: TextStyle(
+                                color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
+                                fontSize: 16,
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                left: 20,
-                                top: 10,
-                              ),
-                              child: Icon(Icons.edit_square, color: AppColors.iconOf, size: 30),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                "khalilabraheem053@gmail.com",
-                                style: TextStyle(
-                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                " 776463185 967+",
-                                style: TextStyle(
-                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
-                                  fontSize: 16,
-                                ),
+                            const SizedBox(height: 10),
+                            Text(
+                              phone,
+                              style: TextStyle(
+                                color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
+                                fontSize: 16,
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
 

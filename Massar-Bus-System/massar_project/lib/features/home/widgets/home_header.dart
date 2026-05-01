@@ -11,15 +11,14 @@ class HomeHeader extends StatelessWidget {
 
   const HomeHeader({
     Key? key,
-    this.notificationCount = 12,
+    this.notificationCount = 0, // القيمة الافتراضية 0 لتنتظر الباك أند
     this.greeting = 'صباح الخير',
-    this.userName = 'أحمد باجردانه',
+    this.userName = 'جاري التحميل...',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
@@ -33,9 +32,9 @@ class HomeHeader extends StatelessWidget {
               // Theme Toggle Shortcut
               BlocBuilder<ThemeBloc, ThemeState>(
                 builder: (context, state) {
-                  // Determine effective brightness for icon selection
                   final effectiveIsDark = state.themeMode == ThemeMode.system
-                      ? MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
                       : state.themeMode == ThemeMode.dark;
 
                   return GestureDetector(
@@ -101,10 +100,13 @@ class HomeHeader extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: const Color(0xFFF04438), // Red badge
                           shape: BoxShape.circle,
-                          border: Border.all(color: theme.cardTheme.color ?? Colors.white, width: 2),
+                          border: Border.all(
+                            color: theme.cardTheme.color ?? Colors.white,
+                            width: 2,
+                          ),
                         ),
                         child: Text(
-                          '$notificationCount',
+                          notificationCount > 99 ? '+99' : '$notificationCount',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,

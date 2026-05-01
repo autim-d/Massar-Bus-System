@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import '../../location_fun.dart';
 
 class LocationMapCard extends StatelessWidget {
   final String title;
-  final String locationDetails;
+  final String? locationDetails;
   final String imagePath;
+  final Position? position;
+  final String? mapboxPublicToken;
+  final bool isLoading;
 
   const LocationMapCard({
     Key? key,
     required this.title,
-    required this.locationDetails,
+    this.locationDetails,
     this.imagePath = 'assets/images/map.png',
+    this.position,
+    this.mapboxPublicToken,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -43,8 +52,29 @@ class LocationMapCard extends StatelessWidget {
               child: Stack(
                 children: [
                    Positioned.fill(
-                    child: Image.asset(imagePath, fit: BoxFit.cover),
+                    child: position != null
+                        ? mapbox.MapWidget(
+                            cameraOptions: mapbox.CameraOptions(
+                              center: mapbox.Point(
+                                coordinates: mapbox.Position(
+                                  position!.longitude,
+                                  position!.latitude,
+                                ),
+                              ),
+                              zoom: 14.0,
+                            ),
+                          )
+                        : Image.asset(imagePath, fit: BoxFit.cover),
                   ),
+                  if (isLoading)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withOpacity(0.1),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
                   Positioned(
                     left: 20,
                     top: 18,
@@ -74,13 +104,46 @@ class LocationMapCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  locationDetails,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
+                if (position != null && mapboxPublicToken != null)
+                  FutureBuilder<String>(
+                    future: getCurrentNeighborhood(position!, mapboxPublicToken!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Align(
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(
+                            height: 14,
+                            width: 14,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
+                      } else if (snapshot.hasError || !snapshot.hasData) {
+                        return Text(
+                          locationDetails ?? "موقع غير معروف",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
+                          ),
+                        );
+                      } else {
+                        return Text(
+                          snapshot.data!,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
+                          ),
+                        );
+                      }
+                    },
+                  )
+                else
+                  Text(
+                    locationDetails ?? "",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

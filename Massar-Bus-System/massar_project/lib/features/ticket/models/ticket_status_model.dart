@@ -38,6 +38,39 @@ class TicketStatusModel extends Equatable {
     this.paymentDeadline,
   });
 
+  factory TicketStatusModel.fromJson(Map<String, dynamic> json) {
+    final trip = json['trip'] ?? {};
+    final pricing = json['pricing'] ?? {};
+
+    TicketState state = TicketState.active;
+    final status = json['status']?.toString().toLowerCase();
+    if (status == 'pending') {
+      state = TicketState.pendingPayment;
+    } else if (status == 'completed' || status == 'confirmed') {
+      state = TicketState.active;
+    } else if (status == 'cancelled') {
+      state = TicketState.cancelled;
+    }
+
+    return TicketStatusModel(
+      id: json['id']?.toString() ?? '',
+      date: trip['date'] ?? '---',
+      state: state,
+      from: trip['fromStation']?['name'] ?? '---',
+      to: trip['toStation']?['name'] ?? '---',
+      busName: trip['busName'] ?? 'باص مسار',
+      ticketNumber: json['booking_code'] ?? 'N/A',
+      seatCount: 'مقعد واحد', // يمكن تحديثه لاحقاً
+      departureTime: trip['departureTime'] ?? '--:--',
+      arrivalTime: trip['arrivalTime'] ?? '--:--',
+      price: '${pricing['total_amount'] ?? 0} ر.ي',
+      tags: const [], // يمكن استخراجها من نوع الرحلة
+      paymentDeadline: json['status'] == 'pending'
+          ? DateTime.now().add(const Duration(hours: 2))
+          : null,
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

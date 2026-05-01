@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('service_fee', 10, 2)->default(0.00);
             $table->decimal('total_amount', 10, 2);
             $table->enum('status', ['pending', 'paid', 'cancelled', 'refunded'])->default('pending');
+            $table->string('passenger_name')->nullable();
+            $table->string('passenger_phone')->nullable();
             $table->dateTime('purchased_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

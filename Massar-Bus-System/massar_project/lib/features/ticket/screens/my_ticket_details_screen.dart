@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_state.dart';
 import 'package:massar_project/features/ticket/models/checkout_session_model.dart';
 import '../widgets/components/qr_code_card.dart';
 import '../widgets/components/price_breakdown_column.dart';
@@ -212,32 +215,47 @@ class MyTicketDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: theme.textTheme.titleLarge?.color)),
                     const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: theme.dividerColor),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text("عدنان البيني",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: theme.textTheme.bodyLarge?.color)),
-                          const SizedBox(height: 4),
-                          Text("adnanabyby@gmail.com",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: theme.textTheme.bodySmall?.color)),
-                          const SizedBox(height: 4),
-                          Text("+967774393235",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: theme.textTheme.bodySmall?.color)),
-                        ],
-                      ),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        String name = session.passengerName ?? 'زائر';
+                        String email = 'غير متوفر';
+                        String phone = session.passengerPhone ?? 'غير متوفر';
+
+                        if (state is AuthAuthenticated) {
+                          // Prioritize session name, then auth name
+                          name = session.passengerName ?? '${state.user?.firstName} ${state.user?.lastName}';
+                          email = state.user?.email ?? '';
+                          phone = session.passengerPhone ?? state.user?.phoneNumber ?? 'غير متوفر';
+                        }
+
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: theme.dividerColor),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(name,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: theme.textTheme.bodyLarge?.color)),
+                              const SizedBox(height: 4),
+                              Text(email,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: theme.textTheme.bodySmall?.color)),
+                              const SizedBox(height: 4),
+                              Text(phone,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: theme.textTheme.bodySmall?.color)),
+                            ],
+                          ),
+                        );
+                      },
                     ),
 
                     const SizedBox(height: 24),

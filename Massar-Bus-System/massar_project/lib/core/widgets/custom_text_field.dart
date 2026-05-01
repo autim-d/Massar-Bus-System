@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final bool? enabled;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const CustomTextField({
     Key? key,
@@ -25,6 +27,8 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.enabled,
+    this.readOnly = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -54,6 +58,8 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboardType,
           textDirection: textDirection,
           enabled: enabled,
+          readOnly: readOnly,
+          onTap: onTap,
           style: TextStyle(
             fontFamily: 'ReadexPro',
             fontSize: 14,

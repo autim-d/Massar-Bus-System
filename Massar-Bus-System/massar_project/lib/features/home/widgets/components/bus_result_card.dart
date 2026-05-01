@@ -6,10 +6,14 @@ import 'route_timeline.dart';
 
 class BusResultCard extends StatelessWidget {
   final BusTicketModel ticket;
+  final String? passengerName;
+  final String? passengerPhone;
 
   const BusResultCard({
     Key? key,
     required this.ticket,
+    this.passengerName,
+    this.passengerPhone,
   }) : super(key: key);
 
   @override
@@ -19,7 +23,12 @@ class BusResultCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/home/ticket-details', extra: ticket);
+        context.push('/home/ticket-details', 
+          extra: ticket.copyWith(
+            passengerName: passengerName,
+            passengerPhone: passengerPhone,
+          )
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -102,7 +111,7 @@ class BusResultCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Arrival in ${ticket.arrivalTime}',
+                          'وصول في ${ticket.arrivalTime}',
                           style: TextStyle(
                             fontSize: 12,
                             color: theme.textTheme.bodyMedium?.color,
@@ -116,7 +125,7 @@ class BusResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'IDR ${ticket.price.toInt()}',
+                      '${ticket.price.toInt()} ر.ي',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -124,7 +133,7 @@ class BusResultCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '/pax',
+                      '/مسافر',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.textTheme.bodyMedium?.color,

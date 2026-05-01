@@ -4,27 +4,157 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Booking;
 
 class UserController extends Controller
 {
+    /**
+     * جلب بيانات الملف الشخصي
+     */
     public function profile(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        // نرسل البيانات بحقول متسقة مع UserModel.fromJson في Flutter
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'first_name' => $user->first_name ?? '',
+                'last_name' => $user->last_name ?? '',
+                'email' => $user->email ?? '',
+                'phone_number' => $user->phone_number ?? '',
+                'avatar_url' => $user->avatar_url ?? '',
+                'identity_number' => $user->identity_number ?? '',
+                'nationality' => $user->nationality ?? '',
+                'unread_notifications_count' => $user->unreadNotificationsCount ?? 0,
+            ]
+        ]);
     }
 
+
+    public function getDashboardData(Request $request)
+    {
+        $user = $request->user();
+
+        // جلب أحدث تذكرة نشطة (مؤكدة ولم تنتهِ بعد)
+        $activeBooking = Booking::where('user_id', $user->id)
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->with(['trip.bus', 'trip.route.originStation', 'trip.route.destinationStation'])
+            ->latest()
+            ->first();
+
+        $activeTicketData = null;
+
+        if ($activeBooking && $activeBooking->trip) {
+            $trip = $activeBooking->trip;
+            $route = $trip->route;
+            $bus = $trip->bus;
+
+            $departureTime = \Carbon\Carbon::parse($trip->departure_time);
+            $arrivalTime = \Carbon\Carbon::parse($trip->arrival_time);
+
+            $activeTicketData = [
+                'booking_code' => $activeBooking->booking_code ?? 'N/A',
+                'date' => $departureTime->format('D, d M Y'),
+                'from' => $route && $route->originStation ? $route->originStation->name : '---',
+                'to' => $route && $route->destinationStation ? $route->destinationStation->name : '---',
+                'duration' => $departureTime->diffInMinutes($arrivalTime) . ' دقيقة',
+                'bus_info' => ($bus ? $bus->bus_name : 'باص مسار') . "  الوصول الساعة " . $arrivalTime->format('H:i') . " في المحطة",
+            ];
+        }
+
+        // جلب بعض المحطات المقترحة (مثلاً أشهر الوجهات)
+        $suggestedStations = \App\Models\Station::limit(5)->get()->map(function($station) {
+            return [
+                'id' => $station->id,
+                'name' => $station->name,
+                'city' => $station->city,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'user' => [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name ?? '',
+                'email' => $user->email ?? '',
+                'phone_number' => $user->phone_number ?? '',
+                'avatar_url' => $user->avatar_url ?? '',
+                'identity_number' => $user->identity_number ?? '',
+                'nationality' => $user->nationality ?? '',
+                'unread_notifications_count' => $user->unreadNotificationsCount ?? 0,
+            ],
+            'activeTicket' => $activeTicketData,
+            'suggestedStations' => $suggestedStations,
+        ]);
+    }
+
+    /**
+     * تحديث بيانات الملف الشخصي
+     */
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'sometimes|string|max:100',
-            'last_name' => 'sometimes|string|max:100',
-            'phone_number' => 'sometimes|string|max:20|unique:users,phone_number,' . $request->user()->id,
-            'identity_number' => 'sometimes|string|max:50',
-            'nationality' => 'sometimes|string|max:100',
-            'avatar_url' => 'sometimes|url|max:255',
+        $user = $request->user();
+
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string',
+            'identity_number' => 'nullable|string',
+            'nationality' => 'nullable|string',
         ]);
 
-        $request->user()->update($validated);
+        // تحديث البيانات في قاعدة البيانات
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'identity_number' => $request->identity_number,
+            'nationality' => $request->nationality,
+        ]);
+
+        return response()->json([
+            'success' => true, // نستخدم success ليتناسب مع فلاتر
+            'message' => 'تم تحديث الملف الشخصي بنجاح',
+            'user' => [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name ?? '',
+                'email' => $user->email ?? '',
+                'phone_number' => $user->phone_number ?? '',
+                'avatar_url' => $user->avatar_url ?? '',
+                'identity_number' => $user->identity_number ?? '',
+                'nationality' => $user->nationality ?? '',
+            ]
+        ]);
+    }
+
+    /**
+     * تحديث الصورة الشخصية
+     */
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            
+            // Generate full URL
+            $url = url('storage/' . $path);
+            
+            $user->update(['avatar_url' => $url]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'تم تحديث الصورة بنجاح',
+                'user' => $user->fresh()
+            ]);
+        }
         
-        return response()->json($request->user());
+        return response()->json(['success' => false, 'message' => 'لم يتم رفع صورة'], 400);
     }
 }

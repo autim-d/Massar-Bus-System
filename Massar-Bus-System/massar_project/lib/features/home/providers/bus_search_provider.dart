@@ -1,53 +1,45 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:massar_project/core/constants/api_constants.dart';
+import 'package:massar_project/core/services/http_service.dart';
 import '../models/bus_ticket_model.dart';
-import '../models/location_model.dart';
+import '../models/bus_search_criteria.dart';
 
-// Provides mock data based on the current date for the UI
-final busSearchProvider = FutureProvider<List<BusTicketModel>>((ref) async {
-  // Simulate network delay
-  await Future.delayed(const Duration(seconds: 1));
+// تم تعديل المزود ليستخدم HttpService (يرسل Token تلقائياً) بدل http.get المباشر
+final busSearchProvider = FutureProvider.family<List<BusTicketModel>, BusSearchCriteria>((
+  ref,
+  criteria,
+) async {
+  final httpService = ref.watch(httpServiceProvider);
 
-  final today = DateTime.now();
+  // 1. تجهيز الرابط (URL) مع فلترة التاريخ والمحطات
+  final String formattedDate =
+      "${criteria.date.year}-${criteria.date.month.toString().padLeft(2, '0')}-${criteria.date.day.toString().padLeft(2, '0')}";
 
-  return [
-    BusTicketModel(
-      id: '1',
-      busName: 'باص 01',
-      date: today,
-      departureTime: '15:00', // Mock actual departure
-      arrivalTime: '03:45 PM', // Matches UI Mockup arrival text format
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isFastest: true,
-      isMixed: true,
-    ),
-    BusTicketModel(
-      id: '2',
-      busName: 'باص 21',
-      date: today,
-      departureTime: '15:30',
-      arrivalTime: '04:00 PM',
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isCheapest: true,
-      isMenOnly: true,
-    ),
-    BusTicketModel(
-      id: '3',
-      busName: 'باص 03',
-      date: today,
-      departureTime: '15:45',
-      arrivalTime: '04:15 PM',
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isFastest: true,
-      isLadiesOnly: true,
-    ),
+  final queryParams = <String>[
+    'date=$formattedDate',
+    // دعم البحث بـ station ID إذا كان متاحاً، أو بالاسم النصي
+    if (criteria.fromId != null && criteria.fromId!.isNotEmpty)
+      'origin_station_id=${criteria.fromId}',
+    if (criteria.toId != null && criteria.toId!.isNotEmpty)
+      'destination_station_id=${criteria.toId}',
   ];
+
+  final url = '${ApiConstants.baseUrl}/trips/search?${queryParams.join('&')}';
+
+  try {
+    // 2. جلب البيانات الحقيقية من الباك أند (مع Token للمسارات المحمية)
+    final response = await httpService.get(url);
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      // Laravel Resource::collection يغلف النتائج داخل مفتاح 'data'
+      final List data = decoded is List ? decoded : (decoded['data'] ?? []);
+      return data.map((json) => BusTicketModel.fromJson(json)).toList();
+    }
+
+    throw Exception('فشل في جلب البيانات: ${response.statusCode}');
+  } catch (e) {
+    throw Exception('فشل الاتصال بالخادم أو لا توجد بيانات متاحة.');
+  }
 });

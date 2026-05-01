@@ -2,8 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 
+import 'package:massar_project/features/ticket/models/checkout_session_model.dart';
+
 class PaymentSuccessScreen extends StatelessWidget {
-  const PaymentSuccessScreen({super.key});
+  final CheckoutSessionModel? session;
+  const PaymentSuccessScreen({super.key, this.session});
+
+  String _formatArabicDateTime(DateTime date) {
+    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    final period = date.hour >= 12 ? 'مساءً' : 'صباحاً';
+    final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+    final minute = date.minute.toString().padLeft(2, '0');
+    
+    return '${date.day} ${months[date.month - 1]}، ${date.year} الساعة $hour:$minute $period';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +109,8 @@ class PaymentSuccessScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '1502241552',
-                                  style: TextStyle(
+                                  session?.orderId ?? 'N/A',
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -123,8 +135,8 @@ class PaymentSuccessScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      'gopay',
-                                      style: TextStyle(
+                                      session?.paymentMethod ?? 'غير معروف',
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -156,9 +168,11 @@ class PaymentSuccessScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '19 فبراير، 2024 الساعة 04:15 مساءً',
+                                  session != null 
+                                      ? _formatArabicDateTime(session!.transactionDate) 
+                                      : '---',
                                   style: TextStyle(
-                                    fontSize: scale(12),
+                                    fontSize: scale(11),
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey,
                                   ),
