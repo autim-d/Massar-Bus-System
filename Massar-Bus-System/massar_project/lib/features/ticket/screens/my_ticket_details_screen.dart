@@ -222,13 +222,10 @@ class MyTicketDetailsScreen extends StatelessWidget {
                         String phone = session.passengerPhone ?? 'غير متوفر';
 
                         if (state is AuthAuthenticated) {
-                          if (session.passengerName == null) {
-                            name = '${state.user?.firstName} ${state.user?.lastName}';
-                          }
+                          // Prioritize session name, then auth name
+                          name = session.passengerName ?? '${state.user?.firstName} ${state.user?.lastName}';
                           email = state.user?.email ?? '';
-                          if (session.passengerPhone == null) {
-                            phone = state.user?.phoneNumber ?? '';
-                          }
+                          phone = session.passengerPhone ?? state.user?.phoneNumber ?? 'غير متوفر';
                         }
 
                         return Container(

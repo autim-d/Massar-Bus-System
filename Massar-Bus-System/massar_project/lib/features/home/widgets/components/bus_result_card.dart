@@ -111,7 +111,7 @@ class BusResultCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Arrival in ${ticket.arrivalTime}',
+                          'وصول في ${ticket.arrivalTime}',
                           style: TextStyle(
                             fontSize: 12,
                             color: theme.textTheme.bodyMedium?.color,
@@ -125,7 +125,7 @@ class BusResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'IDR ${ticket.price.toInt()}',
+                      '${ticket.price.toInt()} ر.ي',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -133,7 +133,7 @@ class BusResultCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '/pax',
+                      '/مسافر',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.textTheme.bodyMedium?.color,

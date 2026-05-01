@@ -50,7 +50,7 @@ class DatePriceSelectorItem extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'IDR ${price.toInt()}',
+              '${price.toInt()} ر.ي',
               style: TextStyle(
                 fontSize: 14,
                 color: isSelected ? const Color(0xFF1570EF) : const Color(0xFF1D2939),

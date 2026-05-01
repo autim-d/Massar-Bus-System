@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Trip extends Model
 {
+    protected $fillable = [
+        'route_id',
+        'bus_id',
+        'departure_time',
+        'arrival_time',
+        'price',
+        'status',
+    ];
+
     protected $casts = [
         'departure_time' => 'datetime',
         'arrival_time' => 'datetime',

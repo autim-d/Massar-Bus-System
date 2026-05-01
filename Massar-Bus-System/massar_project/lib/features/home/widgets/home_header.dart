@@ -106,7 +106,7 @@ class HomeHeader extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          notificationCount > 9 ? '+9' : '$notificationCount',
+                          notificationCount > 99 ? '+99' : '$notificationCount',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,

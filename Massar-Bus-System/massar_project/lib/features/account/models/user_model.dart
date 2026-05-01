@@ -24,8 +24,24 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     String avatarUrl = json['avatar_url'] ?? json['profile_image'] ?? '';
     
+    // Handle full name from API and split it if first_name/last_name are missing
+    String firstName = json['first_name'] ?? '';
+    String lastName = json['last_name'] ?? '';
+    
+    if (firstName.isEmpty && json['name'] != null) {
+      final nameParts = (json['name'] as String).split(' ');
+      firstName = nameParts.first;
+      if (nameParts.length > 1) {
+        lastName = nameParts.sublist(1).join(' ');
+      }
+    }
+
+    // fallback to email prefix if name is still empty
+    if (firstName.isEmpty && json['email'] != null) {
+      firstName = (json['email'] as String).split('@').first;
+    }
+    
     // معالجة مشكلة الـ localhost في محاكي الأندرويد والهاتف الحقيقي
-    // إذا كانت الصورة محفوظة في السيرفر المحلي (127.0.0.1)، فالموبايل يحتاج للـ IP المحلي (10.0.0.109) للوصول إليها
     try {
       if (avatarUrl.isNotEmpty && Platform.isAndroid) {
         if (avatarUrl.contains('127.0.0.1')) {
@@ -37,13 +53,12 @@ class UserModel {
     } catch (_) {}
 
     return UserModel(
-      firstName: json['first_name'] ?? '',
-      lastName: json['last_name'] ?? '',
+      firstName: firstName,
+      lastName: lastName,
       phoneNumber: json['phone_number'] ?? '',
       profileImage: avatarUrl,
       email: json['email'] ?? '',
       nationality: json['nationality'],
-      // Laravel يرسل identity_number، نقبل أيضاً national_id كقيمة احتياطية
       nationalId: json['identity_number'] ?? json['national_id'],
       unreadNotificationsCount: json['unread_notifications_count'] ?? 0,
     );

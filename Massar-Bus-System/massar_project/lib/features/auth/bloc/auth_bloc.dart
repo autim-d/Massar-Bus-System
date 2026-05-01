@@ -37,8 +37,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (result['success'] == true && result['user'] != null) {
         final user = UserModel.fromJson(result['user']);
         final activeTicket = result['activeTicket'];
+        final suggestedStations = result['suggestedStations'];
         // تحديث الحالة ببيانات المستخدم الجديدة (الاسم، الإشعارات، والتذكرة النشطة)
-        emit(AuthAuthenticated.fromModel(user, activeTicket: activeTicket));
+        emit(AuthAuthenticated.fromModel(
+          user, 
+          activeTicket: activeTicket,
+          suggestedStations: suggestedStations,
+        ));
       }
     } catch (e) {
       // في حال الفشل نكتفي بالبقاء على الحالة الحالية بصمت

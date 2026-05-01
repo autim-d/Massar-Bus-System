@@ -9,6 +9,8 @@ import 'package:massar_project/core/widgets/guest_action_interceptor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import 'package:massar_project/features/ticket/widgets/components/animated_success_modal.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_event.dart';
 
 class TicketDetailsScreen extends StatefulWidget {
   final BusTicketModel ticket;
@@ -38,8 +40,8 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Determine a sample convenience fee based on ticket price (e.g. fixed 200)
-    const double convenienceFee = 200.0;
+    // Determine a dynamic convenience fee based on ticket price (e.g. 5%)
+    final double convenienceFee = widget.ticket.price * 0.05;
     final double totalPrice = widget.ticket.price + convenienceFee;
 
     return Directionality(
@@ -73,7 +75,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
         ),
         body: BlocListener<CheckoutBloc, CheckoutState>(
           listener: (context, state) {
-            if (state is CheckoutSuccess && state.isTemporaryBooking) {
+            if (state is CheckoutSuccess) {
               showAnimatedSuccessModal(
                 context: context,
                 title: "تم الحجز بنجاح",
@@ -81,7 +83,12 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                 paymentMethod: state.session.paymentMethod,
                 transactionDate: state.session.transactionDate,
                 onViewTicket: () {
-                  context.go('/tickets/my-ticket', extra: state.session);
+                  if (state.isTemporaryBooking) {
+                    // تحديث بيانات المستخدم (عدد الإشعارات) فوراً بعد الحجز الناجح
+                    context.read<AuthBloc>().add(GetUserDataEvent());
+                    
+                    context.go('/tickets/my-ticket', extra: state.session);
+                  }
                 },
               );
             } else if (state is CheckoutError) {
@@ -203,10 +210,15 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
 
                 // Action Buttons
                 GuestActionInterceptor(
-                  onTap: () {
-                    // Navigate to Payment Method
-                    context.push('/tickets/payment', extra: widget.ticket);
-                  },
+                    onTap: () {
+                      // Navigate to Payment Method
+                      context.push('/tickets/payment', 
+                        extra: widget.ticket.copyWith(
+                          passengerName: passengerName,
+                          passengerPhone: passengerPhone,
+                        )
+                      );
+                    },
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 16),

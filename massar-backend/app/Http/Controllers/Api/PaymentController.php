@@ -74,6 +74,14 @@ class PaymentController extends Controller
                 'purchased_at' => now(),
             ]);
 
+            // إرسال إشعار بالدفع الناجح
+            $booking->user->notify(new \App\Notifications\GeneralNotification(
+                'تم تأكيد الدفع',
+                "تم استلام دفعيتك للحجز رقم {$booking->booking_code} بنجاح. رحلة سعيدة!",
+                'payment_confirmed',
+                ['booking_id' => $booking->id, 'booking_code' => $booking->booking_code]
+            ));
+
             Payment::create([
                 'booking_id' => $booking->id,
                 'transaction_id' => $request->payment_intent_id,

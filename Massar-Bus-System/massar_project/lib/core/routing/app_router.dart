@@ -254,7 +254,9 @@ final GoRouter appRouter = GoRouter(
                   pageBuilder: (context, state) => MassarTransitions.elasticReveal(
                     context: context,
                     state: state,
-                    child: const PaymentSuccessScreen(),
+                    child: PaymentSuccessScreen(
+                      session: state.extra as CheckoutSessionModel?,
+                    ),
                   ),
                 ),
               ],
