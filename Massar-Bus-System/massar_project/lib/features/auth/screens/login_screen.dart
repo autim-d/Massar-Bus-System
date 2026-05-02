@@ -31,8 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     // استخدام BlocConsumer للاستماع للأحداث وبناء الواجهة بناءً على الحالة
     return BlocConsumer<AuthBloc, AuthState>(
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final isLoading = state is AuthLoading;
 
         return Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
+          backgroundColor: Colors.white,
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontFamily: 'ReadexPro',
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: theme.textTheme.bodyLarge?.color,
+                          color: const Color(0xFF1D1D1D),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontFamily: 'ReadexPro',
                           fontSize: 14,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: const Color(0xFF6B7683),
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _isPasswordVisible
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: theme.textTheme.bodyMedium?.color,
+                                color: const Color(0xFF6B7683),
                                 size: 20,
                               ),
                               onPressed: () {
@@ -258,19 +258,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       Row(
                         children: [
-                          Expanded(child: Divider(color: theme.dividerColor)),
+                          Expanded(child: Divider(color: const Color(0xFFEAECF0))),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               'أو الاستمرار باستخدام',
                               style: TextStyle(
                                 fontFamily: 'ReadexPro',
-                                color: theme.textTheme.bodyMedium?.color,
+                                color: const Color(0xFF6B7683),
                                 fontSize: 14,
                               ),
                             ),
                           ),
-                          Expanded(child: Divider(color: theme.dividerColor)),
+                          Expanded(child: Divider(color: const Color(0xFFEAECF0))),
                         ],
                       ),
                       const SizedBox(height: 24),
@@ -289,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _buildSocialButton(
                             icon: Icon(
                               Icons.phone_android,
-                              color: isDark ? Colors.white : Colors.black,
+                              color: Colors.black,
                               size: 28,
                             ),
                             onTap: isLoading
@@ -312,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontFamily: 'ReadexPro',
                             fontSize: 16,
-                            color: theme.textTheme.bodyLarge?.color,
+                            color: const Color(0xFF1D1D1D),
                             decoration: TextDecoration.underline,
                           ),
                         ),
@@ -326,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontFamily: 'ReadexPro',
                               fontSize: 14,
-                              color: theme.textTheme.bodyMedium?.color,
+                              color: const Color(0xFF6B7683),
                             ),
                           ),
                           GestureDetector(
@@ -341,9 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontFamily: 'ReadexPro',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: isDark
-                                    ? const Color(0xFF5491F5)
-                                    : const Color(0xFF1570EF),
+                                color: const Color(0xFF1570EF),
                               ),
                             ),
                           ),
@@ -361,17 +359,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSocialButton({required Widget icon, required VoidCallback? onTap}) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 60,
         height: 60,
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1D2939) : Colors.white,
+          color: Colors.white,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFEAECF0),
+            color: const Color(0xFFEAECF0),
           ),
           boxShadow: [
             BoxShadow(
@@ -386,3 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+
+

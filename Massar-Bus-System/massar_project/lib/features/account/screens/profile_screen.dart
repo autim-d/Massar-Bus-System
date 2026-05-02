@@ -37,23 +37,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        final theme = Theme.of(context);
+        
         return AlertDialog(
-          backgroundColor: theme.cardTheme.color,
+          backgroundColor: Colors.white,
           title: Text(
             '${AppStrings.editPrefix} $title',
             style: TextStyle(
               fontFamily: 'Cairo',
-              color: theme.textTheme.titleLarge?.color,
+              color: const Color(0xFF1D1D1D),
             ),
           ),
           content: TextField(
             controller: controller,
-            style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+            style: TextStyle(color: const Color(0xFF1D1D1D)),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: '${AppStrings.enterNew} $title',
-              labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
+              labelStyle: TextStyle(color: const Color(0xFF6B7683)),
             ),
           ),
           actions: [
@@ -115,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String value,
     VoidCallback onEdit,
   ) {
-    final theme = Theme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
       child: Row(
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     fontFamily: 'Cairo',
-                    color: theme.textTheme.titleLarge?.color,
+                    color: const Color(0xFF1D1D1D),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Cairo',
-                    color: theme.textTheme.bodyMedium?.color,
+                    color: const Color(0xFF6B7683),
                   ),
                 ),
               ],
@@ -164,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -209,17 +209,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: Colors.white,
             appBar: AppBar(
               title: Text(
                 AppStrings.myAccount,
                 style: TextStyle(
-                  color: theme.textTheme.titleLarge?.color,
+                  color: const Color(0xFF1D1D1D),
                   fontFamily: 'Cairo',
                 ),
               ),
               centerTitle: true,
-              backgroundColor: theme.appBarTheme.backgroundColor,
+              backgroundColor: Colors.white,
               elevation: 0,
             ),
             body: SingleChildScrollView(
@@ -229,7 +229,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // قسم الصورة الشخصية
                   _buildPhotoSection(context, theme, currentUser),
                   const SizedBox(height: 10),
-                  Divider(thickness: 1, color: theme.dividerColor),
+                  Divider(thickness: 1, color: const Color(0xFFEAECF0)),
 
                   // عرض الاسم الكامل
                   _buildRow(
@@ -308,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(40),
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundColor: theme.dividerColor.withOpacity(0.2),
+                  backgroundColor: const Color(0xFFEAECF0).withOpacity(0.2),
                   backgroundImage: user.profileImage.isNotEmpty
                       ? (user.profileImage.startsWith('http')
                           ? NetworkImage(user.profileImage)
@@ -317,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               : FileImage(File(user.profileImage)) as ImageProvider))
                       : null,
                   child: user.profileImage.isEmpty
-                      ? Icon(Icons.person, size: 40, color: theme.dividerColor)
+                      ? Icon(Icons.person, size: 40, color: const Color(0xFFEAECF0))
                       : null,
                 ),
               ),
@@ -328,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cairo',
-                  color: theme.textTheme.bodyLarge?.color,
+                  color: const Color(0xFF1D1D1D),
                 ),
               ),
             ],
@@ -354,6 +354,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildDivider(ThemeData theme) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Divider(height: 1, color: theme.dividerColor.withOpacity(0.4)),
+    child: Divider(height: 1, color: const Color(0xFFEAECF0).withOpacity(0.4)),
   );
 }
+
+
+

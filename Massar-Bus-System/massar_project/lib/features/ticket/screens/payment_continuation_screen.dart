@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
+import 'package:massar_project/features/ticket/screens/payment_success_screen.dart';
 
 class PaymentContinuationScreen extends StatelessWidget {
   const PaymentContinuationScreen({super.key});
@@ -20,7 +20,7 @@ class PaymentContinuationScreen extends StatelessWidget {
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () => context.pop(),
+              onPressed: () => Navigator.pop(context),
             ),
             title: Padding(
               padding: EdgeInsetsGeometry.only(top: 17),
@@ -582,7 +582,7 @@ class PaymentContinuationScreen extends StatelessWidget {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  context.push('/tickets/payment-success');
+                  Navigator.push(context, MaterialPageRoute(builder: (builder)=>PaymentSuccessPage()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff1570EF),

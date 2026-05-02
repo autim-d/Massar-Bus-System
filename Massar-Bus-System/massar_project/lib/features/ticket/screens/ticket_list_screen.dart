@@ -21,8 +21,8 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     final horizontalPadding = w * 0.06;
@@ -61,7 +61,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: Stack(
                 children: [
@@ -137,7 +137,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                               onTap: () => context.push('/home/location', extra: true),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: theme.cardTheme.color,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(_cardRadius),
                                   boxShadow: [
                                     BoxShadow(
@@ -157,9 +157,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                       ),
                                       child: Container(
                                         height: 120,
-                                        color: isDark
-                                            ? Colors.white.withOpacity(0.05)
-                                            : Colors.grey.shade100,
+                                        color: Colors.grey.shade100,
                                         child: Stack(
                                           children: [
                                             Positioned.fill(
@@ -202,7 +200,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                               fontFamily: 'AirStripArabic',
                                               fontSize: w * 0.038,
                                               fontWeight: FontWeight.w700,
-                                              color: theme.textTheme.bodyLarge?.color,
+                                              color: const Color(0xFF1D1D1D),
                                             ),
                                           ),
                                           const SizedBox(height: 6),
@@ -212,7 +210,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                             style: TextStyle(
                                               fontFamily: 'AirStripArabic',
                                               fontSize: w * 0.032,
-                                              color: theme.textTheme.bodyMedium?.color,
+                                              color: const Color(0xFF6B7683),
                                             ),
                                           ),
                                         ],
@@ -228,7 +226,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                                 decoration: BoxDecoration(
-                                  color: theme.cardTheme.color,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
@@ -253,7 +251,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                               fontFamily: 'AirStripArabic',
                                               fontSize: w * 0.036,
                                               fontWeight: FontWeight.w700,
-                                              color: theme.textTheme.bodyLarge?.color,
+                                              color: const Color(0xFF1D1D1D),
                                             ),
                                           ),
                                           const SizedBox(height: 6),
@@ -266,7 +264,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                                 style: TextStyle(
                                                   fontFamily: 'AirStripArabic',
                                                   fontSize: w * 0.032,
-                                                  color: theme.textTheme.bodyMedium?.color,
+                                                  color: const Color(0xFF6B7683),
                                                 ),
                                               ),
                                               const SizedBox(width: 6),
@@ -311,7 +309,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: theme.cardTheme.color,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
@@ -355,9 +353,9 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(horizontal: 14),
                                             decoration: BoxDecoration(
-                                              color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade50,
+                                              color: Colors.grey.shade50,
                                               borderRadius: BorderRadius.circular(10),
-                                              border: Border.all(color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200),
+                                              border: Border.all(color: Colors.grey.shade200),
                                             ),
                                             child: Row(
                                               children: [
@@ -367,7 +365,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                                   item['label'] as String,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w700,
-                                                    color: theme.textTheme.bodyLarge?.color,
+                                                    color: const Color(0xFF1D1D1D),
                                                   ),
                                                 ),
                                               ],
@@ -384,7 +382,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: theme.cardTheme.color,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
@@ -405,7 +403,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                         fontFamily: 'AirStripArabic',
                                         fontSize: w * 0.034,
                                         fontWeight: FontWeight.w700,
-                                        color: theme.textTheme.bodyLarge?.color,
+                                        color: const Color(0xFF1D1D1D),
                                       ),
                                     ),
                                   ),
@@ -421,12 +419,12 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
                                                 place,
                                                 style: TextStyle(
                                                   fontSize: w * 0.034,
-                                                  color: theme.textTheme.bodyMedium?.color,
+                                                  color: const Color(0xFF6B7683),
                                                 ),
                                               ),
                                             ),
                                             const SizedBox(width: 8),
-                                            Icon(Icons.access_time, size: 18, color: theme.iconTheme.color?.withOpacity(0.5)),
+                                            Icon(Icons.access_time, size: 18, color: const Color(0xFF1D1D1D)?.withOpacity(0.5)),
                                           ],
                                         ),
                                       );
@@ -450,3 +448,7 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
     );
   }
 }
+
+
+
+

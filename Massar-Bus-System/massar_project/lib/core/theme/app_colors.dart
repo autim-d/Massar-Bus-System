@@ -7,10 +7,7 @@ class AppColors {
   // main color
   static const Color primaryColor = Colors.white;
   static const Color secondaryColor = Colors.black;
-  static const Color cardColor = Color(0xFFF2F4F7);
-  static const Color primaryBlue = Color(0xFF1570EF);
-  static const Color secondaryOrange = Color(0xFFFF914D);
-  static const Color indicatorInactive = Color(0xFF9BB7FF);
+  static const Color cardColor = Color.fromARGB(255, 239, 241, 245);
 
   // text color
   static const Color textPrimary =   Color(0xFF101828); //
@@ -20,8 +17,6 @@ class AppColors {
   static const Color textSave =      Colors.white; //
   static const Color textActiv =     Color(0xff067647); //
   static const Color textHelth =     Color(0xffDC6803); //
-  static const Color hintText =      Color(0xFF99A1AF);
-  static const Color borderColor =   Color(0xFFD1D5DC);
 
   // background color
   static const Color backgroundLight = Color(0xFFF8F9FA);
@@ -38,7 +33,7 @@ class AppColors {
   static const Color checkbox = Color(0xFF156AEF); //
 
   // button color
-  static const Color mainButton = primaryBlue;
+  static const Color mainButton = Color(0xFF1570EF);
   static const Color grey200 = Color(0xFFE9ECEF);
   static const Color buttonPhone = Color(0xFFffffff);
 }

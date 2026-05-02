@@ -31,25 +31,25 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: BorderSide(color: theme.dividerColor),
+      borderSide: BorderSide(color: const Color(0xFFEAECF0)),
     );
 
     final inputDecoration = InputDecoration(
       filled: true,
       fillColor:
-          theme.inputDecorationTheme.fillColor ??
-          (isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFF5F7FB)),
+          Colors.white ??
+          (const Color(0xFFF5F7FB)),
       enabledBorder: border,
       focusedBorder: border.copyWith(
         borderSide: const BorderSide(color: Color(0xFF0053D9), width: 1.4),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+      hintStyle: TextStyle(color: const Color(0xFF6B7683)),
     );
 
     return BlocConsumer<AuthBloc, AuthState>(
@@ -74,21 +74,21 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
         final isLoading = state is AuthLoading;
 
         return Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
+          backgroundColor: Colors.white,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: theme.appBarTheme.backgroundColor,
+            backgroundColor: Colors.white,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new,
-                color: theme.iconTheme.color,
+                color: const Color(0xFF1D1D1D),
               ),
               onPressed: () => context.pop(),
             ),
             title: Text(
               'بيانات الحساب',
               style: TextStyle(
-                color: theme.textTheme.titleLarge?.color,
+                color: const Color(0xFF1D1D1D),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -105,7 +105,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: theme.textTheme.titleLarge?.color,
+                      color: const Color(0xFF1D1D1D),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -113,20 +113,18 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     'ساعدنا على التعرف عليك بشكل أفضل لضمان تجربة سفر سلسة.',
                     style: TextStyle(
                       fontSize: 15,
-                      color: isDark
-                          ? theme.textTheme.bodySmall?.color
-                          : const Color(0xFF6B7683),
+                      color: const Color(0xFF6B7683),
                     ),
                   ),
                   const SizedBox(height: 24),
 
                   // الاسم الكامل
-                  _buildLabel('الاسم الكامل', theme, isDark),
+                  _buildLabel('الاسم الكامل'),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _nameController,
                     enabled: !isLoading,
-                    style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                    style: TextStyle(color: const Color(0xFF1D1D1D)),
                     decoration: inputDecoration.copyWith(
                       hintText: 'أدخل اسمك الرباعي',
                     ),
@@ -135,13 +133,13 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                   const SizedBox(height: 20),
 
                   // البريد الإلكتروني
-                  _buildLabel('عنوان البريد الإلكتروني', theme, isDark),
+                  _buildLabel('عنوان البريد الإلكتروني'),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _emailController,
                     enabled: !isLoading,
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                    style: TextStyle(color: const Color(0xFF1D1D1D)),
                     decoration: inputDecoration.copyWith(
                       hintText: 'example@email.com',
                     ),
@@ -150,13 +148,13 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                   const SizedBox(height: 20),
 
                   // رقم الهوية
-                  _buildLabel('رقم الهوية الإماراتية', theme, isDark),
+                  _buildLabel('رقم الهوية الإماراتية'),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _idController,
                     enabled: !isLoading,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                    style: TextStyle(color: const Color(0xFF1D1D1D)),
                     decoration: inputDecoration.copyWith(
                       hintText: '784-1987-1234567-1',
                     ),
@@ -165,14 +163,12 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                   const SizedBox(height: 20),
 
                   // الجنسية
-                  _buildLabel('الجنسية', theme, isDark),
+                  _buildLabel('الجنسية'),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     decoration: inputDecoration,
-                    dropdownColor: isDark
-                        ? const Color(0xFF1D2939)
-                        : Colors.white,
-                    style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                    dropdownColor: Colors.white,
+                    style: TextStyle(color: const Color(0xFF1D1D1D)),
                     value: _selectedNationality,
                     items:
                         [
@@ -186,7 +182,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                             child: Text(
                               val,
                               style: TextStyle(
-                                color: theme.textTheme.bodyLarge?.color,
+                                color: const Color(0xFF1D1D1D),
                               ),
                             ),
                           );
@@ -230,9 +226,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                       child: Text(
                         'سأكمل لاحقًا',
                         style: TextStyle(
-                          color: isDark
-                              ? theme.textTheme.bodySmall?.color
-                              : const Color(0xFF6B7683),
+                          color: const Color(0xFF6B7683),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -248,13 +242,11 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
   }
 
   // دالة المساعدة لتسمية الحقول
-  Widget _buildLabel(String label, ThemeData theme, bool isDark) {
+  Widget _buildLabel(String label) {
     return Text(
       label,
       style: TextStyle(
-        color: isDark
-            ? theme.textTheme.bodyLarge?.color
-            : const Color(0xFF4C5968),
+        color: const Color(0xFF4C5968),
         fontWeight: FontWeight.w600,
       ),
     );
@@ -288,3 +280,6 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
     context.read<AuthBloc>().add(UpdateProfileSubmitted(user: updatedUser));
   }
 }
+
+
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+qimport 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -33,8 +33,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
               fontFamily: 'ReadexPro',
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isDark ? const Color(0xFFD0D5DD) : const Color(0xFF344054),
+              color: const Color(0xFF344054),
             ),
           ),
         ),
@@ -63,27 +63,25 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'ReadexPro',
             fontSize: 14,
-            color: theme.textTheme.bodyLarge?.color,
+            color: const Color(0xFF1D1D1D),
           ),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
               fontFamily: 'ReadexPro',
-              color: theme.textTheme.bodyMedium?.color,
+              color: const Color(0xFF6B7683),
               fontSize: 14,
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             filled: true,
-            fillColor: isDark ? const Color(0xFF1D2939) : Colors.white,
+            fillColor: Colors.white,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                  color: isDark
-                      ? Colors.white.withOpacity(0.1)
-                      : const Color(0xFFD0D5DD),
+                  color: const Color(0xFFD0D5DD),
                   width: 1),
             ),
             focusedBorder: OutlineInputBorder(
@@ -107,9 +105,7 @@ class CustomTextField extends StatelessWidget {
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                  color: isDark
-                      ? Colors.white.withOpacity(0.05)
-                      : const Color(0xFFEAECF0),
+                  color: const Color(0xFFEAECF0),
                   width: 1),
             ),
           ),
@@ -119,3 +115,7 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+
+
+

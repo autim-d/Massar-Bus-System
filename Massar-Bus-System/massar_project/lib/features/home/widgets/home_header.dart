@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:massar_project/core/theme/bloc/theme_bloc.dart';
-import 'package:massar_project/core/theme/bloc/theme_event.dart';
-import 'package:massar_project/core/theme/bloc/theme_state.dart';
 
 class HomeHeader extends StatelessWidget {
   final int notificationCount;
@@ -30,41 +26,30 @@ class HomeHeader extends StatelessWidget {
           Row(
             children: [
               // Theme Toggle Shortcut
-              BlocBuilder<ThemeBloc, ThemeState>(
-                builder: (context, state) {
-                  final effectiveIsDark = state.themeMode == ThemeMode.system
-                      ? MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark
-                      : state.themeMode == ThemeMode.dark;
-
-                  return GestureDetector(
-                    onTap: () {
-                      context.read<ThemeBloc>().add(const ToggleTheme());
-                    },
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        effectiveIsDark
-                            ? Icons.light_mode_outlined
-                            : Icons.dark_mode_outlined,
-                        color: theme.iconTheme.color,
-                        size: 24,
-                      ),
-                    ),
-                  );
+              GestureDetector(
+                onTap: () {
+                  // context.read<ThemeBloc>().add(const ToggleTheme());
                 },
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.light_mode_outlined,
+                    color: const Color(0xFF1D1D1D),
+                    size: 24,
+                  ),
+                ),
               ),
               const SizedBox(width: 12),
               // Notification Bell with Badge
@@ -75,7 +60,7 @@ class HomeHeader extends StatelessWidget {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: theme.cardTheme.color,
+                      color: Colors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -87,7 +72,7 @@ class HomeHeader extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.notifications_none_rounded,
-                      color: theme.iconTheme.color,
+                      color: const Color(0xFF1D1D1D),
                       size: 24,
                     ),
                   ),
@@ -101,7 +86,7 @@ class HomeHeader extends StatelessWidget {
                           color: const Color(0xFFF04438), // Red badge
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: theme.cardTheme.color ?? Colors.white,
+                            color: Colors.white,
                             width: 2,
                           ),
                         ),
@@ -132,7 +117,7 @@ class HomeHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: theme.textTheme.bodyMedium?.color,
+                      color: const Color(0xFF6B7683),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -141,7 +126,7 @@ class HomeHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: theme.textTheme.bodyLarge?.color,
+                      color: const Color(0xFF1D1D1D),
                     ),
                   ),
                 ],
@@ -155,7 +140,7 @@ class HomeHeader extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: theme.cardTheme.color,
+                    color: Colors.white,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
@@ -167,7 +152,7 @@ class HomeHeader extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.menu_rounded,
-                    color: theme.iconTheme.color,
+                    color: const Color(0xFF1D1D1D),
                     size: 24,
                   ),
                 ),

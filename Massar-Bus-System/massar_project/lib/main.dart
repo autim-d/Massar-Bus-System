@@ -6,10 +6,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
-import 'package:massar_project/core/theme/bloc/theme_bloc.dart';
-import 'package:massar_project/core/theme/bloc/theme_state.dart';
-import 'package:massar_project/core/theme/bloc/theme_event.dart';
-import 'package:massar_project/core/theme/app_theme.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import 'package:massar_project/features/ticket/bloc/ticket_status_bloc/ticket_status_bloc.dart';
 
@@ -44,9 +40,6 @@ class MyApp extends ConsumerWidget {
             authRepository: ref.read(authRepositoryProvider),
           ),
         ),
-        BlocProvider<ThemeBloc>(
-          create: (context) => ThemeBloc()..add(const LoadTheme()),
-        ),
         BlocProvider<CheckoutBloc>(
           create: (context) => CheckoutBloc(
             ref.read(bookingRepositoryProvider),
@@ -58,27 +51,24 @@ class MyApp extends ConsumerWidget {
             ..add(LoadTicketStatuses()),
         ),
       ],
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        builder: (context, themeState) {
-          return MaterialApp.router(
-            title: 'Masar Smart Transportation',
-            locale: const Locale('ar', ''),
-            supportedLocales: const [
-              Locale('ar', ''), // Arabic
-              Locale('en', ''), // English
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            debugShowCheckedModeBanner: false,
-            themeMode: themeState.themeMode,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            routerConfig: appRouter,
-          );
-        },
+      child: MaterialApp.router(
+        title: 'Masar Smart Transportation',
+        locale: const Locale('ar', ''),
+        supportedLocales: const [
+          Locale('ar', ''), // Arabic
+          Locale('en', ''), // English
+        ],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'ReadexPro',
+          primarySwatch: Colors.blue,
+        ),
+        routerConfig: appRouter,
       ),
     );
   }

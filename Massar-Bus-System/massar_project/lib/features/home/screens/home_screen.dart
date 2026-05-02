@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextDirection.rtl, // ضمان دعم اللغة العربية من اليمين لليسار
       child: Scaffold(
         drawer: const CustomDrawer(),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             // خلفية نمط الخريطة الباهتة (Pattern Background)
@@ -125,3 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+
+
+

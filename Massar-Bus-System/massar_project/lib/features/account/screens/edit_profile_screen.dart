@@ -46,12 +46,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).cardTheme.color,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        final theme = Theme.of(context);
+        
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Directionality(
@@ -76,11 +76,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: theme.textTheme.titleLarge?.color,
+                            color: const Color(0xFF1D1D1D),
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.close, color: theme.iconTheme.color),
+                          icon: Icon(Icons.close, color: const Color(0xFF1D1D1D)),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
@@ -88,15 +88,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: 12),
                     Text(
                       'الاسم الأول',
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      style: TextStyle(color: const Color(0xFF1D1D1D)),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _firstController,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      style: TextStyle(color: const Color(0xFF1D1D1D)),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: theme.cardTheme.color,
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -105,16 +105,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'الاسم الأخير',
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      style: TextStyle(color: const Color(0xFF1D1D1D)),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _lastController,
                       enabled: !noLastName,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      style: TextStyle(color: const Color(0xFF1D1D1D)),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: theme.cardTheme.color,
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -131,7 +131,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Text(
                           'ليس لدي اسم أخير',
                           style: TextStyle(
-                            color: theme.textTheme.bodyMedium?.color,
+                            color: const Color(0xFF6B7683),
                           ),
                         ),
                       ],
@@ -179,9 +179,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).cardTheme.color,
+      backgroundColor: Colors.white,
       builder: (context) {
-        final theme = Theme.of(context);
+        
         return Padding(
           padding: EdgeInsets.only(
             left: 16,
@@ -196,7 +196,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Text(
                 'تعديل رقم الجوال',
                 style: TextStyle(
-                  color: theme.textTheme.bodyLarge?.color,
+                  color: const Color(0xFF1D1D1D),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -204,10 +204,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               TextField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                style: TextStyle(color: const Color(0xFF1D1D1D)),
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: theme.cardTheme.color,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -241,7 +241,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
 
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
@@ -256,18 +256,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: Colors.white,
             appBar: AppBar(
               title: Text(
                 'حسابي',
                 style: TextStyle(
-                  color: theme.textTheme.titleLarge?.color,
+                  color: const Color(0xFF1D1D1D),
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              backgroundColor: theme.appBarTheme.backgroundColor,
+              backgroundColor: Colors.white,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+                icon: Icon(Icons.arrow_back_ios, color: const Color(0xFF1D1D1D)),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -303,7 +303,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     '${user.firstName} ${user.lastName}'.trim(),
                     style: TextStyle(
                       fontSize: 16,
-                      color: theme.textTheme.bodyLarge?.color,
+                      color: const Color(0xFF1D1D1D),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -316,7 +316,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     user.phoneNumber,
                     style: TextStyle(
                       fontSize: 16,
-                      color: theme.textTheme.bodyLarge?.color,
+                      color: const Color(0xFF1D1D1D),
                     ),
                   ),
                 ],
@@ -335,7 +335,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   ) {
     return Column(
       children: [
-        Container(height: 1, color: theme.dividerColor),
+        Container(height: 1, color: const Color(0xFFEAECF0)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -344,7 +344,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: theme.textTheme.bodyLarge?.color,
+                color: const Color(0xFF1D1D1D),
               ),
             ),
             TextButton(
@@ -360,3 +360,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 }
+
+
+

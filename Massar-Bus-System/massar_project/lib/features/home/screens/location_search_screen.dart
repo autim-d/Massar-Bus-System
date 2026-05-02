@@ -106,26 +106,26 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
     final stationsAsync = ref.watch(stationsProvider);
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: theme.appBarTheme.backgroundColor,
+            backgroundColor: Colors.white,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.close, color: theme.iconTheme.color),
+              icon: Icon(Icons.close, color: const Color(0xFF1D1D1D)),
               onPressed: () => context.pop(),
             ),
             title: Text(
               "اين تريد الذهاب ؟",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: theme.textTheme.titleLarge?.color,
+                color: const Color(0xFF1D1D1D),
               ),
             ),
           ),
@@ -149,10 +149,10 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: theme.cardTheme.color,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: theme.brightness == Brightness.dark 
+                      color: false 
                           ? Colors.white.withOpacity(0.1) 
                           : const Color(0xFFE4E7EC),
                     ),
@@ -176,7 +176,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                           prefixIcon: const Icon(Icons.person_outline),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: theme.dividerColor),
+                            borderSide: BorderSide(color: const Color(0xFFEAECF0)),
                           ),
                         ),
                       ),
@@ -190,7 +190,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                           prefixIcon: const Icon(Icons.phone_outlined),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: theme.dividerColor),
+                            borderSide: BorderSide(color: const Color(0xFFEAECF0)),
                           ),
                         ),
                       ),
@@ -219,7 +219,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
 
                       return ListView.separated(
                         itemCount: displayList.length,
-                        separatorBuilder: (_, __) => Divider(color: theme.dividerColor),
+                        separatorBuilder: (_, __) => Divider(color: const Color(0xFFEAECF0)),
                         itemBuilder: (context, index) {
                           final station = displayList[index];
                           return ListTile(
@@ -278,3 +278,6 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
     );
   }
 }
+
+
+
