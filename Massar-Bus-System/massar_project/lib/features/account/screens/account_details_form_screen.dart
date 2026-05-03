@@ -15,7 +15,7 @@ class AccountDetailsFormScreen extends StatelessWidget {
     );
     final inputDecoration = InputDecoration(
       filled: true,
-      fillColor: theme.inputDecorationTheme.fillColor ?? (isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFF5F7FB)),
+      fillColor: theme.inputDecorationTheme.fillColor ?? (isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xFFF5F7FB)),
       enabledBorder: border,
       focusedBorder: border.copyWith(
         borderSide: const BorderSide(color: Color(0xFF0053D9), width: 1.4),

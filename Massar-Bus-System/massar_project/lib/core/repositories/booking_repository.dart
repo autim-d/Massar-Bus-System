@@ -17,7 +17,7 @@ class BookingRepository {
       if (userId == null) throw Exception('User not logged in');
 
       // Fetch user id from our internal users table
-      final user = await _supabase.from('users').select('id').eq('firebase_uid', userId).single();
+      final user = await _supabase.from('users').select('id').eq('id', userId).single();
 
       // Insert booking via Supabase. Note: business logic like generating booking code 
       // or fetching ticket price should be handled either here, or better, in a Postgres trigger.
@@ -52,7 +52,7 @@ class BookingRepository {
       final userId = _supabase.auth.currentUser?.id;
       if (userId == null) throw Exception('Not authenticated');
 
-      final user = await _supabase.from('users').select('id').eq('firebase_uid', userId).single();
+      final user = await _supabase.from('users').select('id').eq('id', userId).single();
       
       final response = await _supabase
           .from('bookings')

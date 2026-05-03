@@ -1,0 +1,224 @@
+﻿Analyzing massar_project...                                     
+
+warning - Unused import: 'dart:io' - lib\core\constants\api_constants.dart:1:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\navigation\main_layout.dart:41:44 - deprecated_member_use
+warning - The declaration '_PromotionsPlaceholderScreen' isn't referenced - lib\core\routing\app_router.dart:391:7 - unused_element
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\routing\app_router.dart:405:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\routing\shell_navigation_screen.dart:102:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\routing\shell_navigation_screen.dart:214:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\routing\shell_navigation_screen.dart:277:40 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\custom_drawer.dart:13:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_drawer.dart:19:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_drawer.dart:20:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_drawer.dart:81:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_drawer.dart:114:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_drawer.dart:178:49 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\custom_drawer_item.dart:8:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\custom_text_field.dart:18:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_text_field.dart:85:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\custom_text_field.dart:111:38 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\location_map_card.dart:14:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\location_map_card.dart:35:33 - deprecated_member_use
+   info - 'cameraOptions' is deprecated and shouldn't be used. Use [viewport] to specify the camera position and behavior of the map - lib\core\widgets\location_map_card.dart:57:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\location_map_card.dart:72:45 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\massar_bottom_nav_bar.dart:7:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\massar_bottom_nav_bar.dart:24:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\massar_bottom_nav_bar.dart:66:48 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\primary_button.dart:10:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\primary_button.dart:28:42 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\core\widgets\search_destination_card.dart:9:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\widgets\search_destination_card.dart:30:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\account_details_form_screen.dart:18:81 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\features\account\screens\account_details_form_screen.dart:127:17 - deprecated_member_use
+warning - Unused import: 'package:go_router/go_router.dart' - lib\features\account\screens\account_screen.dart:3:8 - unused_import
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\account\screens\account_screen.dart:4:8 - unused_import
+   info - Parameter 'key' could be a super parameter - lib\features\account\screens\appearance_screen.dart:10:9 - use_super_parameters
+warning - The value of the local variable 'isDarkTheme' isn't used - lib\features\account\screens\appearance_screen.dart:15:11 - unused_local_variable
+   info - Parameter 'key' could be a super parameter - lib\features\account\screens\change_password_screen.dart:5:9 - use_super_parameters
+warning - Unused import: 'package:massar_project/features/auth/bloc/auth_event.dart' - lib\features\account\screens\edit_photo_screen.dart:8:8 - unused_import
+   info - Don't use 'BuildContext's across async gaps - lib\features\account\screens\edit_photo_screen.dart:96:28 - use_build_context_synchronously
+  error - The name 'ProfileUpdateSuccess' isn't defined, so it can't be used in an 'is' expression - lib\features\account\screens\edit_photo_screen.dart:108:24 - type_test_with_undefined_name
+warning - The declaration 'elseif' isn't referenced - lib\features\account\screens\edit_photo_screen.dart:113:13 - unused_element
+  error - Expected to find ')' - lib\features\account\screens\edit_photo_screen.dart:113:27 - expected_token
+  error - The name 'AuthLoading' isn't defined, so it can't be used in an 'is' expression - lib\features\account\screens\edit_photo_screen.dart:120:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:130:47 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:135:49 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:168:27 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:198:57 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:209:49 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:209:60 - dead_code
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:211:33 - dead_code
+  error - The method 'UpdateAvatarRequested' isn't defined for the type '_EditPhotoScreenState' - lib\features\account\screens\edit_photo_screen.dart:212:64 - undefined_method
+warning - Dead code - lib\features\account\screens\edit_photo_screen.dart:216:33 - dead_code
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\profile_screen.dart:140:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\profile_screen.dart:149:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\profile_screen.dart:158:81 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\account\screens\settings_screen.dart:9:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\settings_screen.dart:50:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\screens\settings_screen.dart:89:43 - deprecated_member_use
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\account\widgets\account_settings_card_widget.dart:3:8 - unused_import
+warning - The value of the local variable 'isDark' isn't used - lib\features\account\widgets\account_settings_card_widget.dart:12:11 - unused_local_variable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\widgets\guest_profile_placeholder.dart:22:46 - deprecated_member_use
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\account\widgets\profile_header_widget.dart:2:8 - unused_import
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\account\widgets\settings_list_tile.dart:2:8 - unused_import
+   info - Parameter 'key' could be a super parameter - lib\features\account\widgets\settings_list_tile.dart:10:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\widgets\settings_list_tile.dart:35:48 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\account\widgets\settings_section_header.dart:6:9 - use_super_parameters
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\account\widgets\support_settings_card_widget.dart:2:8 - unused_import
+warning - The value of the local variable 'isDark' isn't used - lib\features\account\widgets\support_settings_card_widget.dart:11:11 - unused_local_variable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\account\widgets\theme_preview_card.dart:38:41 - deprecated_member_use
+   info - Statements in a for should be enclosed in a block - lib\features\auth\screens\enter_code_screen.dart:39:33 - curly_braces_in_flow_control_structures
+   info - Statements in a for should be enclosed in a block - lib\features\auth\screens\enter_code_screen.dart:40:32 - curly_braces_in_flow_control_structures
+   info - 'RawKeyboardListener' is deprecated and shouldn't be used. Use KeyboardListener instead. This feature was deprecated after v3.18.0-2.0.pre - lib\features\auth\screens\enter_code_screen.dart:99:14 - deprecated_member_use
+   info - 'RawKeyDownEvent' is deprecated and shouldn't be used. Use KeyDownEvent instead. This feature was deprecated after v3.18.0-2.0.pre - lib\features\auth\screens\enter_code_screen.dart:102:24 - deprecated_member_use
+warning - Unused import: '../../../core/theme/app_colors.dart' - lib\features\auth\screens\login_screen.dart:8:8 - unused_import
+warning - Unused import: '../../../core/widgets/primary_button.dart' - lib\features\auth\screens\login_screen.dart:9:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\login_screen.dart:227:78 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\login_screen.dart:239:78 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\login_screen.dart:253:73 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\features\auth\screens\phone_login_screen.dart:75:7 - use_build_context_synchronously
+warning - Unused import: '../../../core/theme/app_colors.dart' - lib\features\auth\screens\sign_up_screen.dart:3:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\sign_up_screen.dart:200:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\sign_up_screen.dart:358:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\screens\verification_method_screen.dart:93:55 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\features\home\providers\active_ticket_provider.dart:51:5 - avoid_print
+  error - Target of URI doesn't exist: '../models/bus_search_criteria.dart' - lib\features\home\providers\bus_search_provider.dart:4:8 - uri_does_not_exist
+  error - The name 'BusSearchCriteria' isn't a type, so it can't be used as a type argument - lib\features\home\providers\bus_search_provider.dart:7:71 - non_type_as_type_argument
+  error - The property 'date' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:14:19 - unchecked_use_of_nullable_value
+  error - The property 'date' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:14:41 - unchecked_use_of_nullable_value
+  error - The property 'date' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:14:91 - unchecked_use_of_nullable_value
+  error - The property 'fromId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:27:18 - unchecked_use_of_nullable_value
+  error - The property 'fromId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:27:45 - unchecked_use_of_nullable_value
+  error - The property 'fromId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:28:70 - unchecked_use_of_nullable_value
+  error - The property 'toId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:30:18 - unchecked_use_of_nullable_value
+  error - The property 'toId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:30:43 - unchecked_use_of_nullable_value
+  error - The property 'toId' can't be unconditionally accessed because the receiver can be 'null' - lib\features\home\providers\bus_search_provider.dart:31:75 - unchecked_use_of_nullable_value
+   info - Don't invoke 'print' in production code - lib\features\home\providers\bus_search_provider.dart:64:5 - avoid_print
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\features\home\providers\search_location_provider.dart:1:8 - unused_import
+warning - Unused import: '../../../core/theme/app_colors.dart' - lib\features\home\screens\bus_results_screen.dart:4:8 - unused_import
+  error - The argument type 'FutureProviderFamily<List<BusTicketModel>, InvalidType>' can't be assigned to the parameter type 'ProviderListenable<dynamic>'.  - lib\features\home\screens\bus_results_screen.dart:24:36 - argument_type_not_assignable
+   info - Parameter 'key' could be a super parameter - lib\features\home\screens\home_screen.dart:18:9 - use_super_parameters
+warning - Unused import: '../../../core/theme/app_colors.dart' - lib\features\home\screens\location_search_screen.dart:4:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\screens\location_search_screen.dart:122:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\screens\location_search_screen.dart:126:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:34:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:38:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:87:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:126:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:140:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:156:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\active_ticket_card.dart:284:22 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\components\bus_result_card.dart:10:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\bus_result_card.dart:32:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\bus_result_card.dart:36:35 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\components\date_price_selector_item.dart:9:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\detailed_ticket_card.dart:37:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\detailed_ticket_card.dart:41:33 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\components\location_input_connector.dart:8:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\location_input_connector.dart:24:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\location_input_connector.dart:28:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\location_input_connector.dart:78:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\location_input_connector.dart:92:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\map_placeholder_card.dart:29:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\map_placeholder_card.dart:32:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\map_placeholder_card.dart:60:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\passenger_info_card.dart:33:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\passenger_info_card.dart:37:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\protection_promo_banner.dart:25:33 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\components\route_timeline.dart:9:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\route_timeline.dart:47:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\route_timeline.dart:135:22 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\components\tag_chip.dart:8:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\components\vertical_route_timeline.dart:103:50 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\e_ticket_modal.dart:7:9 - use_super_parameters
+   info - 'foregroundColor' is deprecated and shouldn't be used. use colors in eyeStyle and dataModuleStyle instead - lib\features\home\widgets\e_ticket_modal.dart:59:15 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\home_header.dart:12:9 - use_super_parameters
+warning - The value of the local variable 'isDark' isn't used - lib\features\home\widgets\home_header.dart:22:11 - unused_local_variable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\home_header.dart:53:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\home_header.dart:83:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\home_header.dart:160:45 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\home_search_bar.dart:6:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\home_search_bar.dart:25:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\widgets\home_search_bar.dart:31:37 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\home\widgets\quick_action_section.dart:11:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\features\onboarding\onboarding_screen.dart:11:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\onboarding_screen.dart:76:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\onboarding_screen.dart:81:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\widgets\onboarding_page.dart:33:39 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\search\search_bus_screen.dart:10:9 - use_super_parameters
+warning - The value of the local variable 'screenWidth' isn't used - lib\features\ticket\screens\detail_ticket_screen.dart:15:11 - unused_local_variable
+warning - Unused import: 'package:go_router/go_router.dart' - lib\features\ticket\screens\my_ticket_details_screen.dart:2:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\my_ticket_details_screen.dart:113:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:82:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:153:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:216:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:273:68 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:333:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:379:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\order_summary_screen.dart:468:48 - deprecated_member_use
+   info - Unnecessary instance of 'Container' - lib\features\ticket\screens\payment_continuation_screen.dart:174:31 - avoid_unnecessary_containers
+   info - Unnecessary instance of 'Container' - lib\features\ticket\screens\payment_continuation_screen.dart:201:33 - avoid_unnecessary_containers
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:136:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:177:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:180:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:238:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:301:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:321:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\payment_method_screen.dart:403:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:117:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:134:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:145:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:226:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:239:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:309:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:347:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:354:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:390:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:395:69 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:428:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\screens\ticket_list_screen.dart:472:73 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\ticket\screens\ticket_status_screen.dart:8:9 - use_super_parameters
+warning - The value of the local variable 'isDark' isn't used - lib\features\ticket\screens\ticket_status_screen.dart:13:11 - unused_local_variable
+warning - Unused import: 'package:massar_project/core/theme/app_colors.dart' - lib\features\ticket\widgets\components\animated_success_modal.dart:2:8 - unused_import
+   info - The imported package 'intl' isn't a dependency of the importing package - lib\features\ticket\widgets\components\animated_success_modal.dart:3:8 - depend_on_referenced_packages
+warning - Unused import: 'package:intl/intl.dart' - lib\features\ticket\widgets\components\animated_success_modal.dart:3:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\animated_success_modal.dart:17:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\animated_success_modal.dart:151:48 - deprecated_member_use
+warning - The value of the local variable 'isDark' isn't used - lib\features\ticket\widgets\components\checkout_stepper.dart:9:11 - unused_local_variable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\checkout_stepper.dart:59:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\checkout_stepper.dart:60:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\checkout_stepper.dart:62:66 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\features\ticket\widgets\components\countdown_timer_button.dart:8:9 - use_super_parameters
+warning - Unused import: '../../../../core/theme/app_colors.dart' - lib\features\ticket\widgets\components\filter_chip_row.dart:2:8 - unused_import
+   info - Parameter 'key' could be a super parameter - lib\features\ticket\widgets\components\filter_chip_row.dart:9:9 - use_super_parameters
+warning - Unused import: 'package:flutter_svg/flutter_svg.dart' - lib\features\ticket\widgets\components\qr_code_card.dart:2:8 - unused_import
+warning - Unused import: 'package:go_router/go_router.dart' - lib\features\ticket\widgets\components\ticket_status_card.dart:2:8 - unused_import
+   info - Parameter 'key' could be a super parameter - lib\features\ticket\widgets\components\ticket_status_card.dart:9:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\ticket_status_card.dart:45:22 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\ticket_status_card.dart:72:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\ticket_status_card.dart:76:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\ticket_status_card.dart:118:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\ticket\widgets\components\ticket_status_card.dart:174:50 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\location_fun.dart:20:5 - avoid_print
+warning - Unused import: 'package:massar_project/features/auth/screens/splash_screen.dart' - lib\main.dart:3:8 - unused_import
+  error - The named parameter 'authRepository' isn't defined - lib\main.dart:48:13 - undefined_named_parameter
+  error - Too many positional arguments: 0 expected, but 2 found - lib\main.dart:56:13 - extra_positional_arguments
+  error - Too many positional arguments: 0 expected, but 1 found - lib\main.dart:62:32 - extra_positional_arguments
+  error - The getter 'nationality' isn't defined for the type 'UserModel' - lib\repositories\auth_repository.dart:60:29 - undefined_getter
+  error - The getter 'nationalId' isn't defined for the type 'UserModel' - lib\repositories\auth_repository.dart:61:33 - undefined_getter
+   info - Don't invoke 'print' in production code - lib\repositories\auth_repository.dart:116:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\repositories\auth_repository.dart:129:7 - avoid_print
+warning - Publishable packages can't have 'path' dependencies - node_modules\firebase-tools\templates\init\functions\dart\pubspec.yaml:11:5 - invalid_dependency
+warning - The directory '../' doesn't contain a pubspec - node_modules\firebase-tools\templates\init\functions\dart\pubspec.yaml:11:11 - path_pubspec_does_not_exist
+  error - Target of URI doesn't exist: 'package:firebase_functions/firebase_functions.dart' - node_modules\firebase-tools\templates\init\functions\dart\server.dart:1:8 - uri_does_not_exist
+  error - The function 'fireUp' isn't defined - node_modules\firebase-tools\templates\init\functions\dart\server.dart:4:3 - undefined_function
+  error - The name 'HttpsOptions' isn't a class - node_modules\firebase-tools\templates\init\functions\dart\server.dart:8:22 - creation_with_non_type
+  error - The function 'Cors' isn't defined - node_modules\firebase-tools\templates\init\functions\dart\server.dart:9:15 - undefined_function
+  error - The function 'Instances' isn't defined - node_modules\firebase-tools\templates\init\functions\dart\server.dart:10:23 - undefined_function
+  error - The function 'Response' isn't defined - node_modules\firebase-tools\templates\init\functions\dart\server.dart:12:26 - undefined_function
+   info - Don't invoke 'print' in production code - refactor.dart:27:5 - avoid_print
+   info - Don't invoke 'print' in production code - refactor.dart:43:7 - avoid_print
+   info - Don't invoke 'print' in production code - refactor.dart:45:7 - avoid_print
+   info - Don't invoke 'print' in production code - refactor.dart:69:7 - avoid_print
+   info - Don't invoke 'print' in production code - refactor.dart:73:3 - avoid_print
+

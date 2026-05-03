@@ -133,7 +133,7 @@ class PaymentMethodScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
                         border: Border.all(
-                          color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xffE5D2D2),
+                          color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffE5D2D2),
                           width: .7,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -174,10 +174,10 @@ class PaymentMethodScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                                  color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xffE5D2D2),
+                                    color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffE5D2D2),
                                   ),
                                 ),
                                 child: Text(
@@ -235,7 +235,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Payment Method Selector
@@ -298,7 +298,7 @@ class PaymentMethodScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                                  color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                                   border: Border.all(color: theme.dividerColor),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -318,7 +318,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Promo Code
@@ -400,7 +400,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Price Breakdown

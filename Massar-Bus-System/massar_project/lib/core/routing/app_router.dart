@@ -402,7 +402,7 @@ class _PromotionsPlaceholderScreen extends StatelessWidget {
             Icon(
               Icons.local_offer_outlined,
               size: 72,
-              color: const Color(0xFF1570EF).withOpacity(0.4),
+              color: const Color(0xFF1570EF).withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
             const Text(

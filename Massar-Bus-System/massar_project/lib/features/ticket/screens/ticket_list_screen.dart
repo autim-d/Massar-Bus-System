@@ -114,7 +114,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             borderRadius: BorderRadius.circular(_cardRadius),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.04),
+                                color: Colors.black.withValues(alpha: 0.04),
                                 blurRadius: 10,
                                 offset: const Offset(0, 6),
                               ),
@@ -131,7 +131,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                 child: Container(
                                   height: 120,
                                   color: isDark
-                                      ? Colors.white.withOpacity(0.05)
+                                      ? Colors.white.withValues(alpha: 0.05)
                                       : Colors.grey.shade100,
                                   child: Stack(
                                     children: [
@@ -142,7 +142,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                           errorBuilder: (_, __, ___) =>
                                               Container(
                                             color: isDark
-                                                ? Colors.white.withOpacity(0.05)
+                                                ? Colors.white.withValues(alpha: 0.05)
                                                 : Colors.grey.shade100,
                                             child: const Center(
                                               child: Icon(
@@ -223,7 +223,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.03),
+                                  color: Colors.black.withValues(alpha: 0.03),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -236,7 +236,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                   height: 36,
                                   decoration: BoxDecoration(
                                     color: isDark
-                                        ? Colors.white.withOpacity(0.05)
+                                        ? Colors.white.withValues(alpha: 0.05)
                                         : Colors.grey.shade100,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -306,7 +306,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
+                                color: Colors.black.withValues(alpha: 0.03),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -344,14 +344,14 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: isDark
-                                                ? Colors.white.withOpacity(0.05)
+                                                ? Colors.white.withValues(alpha: 0.05)
                                                 : Colors.grey.shade50,
                                             borderRadius: BorderRadius.circular(
                                               10,
                                             ),
                                             border: Border.all(
                                               color: isDark
-                                                  ? Colors.white.withOpacity(0.1)
+                                                  ? Colors.white.withValues(alpha: 0.1)
                                                   : Colors.grey.shade200,
                                             ),
                                           ),
@@ -387,7 +387,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                             ),
                                             border: Border.all(
                                               color: isDark
-                                                  ? Colors.white.withOpacity(0.1)
+                                                  ? Colors.white.withValues(alpha: 0.1)
                                                   : Colors.grey.shade200,
                                             ),
                                             boxShadow: [
@@ -425,7 +425,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
+                                color: Colors.black.withValues(alpha: 0.03),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -469,7 +469,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                         Icon(
                                           Icons.access_time,
                                           size: 18,
-                                          color: theme.iconTheme.color?.withOpacity(0.5),
+                                          color: theme.iconTheme.color?.withValues(alpha: 0.5),
                                         ),
                                       ],
                                     ),

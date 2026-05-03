@@ -19,7 +19,7 @@ class GuestProfilePlaceholder extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF2563EB).withOpacity(0.1),
+              color: const Color(0xFF2563EB).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

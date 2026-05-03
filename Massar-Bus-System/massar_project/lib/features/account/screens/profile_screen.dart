@@ -137,7 +137,7 @@ class ProfileScreen extends ConsumerWidget {
             }),
             SizedBox(
               width: 335,
-              child: Divider(height: 4, color: theme.dividerColor.withOpacity(0.4)),
+              child: Divider(height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
             const SizedBox(height: 7),
 
@@ -146,7 +146,7 @@ class ProfileScreen extends ConsumerWidget {
             }),
             SizedBox(
               width: 335,
-              child: Divider(height: 4, color: theme.dividerColor.withOpacity(0.4)),
+              child: Divider(height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
             const SizedBox(height: 7),
 
@@ -155,7 +155,7 @@ class ProfileScreen extends ConsumerWidget {
             }),
             SizedBox(
               width: 335,
-              child: Divider(thickness: 1, height: 4, color: theme.dividerColor.withOpacity(0.4)),
+              child: Divider(thickness: 1, height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
             const SizedBox(height: 7),
 

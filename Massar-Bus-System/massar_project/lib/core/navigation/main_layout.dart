@@ -38,7 +38,7 @@ class _MainLayoutState extends State<MainLayout> {
           color: isDark ? const Color(0xFF1D2939) : Colors.white,
           boxShadow: [
             BoxShadow(
-              color: isDark ? Colors.black.withOpacity(0.3) : Colors.black12,
+              color: isDark ? Colors.black.withValues(alpha: 0.3) : Colors.black12,
               blurRadius: 6,
             )
           ],

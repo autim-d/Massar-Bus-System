@@ -27,3 +27,18 @@ class LoginSubmitted extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+class UpdateAvatarRequested extends AuthEvent {
+  final String imagePath;
+
+  const UpdateAvatarRequested({required this.imagePath});
+
+  @override
+  List<Object> get props => [imagePath];
+}
+
+class GoogleSignInRequested extends AuthEvent {
+  const GoogleSignInRequested();
+}
+
+

@@ -2,15 +2,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'ticket_status_event.dart';
 import 'ticket_status_state.dart';
 import '../../models/ticket_status_model.dart';
+import 'package:massar_project/core/repositories/booking_repository.dart';
 
 export 'ticket_status_event.dart';
 export 'ticket_status_state.dart';
 
 class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
-  TicketStatusBloc() : super(TicketStatusInitial()) {
+  final BookingRepository _bookingRepository;
+
+  TicketStatusBloc(this._bookingRepository) : super(TicketStatusInitial()) {
     on<LoadTicketStatuses>(_onLoadTicketStatuses);
     on<FilterTicketsRequested>(_onFilterTicketsRequested);
   }
+
 
   void _onLoadTicketStatuses(
     LoadTicketStatuses event,

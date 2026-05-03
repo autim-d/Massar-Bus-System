@@ -39,6 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is AuthAuthenticated) {
           // Success! Clear stack and go home
           context.go('/home');
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -224,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Divider
                     Row(
                       children: [
-                        Expanded(child: Divider(color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade300)),
+                        Expanded(child: Divider(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.shade300)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Text(
@@ -236,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Expanded(child: Divider(color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade300)),
+                        Expanded(child: Divider(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.shade300)),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -247,10 +254,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 52,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Google login logic
+                          context.read<AuthBloc>().add(const GoogleSignInRequested());
                         },
+
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFD0D5DD)),
+                          side: BorderSide(color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFD0D5DD)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

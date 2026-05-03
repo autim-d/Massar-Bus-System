@@ -42,7 +42,7 @@ class TicketStatusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -69,11 +69,11 @@ class TicketStatusCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
             color: isDark
-                ? Colors.white.withOpacity(0.1)
+                ? Colors.white.withValues(alpha: 0.1)
                 : const Color(0xFFE4E7EC)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -115,7 +115,7 @@ class TicketStatusCard extends StatelessWidget {
                                   horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: isDark
-                                    ? Colors.white.withOpacity(0.05)
+                                    ? Colors.white.withValues(alpha: 0.05)
                                     : const Color(0xFFF2F4F7),
                                 borderRadius: BorderRadius.circular(4),
                               ),
@@ -171,7 +171,7 @@ class TicketStatusCard extends StatelessWidget {
                           child: Icon(Icons.arrow_forward_ios,
                               size: 10,
                               color: isDark
-                                  ? Colors.white.withOpacity(0.3)
+                                  ? Colors.white.withValues(alpha: 0.3)
                                   : const Color(0xFFD0D5DD)),
                         ),
                         Expanded(
@@ -268,5 +268,4 @@ class TicketStatusCard extends StatelessWidget {
       ),
     );
   }
-  }
-
+}

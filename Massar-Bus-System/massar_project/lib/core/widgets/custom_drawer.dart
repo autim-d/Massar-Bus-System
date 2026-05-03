@@ -16,8 +16,8 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final drawerBgColor = isDark
-        ? const Color(0xFF1E2939).withOpacity(0.5)
-        : const Color(0xFF1570EF).withOpacity(0.5);
+        ? const Color(0xFF1E2939).withValues(alpha: 0.5)
+        : const Color(0xFF1570EF).withValues(alpha: 0.5);
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -78,7 +78,7 @@ class CustomDrawer extends StatelessWidget {
                                   Text(
                                     state.email,
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: Colors.white.withValues(alpha: 0.8),
                                       fontSize: 14,
                                       fontFamily: 'ReadexPro',
                                     ),
@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                                   Text(
                                     'ضيف',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: Colors.white.withValues(alpha: 0.8),
                                       fontSize: 14,
                                       fontFamily: 'ReadexPro',
                                     ),
@@ -175,7 +175,7 @@ class CustomDrawer extends StatelessWidget {
                 // Footer
                 Column(
                   children: [
-                    Divider(color: Colors.white.withOpacity(0.2), height: 1),
+                    Divider(color: Colors.white.withValues(alpha: 0.2), height: 1),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: BlocBuilder<AuthBloc, AuthState>(

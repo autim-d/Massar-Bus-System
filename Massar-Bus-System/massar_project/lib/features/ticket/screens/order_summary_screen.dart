@@ -79,7 +79,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                     decoration: BoxDecoration(
                       color: theme.cardTheme.color,
                       border: Border.all(
-                        color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xffE5D2D2),
+                        color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffE5D2D2),
                         width: .7,
                       ),
                       borderRadius: BorderRadius.circular(10),
@@ -150,7 +150,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
+                                color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
                                   color: theme.dividerColor,
@@ -213,7 +213,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                             decoration: BoxDecoration(
                               border: Border.all(color: theme.dividerColor),
                               borderRadius: BorderRadius.circular(15),
-                              color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                              color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                             ),
                             child: Center(
                               child: Text(
@@ -270,7 +270,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                         color: theme.dividerColor,
                                       ),
                                       borderRadius: BorderRadius.circular(15),
-                                      color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                                      color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                                     ),
                                     child: Center(
                                       child: Text(
@@ -330,7 +330,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                 ),
                 const SizedBox(height: 20),
 
@@ -376,7 +376,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                 ),
                 const SizedBox(height: 20),
                 Padding(
@@ -465,7 +465,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   endIndent: 0,
                   height: 20,
                   thickness: 8,
-                  color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xffF2F4F7),
+                  color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                 ),
                 const SizedBox(height: 20),
                 Padding(

@@ -10,7 +10,7 @@ final activeTicketProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
     if (userId == null) return null;
 
     // 1. Get internal user id
-    final user = await supabase.from('users').select('id').eq('firebase_uid', userId).single();
+    final user = await supabase.from('users').select('id').eq('id', userId).single();
 
     // 2. Fetch latest paid booking
     final booking = await supabase

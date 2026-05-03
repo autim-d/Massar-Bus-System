@@ -60,7 +60,7 @@ class AuthRepository {
         'nationality': user.nationality,
         'identity_number': user.nationalId,
         'phone_number': user.phoneNumber,
-      }).eq('firebase_uid', userId).select().single();
+      }).eq('id', userId).select().single();
 
       return UserModel.fromJson(res);
     } on PostgrestException catch (e) {
@@ -168,7 +168,7 @@ class AuthRepository {
       if (user != null) {
         // 2. Sync to public.users table
         final dbRes = await _supabase.from('users').insert({
-          'firebase_uid': user.id,
+          'id': user.id,
           'first_name': firstName,
           'last_name': lastName,
           'email': email,
@@ -207,7 +207,7 @@ class AuthRepository {
         return {'success': false, 'message': 'غير مسجل الدخول'};
       }
 
-      final userRecord = await _supabase.from('users').select().eq('firebase_uid', userId).single();
+      final userRecord = await _supabase.from('users').select().eq('id', userId).single();
       
       // TODO: Fetch activeTicket from bookings if needed
       final activeTicket = null; 
@@ -241,7 +241,7 @@ class AuthRepository {
 
       final res = await _supabase.from('users').update({
         'avatar_url': imageUrl,
-      }).eq('firebase_uid', userId).select().single();
+      }).eq('id', userId).select().single();
 
       return UserModel.fromJson(res);
     } on StorageException catch (e) {
@@ -256,46 +256,41 @@ class AuthRepository {
   // ==========================================
   Future<Map<String, dynamic>> signInWithGoogle() async {
     try {
-      const webClientId = '632794604210-jjving8bqbci91vuud90u2225l5kipvi.apps.googleusercontent.com';
-
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        serverClientId: webClientId,
-      );
-      final googleUser = await googleSignIn.signIn();
-      final googleAuth = await googleUser?.authentication;
-      final accessToken = googleAuth?.accessToken;
-      final idToken = googleAuth?.idToken;
-
-      if (accessToken == null || idToken == null) {
-        throw Exception('Google Auth failed');
-      }
-
-      final res = await _supabase.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-        accessToken: accessToken,
+      // ✅ استخدام تسجيل الدخول المباشر عبر Supabase OAuth
+      // هذا سيفتح نافذة متصفح داخل التطبيق (In-App Browser) 
+      // وهو أكثر استقراراً ولا يتطلب إعدادات SHA-1 معقدة
+      final bool res = await _supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'io.supabase.massar://login-callback',
       );
 
-      // Optionally sync to public.users table if new user
-      if (res.user != null) {
-         final existingUser = await _supabase.from('users').select().eq('firebase_uid', res.user!.id).maybeSingle();
-         if (existingUser == null) {
-            await _supabase.from('users').insert({
-              'firebase_uid': res.user!.id,
-              'first_name': res.user!.userMetadata?['full_name']?.split(' ').first ?? 'User',
-              'last_name': res.user!.userMetadata?['full_name']?.split(' ').last ?? '',
-              'email': res.user!.email,
-              'avatar_url': res.user!.userMetadata?['avatar_url'],
-            });
-         }
-      }
+      if (res) {
+        // ننتظر قليلاً للتأكد من تحديث الجلسة
+        await Future.delayed(const Duration(seconds: 1));
+        
+        final userData = await getDashboardData();
+        
+        // إذا لم نجد بيانات في الجدول، نستخدم البيانات من الجلسة الحالية
+        final currentUser = _supabase.auth.currentUser;
+        final user = userData['success'] ? userData['user'] : {
+          'first_name': currentUser?.userMetadata?['full_name']?.split(' ').first ?? 'User',
+          'last_name': currentUser?.userMetadata?['full_name']?.split(' ').last ?? '',
+          'email': currentUser?.email,
+          'avatar_url': currentUser?.userMetadata?['avatar_url'],
+        };
 
-      final userData = await getDashboardData();
-      return {'success': true, 'user': userData['user']};
+        return {'success': true, 'user': user};
+      } else {
+        return {'success': false, 'message': 'تعذر فتح صفحة تسجيل الدخول'};
+      }
     } on AuthException catch (e) {
       return {'success': false, 'message': e.message};
     } catch (e) {
       return {'success': false, 'message': e.toString()};
     }
   }
+
+
+
+
 }

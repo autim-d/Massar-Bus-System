@@ -115,6 +115,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
               SnackBar(content: Text(state.message), backgroundColor: Colors.red),
             );
           }
+
         },
         builder: (context, state) {
           final isLoading = state is AuthLoading;

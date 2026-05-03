@@ -44,7 +44,7 @@ class RouteTimeline extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFF9FAFB),
+                    color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xFFF9FAFB),
                     borderRadius: BorderRadius.circular(12.0),
                     border: Border.all(color: theme.dividerColor),
                   ),
@@ -132,7 +132,7 @@ class RouteTimeline extends StatelessWidget {
       height: 16,
       margin: const EdgeInsets.only(top: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         border: Border.all(color: color, width: 2),
         shape: BoxShape.circle,
       ),

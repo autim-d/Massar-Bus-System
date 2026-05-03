@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: isDark
-                                    ? Colors.white.withOpacity(0.1)
+                                    ? Colors.white.withValues(alpha: 0.1)
                                     : const Color(0xFFD0D5DD),
                               ),
                             ),
@@ -355,7 +355,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           border: Border.all(
             color: isSelected
                 ? const Color(0xFF3B82F6)
-                : (isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFD0D5DD)),
+                : (isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFD0D5DD)),
           ),
         ),
         child: Row(

@@ -43,7 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).cardTheme.color,
       // ignore: deprecated_member_use
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -200,7 +200,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).cardTheme.color,
       // ignore: deprecated_member_use
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),

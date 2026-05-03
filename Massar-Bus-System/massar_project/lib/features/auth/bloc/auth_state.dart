@@ -33,3 +33,20 @@ class AuthUnauthenticated extends AuthState {
 class AuthGuest extends AuthState {
   const AuthGuest();
 }
+
+class AuthLoading extends AuthState {
+  const AuthLoading();
+}
+
+class AuthError extends AuthState {
+  final String message;
+  const AuthError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class ProfileUpdateSuccess extends AuthState {
+  const ProfileUpdateSuccess();
+}
+

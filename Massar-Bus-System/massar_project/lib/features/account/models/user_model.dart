@@ -4,6 +4,8 @@ class UserModel {
   final String phoneNumber;
   final String profileImage;
   final String email;
+  final String nationality;
+  final String nationalId;
 
   UserModel({
     required this.firstName,
@@ -11,6 +13,8 @@ class UserModel {
     required this.phoneNumber,
     required this.profileImage,
     required this.email,
+    this.nationality = '',
+    this.nationalId = '',
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,8 @@ class UserModel {
       phoneNumber: json['phone_number'] ?? '',
       profileImage: json['profile_image'] ?? 'assets/images/adnan.jpg',
       email: json['email'] ?? '',
+      nationality: json['nationality'] ?? '',
+      nationalId: json['identity_number'] ?? '',
     );
   }
 
@@ -29,6 +35,8 @@ class UserModel {
     String? phoneNumber,
     String? profileImage,
     String? email,
+    String? nationality,
+    String? nationalId,
   }) {
     return UserModel(
       firstName: firstName ?? this.firstName,
@@ -36,6 +44,9 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       profileImage: profileImage ?? this.profileImage,
       email: email ?? this.email,
+      nationality: nationality ?? this.nationality,
+      nationalId: nationalId ?? this.nationalId,
     );
   }
 }
+

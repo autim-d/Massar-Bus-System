@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/checkout_session_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:massar_project/core/repositories/booking_repository.dart';
+import 'package:massar_project/core/repositories/payment_repository.dart';
 
 // --- Events ---
 abstract class CheckoutEvent extends Equatable {
@@ -47,7 +49,10 @@ class CheckoutError extends CheckoutState {
 
 // --- BLoC ---
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
-  CheckoutBloc() : super(CheckoutInitial()) {
+  final BookingRepository _bookingRepository;
+  final PaymentRepository _paymentRepository;
+
+  CheckoutBloc(this._bookingRepository, this._paymentRepository) : super(CheckoutInitial()) {
     on<ProcessPaymentRequested>(_onProcessPayment);
     on<ProcessTemporaryBookingRequested>(_onProcessTemporaryBooking);
   }

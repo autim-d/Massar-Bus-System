@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/bus_search_provider.dart';
 import '../providers/search_location_provider.dart';
+import '../models/bus_search_criteria.dart';
 import '../widgets/components/bus_result_card.dart';
 import '../widgets/components/date_price_selector_item.dart';
 
@@ -21,8 +22,13 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final ticketsAsync = ref.watch(busSearchProvider);
     final locationState = ref.watch(searchLocationProvider);
+    final ticketsAsync = ref.watch(busSearchProvider(BusSearchCriteria(
+      fromId: locationState.currentLocation?.id,
+      toId: locationState.destination?.id,
+      date: selectedDate,
+    )));
+
     final destinationName =
         locationState.destination?.name ?? 'Monumen Nasional';
 

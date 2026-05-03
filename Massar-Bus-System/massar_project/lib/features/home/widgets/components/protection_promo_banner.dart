@@ -22,7 +22,7 @@ class _ProtectionPromoBannerState extends State<ProtectionPromoBanner> {
         border: Border.all(color: const Color(0xFFE85C0D)), // Orange border
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

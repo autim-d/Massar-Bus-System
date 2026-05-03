@@ -110,7 +110,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                            color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: theme.dividerColor),
                           ),
