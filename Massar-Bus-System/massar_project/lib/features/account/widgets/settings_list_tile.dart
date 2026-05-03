@@ -32,7 +32,7 @@ class SettingsListTile extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFF1570EF).withOpacity(0.1),
+                color: const Color(0xFF1570EF).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(

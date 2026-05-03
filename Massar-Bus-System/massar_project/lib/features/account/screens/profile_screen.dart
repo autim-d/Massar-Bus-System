@@ -1,107 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:massar_project/core/constants/app_strings.dart';
-import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
-import 'package:massar_project/features/auth/bloc/auth_event.dart';
-import 'package:massar_project/features/auth/bloc/auth_state.dart';
-import 'package:massar_project/features/account/models/user_model.dart';
-import 'package:image_picker/image_picker.dart'; // إضافة المكتبة
-import 'dart:io';
+import 'package:massar_project/core/constants/dummy_data.dart';
+import 'package:massar_project/features/account/controllers/profile_controller.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  UserModel? _lastUser;
-
-  // دالة إظهار نافذة التعديل والربط مع الـ Bloc
-  void _editField(
-    BuildContext context,
-    String title,
-    String currentValue,
-    String fieldKey,
-    UserModel user,
-  ) {
-    // نستخدم controller واحد للنص المدخل
-    TextEditingController controller = TextEditingController(
-      text: currentValue,
-    );
+  void _editField(BuildContext context, WidgetRef ref, String title, String currentValue, String fieldKey) {
+    TextEditingController controller = TextEditingController(text: currentValue);
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        final theme = Theme.of(context);
         return AlertDialog(
-          backgroundColor: theme.cardTheme.color,
-          title: Text(
-            '${AppStrings.editPrefix} $title',
-            style: TextStyle(
-              fontFamily: 'Cairo',
-              color: theme.textTheme.titleLarge?.color,
-            ),
-          ),
+          title: Text('${AppStrings.editPrefix} $title'),
           content: TextField(
             controller: controller,
-            style: TextStyle(color: theme.textTheme.bodyLarge?.color),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: '${AppStrings.enterNew} $title',
-              labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
+              labelText: '${AppStrings.enterNew} $title ${AppStrings.newValue}',
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                AppStrings.cancel,
-                style: TextStyle(fontFamily: 'Cairo'),
-              ),
+              onPressed: () => context.pop(),
+              child: const Text(AppStrings.cancel),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               onPressed: () {
-                UserModel updatedUser;
-
-                // منطق تحديث الحقول بناءً على الـ key
-                if (fieldKey == 'name') {
-                  String fullName = controller.text.trim();
-                  List<String> names = fullName.split(' ');
-
-                  // تحديث الاسم الأول والآخر (إذا وجد اسم آخر)
-                  updatedUser = user.copyWith(
-                    firstName: names.isNotEmpty ? names[0] : user.firstName,
-                    lastName: names.length > 1
-                        ? names.sublist(1).join(' ')
-                        : '',
-                  );
-                } else if (fieldKey == 'phone') {
-                  updatedUser = user.copyWith(
-                    phoneNumber: controller.text.trim(),
-                  );
-                } else if (fieldKey == 'email') {
-                  updatedUser = user.copyWith(email: controller.text.trim());
-                } else {
-                  updatedUser = user;
-                }
-
-                // إرسال الحدث إلى AuthBloc (الذي تم تجهيزه مسبقاً)
-                context.read<AuthBloc>().add(
-                  UpdateProfileSubmitted(user: updatedUser),
-                );
-
-                Navigator.pop(context);
+                ref.read(profileControllerProvider.notifier).updateField(fieldKey, controller.text);
+                context.pop();
               },
-              child: const Text(
-                AppStrings.save,
-                style: TextStyle(fontFamily: 'Cairo', color: Colors.white),
-              ),
+              child: const Text(AppStrings.save),
             ),
           ],
         );
@@ -109,12 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildRow(
-    BuildContext context,
-    String title,
-    String value,
-    VoidCallback onEdit,
-  ) {
+  Widget _buildRow(BuildContext context, String title, String value, VoidCallback onEdit) {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -127,35 +56,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'Cairo',
-                    color: theme.textTheme.titleLarge?.color,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: theme.textTheme.titleLarge?.color),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Cairo',
-                    color: theme.textTheme.bodyMedium?.color,
-                  ),
-                ),
+                Text(value, style: TextStyle(fontSize: 15, color: theme.textTheme.bodyLarge?.color)),
               ],
             ),
           ),
           TextButton(
             onPressed: onEdit,
-            child: const Text(
-              AppStrings.edit,
-              style: TextStyle(
-                color: AppColors.textEdit,
-                fontSize: 14,
-                fontFamily: 'Cairo',
-              ),
-            ),
+            child: const Text(AppStrings.edit, style: TextStyle(color: AppColors.textEdit)),
           ),
         ],
       ),
@@ -163,197 +73,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the profile state
+    final profileState = ref.watch(profileControllerProvider);
+    final profileNotifier = ref.read(profileControllerProvider.notifier);
     final theme = Theme.of(context);
 
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is ProfileUpdateSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم تحديث البيانات بنجاح', style: TextStyle(fontFamily: 'Cairo')),
-              backgroundColor: Colors.green,
-            ),
-          );
-        } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message, style: TextStyle(fontFamily: 'Cairo')),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is AuthAuthenticated) {
-          _lastUser = state.user;
-        } else if (state is ProfileUpdateSuccess) {
-          _lastUser = state.user;
-        }
-        
-        // إذا لم يكن هناك بيانات نهائياً (مثلاً في بداية التشغيل)
-        if (_lastUser == null && state is AuthLoading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (_lastUser == null) {
-          return const Scaffold(
-            body: Center(child: Text('يرجى تسجيل الدخول لعرض الملف الشخصي', style: TextStyle(fontFamily: 'Cairo'))),
-          );
-        }
-        
-        final currentUser = _lastUser!; 
-
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
-            appBar: AppBar(
-              title: Text(
-                AppStrings.myAccount,
-                style: TextStyle(
-                  color: theme.textTheme.titleLarge?.color,
-                  fontFamily: 'Cairo',
-                ),
-              ),
-              centerTitle: true,
-              backgroundColor: theme.appBarTheme.backgroundColor,
-              elevation: 0,
-            ),
-            body: SingleChildScrollView(
-              child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(AppStrings.myAccount),
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        elevation: 0,
+        iconTheme: theme.iconTheme,
+        titleTextStyle: theme.appBarTheme.titleTextStyle,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Divider(height: 1, color: theme.dividerColor),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(height: 20),
-                  // قسم الصورة الشخصية
-                  _buildPhotoSection(context, theme, currentUser),
-                  const SizedBox(height: 10),
-                  Divider(thickness: 1, color: theme.dividerColor),
-
-                  // عرض الاسم الكامل
-                  _buildRow(
-                    context,
-                    AppStrings.nameLabel,
-                    '${currentUser.firstName} ${currentUser.lastName}'.trim(),
-                    () {
-                      _editField(
-                        context,
-                        AppStrings.nameLabel,
-                        '${currentUser.firstName} ${currentUser.lastName}'.trim(),
-                        'name',
-                        currentUser,
-                      );
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    child: Column(
+                      children: [
+                        Text(
+                          AppStrings.myPhoto,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: theme.textTheme.bodyLarge?.color,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: profileState.image != null
+                              ? FileImage(profileState.image!) as ImageProvider
+                              : const AssetImage(DummyData.userAvatarPath),
+                        ),
+                      ],
+                    ),
                   ),
-                  _buildDivider(theme),
-
-                  // عرض البريد
-                  _buildRow(context, AppStrings.emailLabel, currentUser.email, () {
-                    _editField(
-                      context,
-                      AppStrings.emailLabel,
-                      currentUser.email,
-                      'email',
-                      currentUser,
-                    );
-                  }),
-                  _buildDivider(theme),
-
-                  // عرض رقم الهاتف
-                  _buildRow(
-                    context,
-                    AppStrings.phoneLabel,
-                    currentUser.phoneNumber,
-                    () {
-                      _editField(
-                        context,
-                        AppStrings.phoneLabel,
-                        currentUser.phoneNumber,
-                        'phone',
-                        currentUser,
-                      );
-                    },
+                  TextButton(
+                    onPressed: () => profileNotifier.pickImage(),
+                    child: const Text(
+                      AppStrings.edit,
+                      style: TextStyle(fontSize: 16, color: AppColors.textEdit),
+                    ),
                   ),
-                  _buildDivider(theme),
                 ],
               ),
             ),
-          ),
-        );
-      },
-    );
-  }
+            const SizedBox(height: 10),
+            Divider(thickness: 1, color: theme.dividerColor),
+            const SizedBox(height: 7),
 
-  Widget _buildPhotoSection(
-    BuildContext context,
-    ThemeData theme,
-    UserModel user,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final ImagePicker picker = ImagePicker();
-                  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                  if (image != null && context.mounted) {
-                    context.push('/account/edit-photo', extra: image.path);
-                  }
-                },
-                borderRadius: BorderRadius.circular(40),
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: theme.dividerColor.withOpacity(0.2),
-                  backgroundImage: user.profileImage.isNotEmpty
-                      ? (user.profileImage.startsWith('http')
-                          ? NetworkImage(user.profileImage)
-                          : (user.profileImage.startsWith('assets')
-                              ? AssetImage(user.profileImage)
-                              : FileImage(File(user.profileImage)) as ImageProvider))
-                      : null,
-                  child: user.profileImage.isEmpty
-                      ? Icon(Icons.person, size: 40, color: theme.dividerColor)
-                      : null,
-                ),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                AppStrings.myPhoto,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Cairo',
-                  color: theme.textTheme.bodyLarge?.color,
-                ),
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () {
-              // الضغط على تعديل يفتح شاشة الضبط للصورة الحالية
-              context.push('/account/edit-photo', extra: user.profileImage);
-            },
-            child: const Text(
-              AppStrings.edit,
-              style: TextStyle(
-                color: AppColors.textEdit,
-                fontSize: 16,
-                fontFamily: 'Cairo',
-              ),
+            _buildRow(context, AppStrings.nameLabel, profileState.name, () {
+              _editField(context, ref, AppStrings.nameLabel, profileState.name, 'name');
+            }),
+            SizedBox(
+              width: 335,
+              child: Divider(height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
-          ),
-        ],
+            const SizedBox(height: 7),
+
+            _buildRow(context, AppStrings.emailLabel, profileState.email, () {
+              _editField(context, ref, AppStrings.emailLabel, profileState.email, 'email');
+            }),
+            SizedBox(
+              width: 335,
+              child: Divider(height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
+            ),
+            const SizedBox(height: 7),
+
+            _buildRow(context, AppStrings.genderLabel, profileState.gender, () {
+              _editField(context, ref, AppStrings.genderLabel, profileState.gender, 'gender');
+            }),
+            SizedBox(
+              width: 335,
+              child: Divider(thickness: 1, height: 4, color: theme.dividerColor.withValues(alpha: 0.4)),
+            ),
+            const SizedBox(height: 7),
+
+            _buildRow(context, AppStrings.phoneLabel, profileState.phone, () {
+              _editField(context, ref, AppStrings.phoneLabel, profileState.phone, 'phone');
+            }),
+          ],
+        ),
       ),
     );
   }
-
-  Widget _buildDivider(ThemeData theme) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Divider(height: 1, color: theme.dividerColor.withOpacity(0.4)),
-  );
 }

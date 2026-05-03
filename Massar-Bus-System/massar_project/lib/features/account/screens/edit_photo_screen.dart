@@ -82,10 +82,6 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
           ),
-          IOSUiSettings(
-            title: 'تعديل الصورة',
-            aspectRatioLockEnabled: true,
-          ),
         ],
       );
 
@@ -119,6 +115,7 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
               SnackBar(content: Text(state.message), backgroundColor: Colors.red),
             );
           }
+
         },
         builder: (context, state) {
           final isLoading = state is AuthLoading;

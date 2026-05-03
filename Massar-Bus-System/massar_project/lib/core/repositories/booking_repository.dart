@@ -1,60 +1,67 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:massar_project/core/constants/api_constants.dart';
-import 'package:massar_project/core/services/http_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 final bookingRepositoryProvider = Provider<BookingRepository>((ref) {
-  final httpService = ref.watch(httpServiceProvider);
-  return BookingRepository(httpService);
+  return BookingRepository(Supabase.instance.client);
 });
 
 class BookingRepository {
-  final HttpService _http;
+  final SupabaseClient _supabase;
 
-  BookingRepository(this._http);
+  BookingRepository(this._supabase);
 
-  /// إنشاء حجز جديد (حجز مؤقت أو بانتظار الدفع)
+  /// إنشاء حجز جديد
   Future<Map<String, dynamic>> createBooking(String tripId, {String? passengerName, String? passengerPhone}) async {
     try {
-      final response = await _http.post(
-        '${ApiConstants.baseUrl}/bookings',
-        body: {
-          'trip_id': tripId,
-          'passenger_name': passengerName,
-          'passenger_phone': passengerPhone,
-        },
-      );
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
 
-      final data = jsonDecode(response.body);
+      // Fetch user id from our internal users table
+      final user = await _supabase.from('users').select('id').eq('id', userId).single();
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return {
-          'success': true,
-          'booking': data['data'] ?? data,
-        };
-      } else {
-        return {
-          'success': false,
-          'message': data['message'] ?? 'فشل إنشاء الحجز',
-        };
-      }
+      // Insert booking via Supabase. Note: business logic like generating booking code 
+      // or fetching ticket price should be handled either here, or better, in a Postgres trigger.
+      final response = await _supabase.from('bookings').insert({
+        'user_id': user['id'],
+        'trip_id': int.parse(tripId),
+        'passenger_name': passengerName,
+        'passenger_phone': passengerPhone,
+        'status': 'pending',
+      }).select().single();
+
+      return {
+        'success': true,
+        'booking': response,
+      };
+    } on PostgrestException catch (e) {
+      return {
+        'success': false,
+        'message': e.message,
+      };
     } catch (e) {
       return {
         'success': false,
-        'message': 'خطأ في الاتصال بالسيرفر',
+        'message': 'خطأ في الاتصال بالسيرفر: $e',
       };
     }
   }
 
   /// جلب قائمة حجوزات المستخدم
   Future<List<dynamic>> getBookings() async {
-    final response = await _http.get('${ApiConstants.baseUrl}/bookings');
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) throw Exception('Not authenticated');
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      return jsonResponse['data'] ?? [];
-    } else {
-      throw Exception('فشل تحميل الحجوزات');
+      final user = await _supabase.from('users').select('id').eq('id', userId).single();
+      
+      final response = await _supabase
+          .from('bookings')
+          .select('*, trips(*, routes(*, stations(*)), buses(*))')
+          .eq('user_id', user['id']);
+          
+      return response;
+    } catch (e) {
+      throw Exception('فشل تحميل الحجوزات: $e');
     }
   }
 }

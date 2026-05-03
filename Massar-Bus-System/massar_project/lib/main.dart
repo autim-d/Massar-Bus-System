@@ -13,15 +13,19 @@ import 'package:massar_project/core/theme/app_theme.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import 'package:massar_project/features/ticket/bloc/ticket_status_bloc/ticket_status_bloc.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:massar_project/firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:massar_project/repositories/auth_repository.dart';
 import 'package:massar_project/core/repositories/booking_repository.dart';
 import 'package:massar_project/core/repositories/payment_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Supabase.initialize(
+    url: 'https://rburrvyhlzobzgyutsgc.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJidXJydnlobHpvYnpneXV0c2djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NDM2ODcsImV4cCI6MjA5MzIxOTY4N30.BkBK7gULpZXKnt233brXCg3rVNVEX_AWw9E4zjn_KJM',
+  );
 
   Animate.restartOnHotReload = true;
 
@@ -54,8 +58,9 @@ class MyApp extends ConsumerWidget {
           ),
         ),
         BlocProvider<TicketStatusBloc>(
-          create: (context) => TicketStatusBloc(ref.read(bookingRepositoryProvider))
-            ..add(LoadTicketStatuses()),
+          create: (context) =>
+              TicketStatusBloc(ref.read(bookingRepositoryProvider))
+                ..add(LoadTicketStatuses()),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(

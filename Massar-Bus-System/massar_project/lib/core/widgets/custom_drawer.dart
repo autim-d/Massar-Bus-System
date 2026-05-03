@@ -7,25 +7,17 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
 import 'package:massar_project/features/auth/bloc/auth_event.dart';
 import 'package:massar_project/features/auth/bloc/auth_state.dart';
-import 'package:massar_project/features/account/models/user_model.dart';
 import 'custom_drawer_item.dart';
 
-class CustomDrawer extends StatefulWidget {
+class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
-
-  @override
-  State<CustomDrawer> createState() => _CustomDrawerState();
-}
-
-class _CustomDrawerState extends State<CustomDrawer> {
-  UserModel? _lastUser;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final drawerBgColor = isDark
-        ? const Color(0xFF1E2939).withOpacity(0.5)
-        : const Color(0xFF1570EF).withOpacity(0.5);
+        ? const Color(0xFF1E2939).withValues(alpha: 0.5)
+        : const Color(0xFF1570EF).withValues(alpha: 0.5);
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -63,12 +55,37 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             if (state is AuthAuthenticated) {
-                              _lastUser = state.user;
-                            } else if (state is ProfileUpdateSuccess) {
-                              _lastUser = state.user;
-                            }
-
-                            if (state is AuthGuest) {
+                              return Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: AssetImage(
+                                      state.avatarUrl,
+                                    ),
+                                    backgroundColor: Colors.white24,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    state.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'ReadexPro',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    state.email,
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.8),
+                                      fontSize: 14,
+                                      fontFamily: 'ReadexPro',
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else if (state is AuthGuest) {
                               return Column(
                                 children: [
                                   const CircleAvatar(
@@ -94,7 +111,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                   Text(
                                     'ضيف',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: Colors.white.withValues(alpha: 0.8),
                                       fontSize: 14,
                                       fontFamily: 'ReadexPro',
                                     ),
@@ -102,46 +119,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 ],
                               );
                             }
-
-                            if (_lastUser != null) {
-                              ImageProvider imageProvider;
-                              final imageUrl = _lastUser!.profileImage;
-                              if (imageUrl != null && imageUrl.isNotEmpty && imageUrl.startsWith('http')) {
-                                imageProvider = NetworkImage(imageUrl);
-                              } else {
-                                imageProvider = const AssetImage('assets/images/defulte.jpg');
-                              }
-
-                              return Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: imageProvider,
-                                    backgroundColor: Colors.white24,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    '${_lastUser!.firstName} ${_lastUser!.lastName}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'ReadexPro',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _lastUser!.email ?? '',
-                                    style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
-                                      fontSize: 14,
-                                      fontFamily: 'ReadexPro',
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-
                             return const CircularProgressIndicator(
                               color: Colors.white,
                             );
@@ -198,7 +175,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 // Footer
                 Column(
                   children: [
-                    Divider(color: Colors.white.withOpacity(0.2), height: 1),
+                    Divider(color: Colors.white.withValues(alpha: 0.2), height: 1),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: BlocBuilder<AuthBloc, AuthState>(

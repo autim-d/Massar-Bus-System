@@ -99,7 +99,7 @@ class _MassarBottomNav extends StatelessWidget {
                 color: isDark ? const Color(0xFF1D2939) : Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? Colors.black.withOpacity(0.3) : const Color(0x1A000000),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0x1A000000),
                     blurRadius: 12,
                     offset: const Offset(0, -2),
                   ),
@@ -211,7 +211,7 @@ class _NavItem extends StatelessWidget {
 
     return InkWell(
       onTap: () => onTap(index),
-      splashColor: selectedColor.withOpacity(0.08),
+      splashColor: selectedColor.withValues(alpha: 0.08),
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
@@ -274,7 +274,7 @@ class _CentreTabFab extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: selectedColor.withOpacity(0.35),
+                  color: selectedColor.withValues(alpha: 0.35),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

@@ -1,52 +1,35 @@
-import 'dart:convert';
-import 'dart:io'; // تم استيراد الملف للتعامل مع File
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:massar_project/core/services/http_service.dart';
 import 'package:massar_project/features/account/models/user_model.dart';
-import 'dart:io' show Platform;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // إنشاء مزود (Provider) للـ Repository
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final httpService = ref.watch(httpServiceProvider);
-  return AuthRepository(httpService);
+  return AuthRepository(Supabase.instance.client);
 });
 
 class AuthRepository {
-  final HttpService _httpService;
+  final SupabaseClient _supabase;
 
-  AuthRepository(this._httpService);
-
-  final String _baseUrl = Platform.isAndroid
-      ? 'http://10.0.0.109:8000/api'
-      : 'http://127.0.0.1:8000/api';
+  AuthRepository(this._supabase);
 
   // ==========================================
   // 1. دالة تسجيل الدخول (Login)
   // ==========================================
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final response = await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
-
-      // جلب بيانات المستخدم الإضافية من Laravel
-      final profileResponse = await _httpService.get('$_baseUrl/user/profile');
-      if (profileResponse.statusCode == 200) {
-        final profileData = jsonDecode(profileResponse.body);
-        return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': profileData['user']};
-      } else {
-        return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': {
-          'email': userCredential.user?.email,
-          'first_name': userCredential.user?.displayName ?? 'مستخدم',
-        }};
-      }
-    } on FirebaseAuthException catch (e) {
+      
+      final userData = await getDashboardData();
+      return {'success': true, 'token': response.session?.accessToken, 'user': userData['user']};
+    } on AuthException catch (e) {
       return {
         'success': false,
-        'message': e.message ?? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+        'message': e.message,
       };
     } catch (e) {
       return {
@@ -61,100 +44,74 @@ class AuthRepository {
   // ==========================================
   Future<UserModel> updateProfile(UserModel user) async {
     try {
-      // 1. تحديث البريد الإلكتروني في Firebase إذا تغير
-      final fbUser = FirebaseAuth.instance.currentUser;
-      if (fbUser != null && fbUser.email != user.email) {
-        try {
-          await fbUser.verifyBeforeUpdateEmail(user.email);
-        } catch (e) {
-          // إذا فشل التحديث (مثلاً يحتاج تسجيل دخول حديث)، نلقي استثناءً واضحاً
-          if (e.toString().contains('requires-recent-login')) {
-            throw Exception('لتغيير البريد الإلكتروني، يجب إعادة تسجيل الدخول أولاً لدواعي أمنية.');
-          }
-          throw Exception('فشل تحديث البريد في Firebase: $e');
-        }
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
+
+      // Update auth email if it changed
+      if (user.email != _supabase.auth.currentUser?.email) {
+        await _supabase.auth.updateUser(UserAttributes(email: user.email));
       }
 
-      // 2. تحديث البيانات في Laravel
-      final response = await _httpService.put(
-        '$_baseUrl/user/profile',
-        body: {
-          'first_name': user.firstName,
-          'last_name': user.lastName,
-          'email': user.email,
-          'nationality': user.nationality,
-          'identity_number': user.nationalId,
-          'phone_number': user.phoneNumber,
-        },
-      );
+      // Update public.users table
+      final res = await _supabase.from('users').update({
+        'first_name': user.firstName,
+        'last_name': user.lastName,
+        'email': user.email,
+        'nationality': user.nationality,
+        'identity_number': user.nationalId,
+        'phone_number': user.phoneNumber,
+      }).eq('id', userId).select().single();
 
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        return UserModel.fromJson(data['user'] ?? data);
-      } else {
-        throw Exception(data['message'] ?? 'فشل تحديث البيانات في السيرفر');
-      }
+      return UserModel.fromJson(res);
+    } on PostgrestException catch (e) {
+      throw Exception('فشل تحديث البيانات في السيرفر: ${e.message}');
+    } on AuthException catch (e) {
+      throw Exception('فشل تحديث البريد: ${e.message}');
     } catch (e) {
-      if (e is Exception) rethrow;
       throw Exception('خطأ في الاتصال أثناء تحديث البيانات: $e');
     }
   }
 
+  // ==========================================
+  // 3. دالة تغيير كلمة المرور
   // ==========================================
   Future<Map<String, dynamic>> changePassword({
     required String currentPassword,
     required String newPassword,
   }) async {
     try {
-      final response = await _httpService.post(
-        '$_baseUrl/auth/change-password',
-        body: {
-          'current_password': currentPassword,
-          'new_password': newPassword,
-        },
-      );
-
-      // تأكد أن الاستجابة ليست فارغة قبل التحليل
-      if (response.body.isEmpty) {
-        return {'success': false, 'message': 'استجابة فارغة من السيرفر'};
+      // In Supabase, if the user is logged in, they can just update the password.
+      // Re-authentication to check currentPassword would require signInWithPassword.
+      final email = _supabase.auth.currentUser?.email;
+      if (email != null) {
+        await _supabase.auth.signInWithPassword(email: email, password: currentPassword);
       }
 
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        return {
-          'success': true,
-          'message': data['message'] ?? 'تم تغيير كلمة المرور بنجاح',
-        };
-      } else {
-        // هنا سيعطيك الرسالة القادمة من Laravel (مثل: كلمة المرور القديمة خطأ)
-        return {
-          'success': false,
-          'message': data['message'] ?? 'فشل الطلب: ${response.statusCode}',
-        };
-      }
-    } catch (e) {
-      // طباعة الخطأ في الـ Console تساعدك جداً في معرفة السبب الحقيقي
-      print("Error in changePassword: $e");
+      await _supabase.auth.updateUser(UserAttributes(password: newPassword));
+      return {
+        'success': true,
+        'message': 'تم تغيير كلمة المرور بنجاح',
+      };
+    } on AuthException catch (e) {
       return {
         'success': false,
-        'message': 'تعذر الاتصال بالسيرفر، تأكد من تشغيل Laravel',
+        'message': e.message,
+      };
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'تعذر الاتصال بالسيرفر',
       };
     }
   }
 
   // ==========================================
-  // 5. دالة طلب إرسال رمز التحقق (Send OTP)
+  // 4. دالة طلب إرسال رمز التحقق (Send OTP)
   // ==========================================
   Future<bool> sendOtp(String phone) async {
     try {
-      final response = await _httpService.post(
-        '$_baseUrl/auth/send-otp',
-        body: {'phone': phone},
-      );
-
-      return response.statusCode == 200;
+      await _supabase.auth.signInWithOtp(phone: phone);
+      return true;
     } catch (e) {
       print('خطأ في طلب إرسال الرمز: $e');
       return false;
@@ -162,16 +119,12 @@ class AuthRepository {
   }
 
   // ==========================================
-  // 6. دالة التحقق من الرمز (Verify OTP)
+  // 5. دالة التحقق من الرمز (Verify OTP)
   // ==========================================
   Future<bool> verifyOtp(String phone, String code) async {
     try {
-      final response = await _httpService.post(
-        '$_baseUrl/auth/verify-otp',
-        body: {'phone': phone, 'code': code},
-      );
-
-      return response.statusCode == 200;
+      final res = await _supabase.auth.verifyOTP(type: OtpType.sms, phone: phone, token: code);
+      return res.user != null;
     } catch (e) {
       print('خطأ في التحقق من الرمز: $e');
       return false;
@@ -179,29 +132,15 @@ class AuthRepository {
   }
 
   // ==========================================
-  // 7. دالة تجديد الجلسة (Refresh Token)
+  // 6. دالة تجديد الجلسة (Refresh Token)
   // ==========================================
   Future<bool> refreshToken(String currentRefreshToken) async {
-    try {
-      final response = await _httpService.post(
-        '$_baseUrl/auth/refresh',
-        body: {'refresh_token': currentRefreshToken},
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        print('تم تجديد الجلسة بنجاح: ${data['id_token']}');
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print('خطأ في الاتصال أثناء تجديد الجلسة: $e');
-      return false;
-    }
+    // Supabase handles session refresh automatically, but we can verify the session exists
+    return _supabase.auth.currentSession != null;
   }
 
   // ==========================================
-  // 8. دالة إنشاء حساب جديد (Register)
+  // 7. دالة إنشاء حساب جديد (Register)
   // ==========================================
   Future<Map<String, dynamic>> register({
     required String firstName,
@@ -212,42 +151,43 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      // 1. إنشاء الحساب في Firebase
-      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      // 1. Create account in Supabase Auth
+      final res = await _supabase.auth.signUp(
         email: email,
         password: password,
       );
 
-      await userCredential.user?.updateDisplayName('$firstName $lastName');
-
-      // 2. مزامنة البيانات مع Laravel
-      final profileResponse = await _httpService.put(
-        '$_baseUrl/user/profile',
-        body: {
-          'first_name': firstName,
-          'last_name': lastName,
-          'email': email,
-          'phone_number': phone,
-        },
-      );
-
+      final user = res.user;
       Map<String, dynamic> userData = {
-          'first_name': firstName,
-          'last_name': lastName,
-          'email': email,
-          'phone_number': phone,
+        'first_name': firstName,
+        'last_name': lastName,
+        'email': email,
+        'phone_number': phone,
       };
 
-      if (profileResponse.statusCode == 200) {
-          final profileData = jsonDecode(profileResponse.body);
-          userData = profileData['user'] ?? userData;
+      if (user != null) {
+        // 2. Sync to public.users table
+        final dbRes = await _supabase.from('users').insert({
+          'id': user.id,
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone_number': phone,
+        }).select().single();
+        
+        userData = dbRes;
       }
 
-      return {'success': true, 'token': await userCredential.user?.getIdToken(), 'user': userData};
-    } on FirebaseAuthException catch (e) {
+      return {'success': true, 'token': res.session?.accessToken, 'user': userData};
+    } on AuthException catch (e) {
       return {
         'success': false,
-        'message': e.message ?? 'فشل إنشاء الحساب.',
+        'message': e.message,
+      };
+    } on PostgrestException catch (e) {
+      return {
+        'success': false,
+        'message': 'فشل إدخال البيانات في قاعدة البيانات: ${e.message}',
       };
     } catch (e) {
       return {
@@ -258,49 +198,99 @@ class AuthRepository {
   }
 
   // ==========================================
-  // 9. دالة جلب بيانات الداشبورد (Dashboard Data)
+  // 8. دالة جلب بيانات الداشبورد (Dashboard Data)
   // ==========================================
   Future<Map<String, dynamic>> getDashboardData() async {
     try {
-      final response = await _httpService.get('$_baseUrl/home/dashboard');
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        return {'success': true, 'user': data['user'], 'activeTicket': data['activeTicket']};
-      } else {
-        return {'success': false, 'message': data['message'] ?? 'فشل تحميل بيانات الصفحة الرئيسية'};
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) {
+        return {'success': false, 'message': 'غير مسجل الدخول'};
       }
+
+      final userRecord = await _supabase.from('users').select().eq('id', userId).single();
+      
+      // TODO: Fetch activeTicket from bookings if needed
+      final activeTicket = null; 
+
+      return {'success': true, 'user': userRecord, 'activeTicket': activeTicket};
     } catch (e) {
       return {'success': false, 'message': 'خطأ في الاتصال بالخادم'};
     }
   }
 
   // ==========================================
-  // 10. تسجيل الخروج (Logout)
+  // 9. تسجيل الخروج (Logout)
   // ==========================================
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
+    await _supabase.auth.signOut();
   }
+
   // ==========================================
-  // 11. رفع الصورة الشخصية (Upload Avatar)
+  // 10. رفع الصورة الشخصية (Upload Avatar)
   // ==========================================
   Future<UserModel> uploadProfileImage(File imageFile) async {
     try {
-      final response = await _httpService.multipart(
-        '$_baseUrl/user/update-avatar',
-        filePath: imageFile.path,
-        fieldName: 'avatar',
-      );
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
 
-      final Map<String, dynamic> data = jsonDecode(response.body);
+      final fileExtension = imageFile.path.split('.').last;
+      final fileName = '$userId-${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
+      
+      await _supabase.storage.from('avatars').upload(fileName, imageFile);
+      final imageUrl = _supabase.storage.from('avatars').getPublicUrl(fileName);
 
-      if (response.statusCode == 200 && data['success'] == true) {
-        return UserModel.fromJson(data['user']);
-      } else {
-        throw Exception(data['message'] ?? 'فشل رفع الصورة');
-      }
+      final res = await _supabase.from('users').update({
+        'avatar_url': imageUrl,
+      }).eq('id', userId).select().single();
+
+      return UserModel.fromJson(res);
+    } on StorageException catch (e) {
+      throw Exception('فشل رفع الصورة: ${e.message}');
     } catch (e) {
       throw Exception('خطأ في الاتصال أثناء رفع الصورة: $e');
     }
   }
+
+  // ==========================================
+  // 11. تسجيل الدخول عبر جوجل (Google Sign-In)
+  // ==========================================
+  Future<Map<String, dynamic>> signInWithGoogle() async {
+    try {
+      // ✅ استخدام تسجيل الدخول المباشر عبر Supabase OAuth
+      // هذا سيفتح نافذة متصفح داخل التطبيق (In-App Browser) 
+      // وهو أكثر استقراراً ولا يتطلب إعدادات SHA-1 معقدة
+      final bool res = await _supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'io.supabase.massar://login-callback',
+      );
+
+      if (res) {
+        // ننتظر قليلاً للتأكد من تحديث الجلسة
+        await Future.delayed(const Duration(seconds: 1));
+        
+        final userData = await getDashboardData();
+        
+        // إذا لم نجد بيانات في الجدول، نستخدم البيانات من الجلسة الحالية
+        final currentUser = _supabase.auth.currentUser;
+        final user = userData['success'] ? userData['user'] : {
+          'first_name': currentUser?.userMetadata?['full_name']?.split(' ').first ?? 'User',
+          'last_name': currentUser?.userMetadata?['full_name']?.split(' ').last ?? '',
+          'email': currentUser?.email,
+          'avatar_url': currentUser?.userMetadata?['avatar_url'],
+        };
+
+        return {'success': true, 'user': user};
+      } else {
+        return {'success': false, 'message': 'تعذر فتح صفحة تسجيل الدخول'};
+      }
+    } on AuthException catch (e) {
+      return {'success': false, 'message': e.message};
+    } catch (e) {
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+
+
+
 }

@@ -51,5 +51,20 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- ✅ Supabase Deep Link Schema -->
+				<string>io.supabase.massar</string>
+				<!-- ✅ Google Sign-In Reversed Client ID -->
+				<string>com.googleusercontent.apps.632794604210-jjving8bqbci91vuud90u2225l5kipvi</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
+

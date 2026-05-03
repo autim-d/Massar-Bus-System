@@ -21,7 +21,7 @@ class MassarBottomNavBar extends StatelessWidget {
         color: isDark ? const Color(0xFF1D2939) : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black12,
+            color: isDark ? Colors.black.withValues(alpha: 0.3) : Colors.black12,
             blurRadius: 6,
           )
         ],
@@ -63,7 +63,7 @@ class MassarBottomNavBar extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xff1570EF).withOpacity(0.3),
+                color: const Color(0xff1570EF).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

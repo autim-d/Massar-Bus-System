@@ -1,29 +1,26 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:massar_project/core/constants/api_constants.dart';
-import 'package:massar_project/core/services/http_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 final paymentRepositoryProvider = Provider<PaymentRepository>((ref) {
-  final httpService = ref.watch(httpServiceProvider);
-  return PaymentRepository(httpService);
+  return PaymentRepository(Supabase.instance.client);
 });
 
 class PaymentRepository {
-  final HttpService _http;
+  final SupabaseClient _supabase;
 
-  PaymentRepository(this._http);
+  PaymentRepository(this._supabase);
 
-  /// إنشاء نية دفع (Payment Intent) في Stripe عبر الباك أند
+  /// إنشاء نية دفع (Payment Intent) في Stripe عبر Supabase Edge Functions
   Future<Map<String, dynamic>> createPaymentIntent(int bookingId) async {
     try {
-      final response = await _http.post(
-        '${ApiConstants.baseUrl}/payments/intent',
+      final response = await _supabase.functions.invoke(
+        'create-payment-intent',
         body: {'booking_id': bookingId},
       );
 
-      final data = jsonDecode(response.body);
+      final data = response.data;
 
-      if (response.statusCode == 200) {
+      if (response.status == 200) {
         return {
           'success': true,
           'client_secret': data['client_secret'],
@@ -38,7 +35,7 @@ class PaymentRepository {
     } catch (e) {
       return {
         'success': false,
-        'message': 'خطأ في الاتصال بسيرفر الدفع',
+        'message': 'خطأ في الاتصال بسيرفر الدفع: $e',
       };
     }
   }
@@ -46,17 +43,17 @@ class PaymentRepository {
   /// تأكيد الدفع بعد نجاحه في Stripe
   Future<Map<String, dynamic>> confirmPayment(int bookingId, String paymentIntentId) async {
     try {
-      final response = await _http.post(
-        '${ApiConstants.baseUrl}/payments/confirm',
+      final response = await _supabase.functions.invoke(
+        'confirm-payment',
         body: {
           'booking_id': bookingId,
           'payment_intent_id': paymentIntentId,
         },
       );
 
-      final data = jsonDecode(response.body);
+      final data = response.data;
 
-      if (response.statusCode == 200) {
+      if (response.status == 200) {
         return {
           'success': true,
           'message': data['message'] ?? 'تم تأكيد الدفع بنجاح',
@@ -71,7 +68,7 @@ class PaymentRepository {
     } catch (e) {
       return {
         'success': false,
-        'message': 'خطأ في الاتصال بالسيرفر أثناء تأكيد الدفع',
+        'message': 'خطأ أثناء تأكيد الدفع: $e',
       };
     }
   }

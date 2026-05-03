@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
-import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
-import 'package:massar_project/features/auth/bloc/auth_event.dart';
 import 'package:massar_project/features/home/models/bus_ticket_model.dart';
 import 'package:massar_project/features/ticket/bloc/checkout_bloc.dart';
 import '../widgets/components/checkout_stepper.dart';
@@ -17,29 +15,8 @@ class PaymentMethodScreen extends StatelessWidget {
   const PaymentMethodScreen({super.key, required this.ticket});
 
   String _formatArabicDate(DateTime date) {
-    const months = [
-      'يناير',
-      'فبراير',
-      'مارس',
-      'أبريل',
-      'مايو',
-      'يونيو',
-      'يوليو',
-      'أغسطس',
-      'سبتمبر',
-      'أكتوبر',
-      'نوفمبر',
-      'ديسمبر',
-    ];
-    const weekdays = [
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-      'السبت',
-      'الأحد',
-    ];
+    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    const weekdays = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
     return '${weekdays[date.weekday - 1]} , ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
@@ -59,17 +36,12 @@ class PaymentMethodScreen extends StatelessWidget {
             paymentMethod: state.session.paymentMethod,
             transactionDate: state.session.transactionDate,
             onViewTicket: () {
-              // تحديث بيانات المستخدم (عدد الإشعارات) فوراً بعد الدفع الناجح
-              context.read<AuthBloc>().add(GetUserDataEvent());
-
               // Clear stack and go to e-ticket
               context.go('/tickets/my-ticket', extra: state.session);
             },
           );
         } else if (state is CheckoutError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       child: SafeArea(
@@ -95,10 +67,10 @@ class PaymentMethodScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "سيتم إنشاء المعرف عند الدفع",
+                    "معرف الطلب :1502241552",
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
                       color: theme.textTheme.bodySmall?.color,
                     ),
                   ),
@@ -141,15 +113,9 @@ class PaymentMethodScreen extends StatelessWidget {
                         Row(
                           children: [
                             _buildTimerBox("59"),
-                            const Text(
-                              " : ",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            const Text(" : ", style: TextStyle(color: Colors.white)),
                             _buildTimerBox("01"),
-                            const Text(
-                              " : ",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            const Text(" : ", style: TextStyle(color: Colors.white)),
                             _buildTimerBox("00"),
                             const SizedBox(width: 10),
                           ],
@@ -167,9 +133,7 @@ class PaymentMethodScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
                         border: Border.all(
-                          color: isDark
-                              ? Colors.white.withOpacity(0.1)
-                              : const Color(0xffE5D2D2),
+                          color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffE5D2D2),
                           width: .7,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -188,11 +152,7 @@ class PaymentMethodScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              const Icon(
-                                Icons.place,
-                                color: Colors.green,
-                                size: 20,
-                              ),
+                              const Icon(Icons.place, color: Colors.green, size: 20),
                               const SizedBox(width: 4),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,52 +160,33 @@ class PaymentMethodScreen extends StatelessWidget {
                                   Text(
                                     "التوقف الحالي",
                                     style: TextStyle(
-                                      color: isDark
-                                          ? theme.textTheme.bodySmall?.color
-                                          : const Color(0xff667085),
+                                      color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                       fontSize: 10,
                                     ),
                                   ),
                                   Text(
                                     ticket.fromStation.name,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: theme.textTheme.bodyLarge?.color,
-                                    ),
+                                    style: TextStyle(fontSize: 15, color: theme.textTheme.bodyLarge?.color),
                                   ),
                                 ],
                               ),
                               const SizedBox(width: 15),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? Colors.white.withOpacity(0.05)
-                                      : const Color(0xffF9FAFB),
+                                  color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.1)
-                                        : const Color(0xffE5D2D2),
+                                    color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffE5D2D2),
                                   ),
                                 ),
                                 child: Text(
                                   "الوصول المتوقع: ${ticket.arrivalTime}",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: theme.textTheme.bodySmall?.color,
-                                  ),
+                                  style: TextStyle(fontSize: 10, color: theme.textTheme.bodySmall?.color),
                                 ),
                               ),
                               const SizedBox(width: 15),
-                              const Icon(
-                                Icons.place,
-                                color: AppColors.destenation,
-                                size: 20,
-                              ),
+                              const Icon(Icons.place, color: AppColors.destenation, size: 20),
                               const SizedBox(width: 4),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,18 +194,13 @@ class PaymentMethodScreen extends StatelessWidget {
                                   Text(
                                     "الوجهة",
                                     style: TextStyle(
-                                      color: isDark
-                                          ? theme.textTheme.bodySmall?.color
-                                          : const Color(0xff667085),
+                                      color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                       fontSize: 10,
                                     ),
                                   ),
                                   Text(
                                     ticket.toStation.name,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: theme.textTheme.bodyLarge?.color,
-                                    ),
+                                    style: TextStyle(fontSize: 15, color: theme.textTheme.bodyLarge?.color),
                                   ),
                                 ],
                               ),
@@ -299,17 +235,12 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Payment Method Selector
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
@@ -336,28 +267,18 @@ class PaymentMethodScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Image.asset(
-                                "assets/images/vector.png",
-                                width: 40,
-                                height: 30,
-                              ),
+                              Image.asset("assets/images/vector.png", width: 40, height: 30),
                               const SizedBox(width: 10),
                               Text(
                                 "Mandiri VA",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: theme.textTheme.bodyLarge?.color,
-                                ),
+                                style: TextStyle(fontSize: 16, color: theme.textTheme.bodyLarge?.color),
                               ),
                               const Spacer(),
                               TextButton(
                                 onPressed: () {},
                                 child: const Text(
                                   "تغيير",
-                                  style: TextStyle(
-                                    color: AppColors.textEdit,
-                                    fontWeight: FontWeight.w800,
-                                  ),
+                                  style: TextStyle(color: AppColors.textEdit, fontWeight: FontWeight.w800),
                                 ),
                               ),
                             ],
@@ -369,31 +290,21 @@ class PaymentMethodScreen extends StatelessWidget {
                                 child: Text(
                                   "استخدام الحساب الافتراضي سيضيف رسوم إضافية",
                                   style: TextStyle(
-                                    color: isDark
-                                        ? theme.textTheme.bodySmall?.color
-                                        : const Color(0xff667085),
+                                    color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                                     fontSize: 11,
                                   ),
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? Colors.white.withOpacity(0.05)
-                                      : const Color(0xffF9FAFB),
+                                  color: isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB),
                                   border: Border.all(color: theme.dividerColor),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
                                   " 800+ ريال",
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: theme.textTheme.bodyMedium?.color,
-                                  ),
+                                  style: TextStyle(fontSize: 11, color: theme.textTheme.bodyMedium?.color),
                                 ),
                               ),
                             ],
@@ -407,17 +318,12 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Promo Code
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     child: Container(
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
@@ -425,23 +331,12 @@ class PaymentMethodScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: ListTile(
-                        leading: SvgPicture.asset(
-                          "assets/icons/promo.svg",
-                          width: 24,
-                          height: 24,
-                        ),
+                        leading: SvgPicture.asset("assets/icons/promo.svg", width: 24, height: 24),
                         title: const Text(
                           "استخدم العرض الترويجي",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
                         ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.green,
-                          size: 16,
-                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.green, size: 16),
                         onTap: () {},
                       ),
                     ),
@@ -473,9 +368,7 @@ class PaymentMethodScreen extends StatelessWidget {
                             "الدفع يتم فقط عن طريق بنك بن دول ولا يمكن استبداله",
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark
-                                  ? theme.textTheme.bodySmall?.color
-                                  : const Color(0xff667085),
+                              color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
                             ),
                           ),
                         ],
@@ -487,28 +380,17 @@ class PaymentMethodScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
-                          color: theme.textTheme.bodySmall?.color,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: theme.textTheme.bodySmall?.color, fontSize: 12),
                         children: const [
-                          TextSpan(
-                            text: "بالضغط على زر الدفع، فإنك توافق على ",
-                          ),
+                          TextSpan(text: "بالضغط على زر الدفع، فإنك توافق على "),
                           TextSpan(
                             text: "الشروط والأحكام",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
+                            style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                           ),
                           TextSpan(text: " و "),
                           TextSpan(
                             text: "سياسة الخصوصية",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
+                            style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                           ),
                         ],
                       ),
@@ -518,18 +400,16 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xffF2F4F7),
                   ),
 
                   // Price Breakdown
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
                     child: PriceBreakdownColumn(
-                      ticketPrice: ticket.price,
-                      protectionFee: 200, // Sample convenience fee
-                      serviceFee: 300, // Sample service fee
+                      ticketPrice: 10000,
+                      protectionFee: 10000,
+                      serviceFee: 10000,
                     ),
                   ),
                 ],
@@ -547,29 +427,17 @@ class PaymentMethodScreen extends StatelessWidget {
                       onPressed: isLoading
                           ? null
                           : () {
-                              context.read<CheckoutBloc>().add(
-                                ProcessPaymentRequested(
-                                  tripId: ticket.id,
-                                  passengerName: ticket.passengerName,
-                                  passengerPhone: ticket.passengerPhone,
-                                ),
-                              );
+                              context.read<CheckoutBloc>().add(ProcessPaymentRequested());
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff1570EF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               "الدفع باستخدام بن دول باي",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                     ),
                   );
@@ -591,14 +459,7 @@ class PaymentMethodScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        val,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-          color: Color(0xff1570EF),
-        ),
-      ),
+      child: Text(val, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xff1570EF))),
     );
   }
 }

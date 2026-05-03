@@ -56,10 +56,10 @@ class CheckoutStepper extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isActive
-            ? (isDark ? Colors.blue.withOpacity(0.2) : const Color(0xffEFF8FF))
-            : (isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB)),
+            ? (isDark ? Colors.blue.withValues(alpha: 0.2) : const Color(0xffEFF8FF))
+            : (isDark ? Colors.white.withValues(alpha: 0.05) : const Color(0xffF9FAFB)),
         border: Border.all(
-          color: isActive ? Colors.blue : (isDark ? Colors.white.withOpacity(0.1) : const Color(0xffD0D5DD)),
+          color: isActive ? Colors.blue : (isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xffD0D5DD)),
           width: 1,
         ),
       ),

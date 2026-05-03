@@ -1,39 +1,54 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:massar_project/core/constants/api_constants.dart';
-import 'package:massar_project/core/services/http_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// مزود لجلب آخر تذكرة نشطة للمستخدم من الباك أند
-/// يُستخدم في ActiveTicketCard على الشاشة الرئيسية
-/// تم إصلاح: استخدام HttpService بدل http.get المباشر لإرسال Token المصادقة
+/// مزود لجلب آخر تذكرة نشطة للمستخدم من Supabase
 final activeTicketProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
-  final httpService = ref.watch(httpServiceProvider);
+  final supabase = Supabase.instance.client;
 
   try {
-    final response = await httpService.get('${ApiConstants.baseUrl}/user/active-ticket');
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return null;
 
-    if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      final booking = decoded['data'];
+    // 1. Get internal user id
+    final user = await supabase.from('users').select('id').eq('id', userId).single();
 
-      if (booking == null) return null;
+    // 2. Fetch latest paid booking
+    final booking = await supabase
+        .from('bookings')
+        .select('*, trip:trips(*, route:routes(*, origin:stations!origin_station_id(*), destination:stations!destination_station_id(*)), bus:buses(*))')
+        .eq('user_id', user['id'])
+        .eq('status', 'paid') 
+        .order('created_at', ascending: false)
+        .limit(1)
+        .maybeSingle();
 
-      // تحويل بيانات الحجز إلى الشكل الذي يتوقعه ActiveTicketCard
-      final trip = booking['trip'] ?? {};
-      return {
-        'booking_code': booking['booking_code'] ?? 'N/A',
-        'date': trip['date'] ?? '---',
-        'from': trip['fromStation']?['name'] ?? '---',
-        'to': trip['toStation']?['name'] ?? '---',
-        'duration': trip['durationText'] ?? '---',
-        'bus_info':
-            '${trip['busName'] ?? 'باص'} الوصول الساعة ${trip['arrivalTime'] ?? '--:--'} في المحطة',
-      };
-    }
+    if (booking == null) return null;
 
-    return null;
+    final trip = booking['trip'] ?? {};
+    final route = trip['route'] ?? {};
+    final origin = route['origin'] ?? {};
+    final destination = route['destination'] ?? {};
+    final bus = trip['bus'] ?? {};
+
+    // Calculate duration text
+    final minutes = route['estimated_duration_minutes'] ?? 0;
+    final hours = minutes ~/ 60;
+    final remainingMinutes = minutes % 60;
+    final durationText = hours > 0 
+        ? '$hours ساعة ${remainingMinutes > 0 ? 'و$remainingMinutes دقيقة' : ''}'
+        : '$remainingMinutes دقيقة';
+
+    return {
+      'booking_code': booking['booking_code'] ?? 'N/A',
+      'date': (trip['departure_time'] as String?)?.split(' ').first ?? '---',
+      'from': origin['name'] ?? '---',
+      'to': destination['name'] ?? '---',
+      'duration': durationText,
+      'bus_info':
+          '${bus['bus_name'] ?? 'باص'} الوصول الساعة ${(trip['arrival_time'] as String?)?.split(' ').last.substring(0, 5) ?? '--:--'} في المحطة',
+    };
   } catch (e) {
-    // في حال فشل الاتصال بالسيرفر، نعود بـ null (لا بيانات وهمية)
+    print('Active Ticket Error: $e');
     return null;
   }
 });

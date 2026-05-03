@@ -29,11 +29,11 @@ class LocationInputConnector extends StatelessWidget {
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+          color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFE4E7EC),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -85,7 +85,7 @@ class LocationInputConnector extends StatelessWidget {
               Expanded(
                 child: Container(
                   height: 1,
-                  color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+                  color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFE4E7EC),
                   margin: const EdgeInsets.only(left: 44),
                 ),
               ),
@@ -99,7 +99,7 @@ class LocationInputConnector extends StatelessWidget {
                       width: 2,
                       height: 3,
                       margin: const EdgeInsets.only(bottom: 2),
-                      color: isDark ? Colors.white.withOpacity(0.2) : const Color(0xFFD0D5DD),
+                      color: isDark ? Colors.white.withValues(alpha: 0.2) : const Color(0xFFD0D5DD),
                     ),
                   ),
                 ),

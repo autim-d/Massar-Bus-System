@@ -14,7 +14,7 @@ void showAnimatedSuccessModal({
     context: context,
     barrierDismissible: false,
     barrierLabel: "Success",
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     transitionDuration: const Duration(milliseconds: 400),
     pageBuilder: (context, anim1, anim2) {
       return const SizedBox.shrink();
@@ -148,7 +148,7 @@ class _SuccessModalContentState extends State<_SuccessModalContent> with SingleT
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade50,
+                  color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.grey.shade50,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: theme.dividerColor),
                 ),

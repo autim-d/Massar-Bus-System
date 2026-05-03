@@ -73,12 +73,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Positioned(
             top: -50,
             left: -50,
-            child: _buildDecorativeDot(100, Colors.white.withOpacity(0.05)),
+            child: _buildDecorativeDot(100, Colors.white.withValues(alpha: 0.05)),
           ),
           Positioned(
             bottom: 100,
             right: -30,
-            child: _buildDecorativeDot(80, Colors.white.withOpacity(0.05)),
+            child: _buildDecorativeDot(80, Colors.white.withValues(alpha: 0.05)),
           ),
 
           SafeArea(

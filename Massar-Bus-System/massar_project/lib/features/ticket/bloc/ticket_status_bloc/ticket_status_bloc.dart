@@ -15,6 +15,7 @@ class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
     on<FilterTicketsRequested>(_onFilterTicketsRequested);
   }
 
+
   void _onLoadTicketStatuses(
     LoadTicketStatuses event,
     Emitter<TicketStatusState> emit,

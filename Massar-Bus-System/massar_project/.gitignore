@@ -22,6 +22,8 @@ migrate_working_dir/
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
 #.vscode/
+.vscode/launch.json
+
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -47,6 +49,10 @@ node_modules/
 
 # Secrets
 .env
-.vscode/
 **/android/local.properties
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
+*.api_key
+*.secret
+**/secrets/
 
