@@ -53,19 +53,24 @@ class LocationMapCard extends StatelessWidget {
                 children: [
                    Positioned.fill(
                     child: position != null
-                        ? mapbox.MapWidget(
-                            cameraOptions: mapbox.CameraOptions(
-                              center: mapbox.Point(
-                                coordinates: mapbox.Position(
-                                  position!.longitude,
-                                  position!.latitude,
+                        ? SizedBox(
+                            height: 120, // Ensure fixed height for MapWidget
+                            child: mapbox.MapWidget(
+                              cameraOptions: mapbox.CameraOptions(
+                                center: mapbox.Point(
+                                  coordinates: mapbox.Position(
+                                    position!.longitude,
+                                    position!.latitude,
+                                  ),
                                 ),
+                                zoom: 14.0,
                               ),
-                              zoom: 14.0,
                             ),
                           )
                         : Image.asset(imagePath, fit: BoxFit.cover),
                   ),
+
+
                   if (isLoading)
                     Positioned.fill(
                       child: Container(
@@ -100,50 +105,23 @@ class LocationMapCard extends StatelessWidget {
                   title,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    fontFamily: 'AirStripArabic', fontSize: w * 0.038, fontWeight: FontWeight.w700,
+                    fontFamily: 'AirStripArabic',
+                    fontSize: w * 0.038,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),
-                if (position != null && mapboxPublicToken != null)
-                  FutureBuilder<String>(
-                    future: getCurrentNeighborhood(position!, mapboxPublicToken!),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            height: 14,
-                            width: 14,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        );
-                      } else if (snapshot.hasError || !snapshot.hasData) {
-                        return Text(
-                          locationDetails ?? "موقع غير معروف",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
-                          ),
-                        );
-                      } else {
-                        return Text(
-                          snapshot.data!,
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
-                          ),
-                        );
-                      }
-                    },
-                  )
-                else
-                  Text(
-                    locationDetails ?? "",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: 'AirStripArabic', fontSize: w * 0.032, color: Colors.grey.shade600,
-                    ),
+
+                Text(
+                  locationDetails ?? "موقع غير معروف",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontFamily: 'AirStripArabic',
+                    fontSize: w * 0.032,
+                    color: Colors.grey.shade600,
                   ),
+                ),
+
               ],
             ),
           ),

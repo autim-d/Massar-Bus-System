@@ -41,4 +41,20 @@ class GoogleSignInRequested extends AuthEvent {
   const GoogleSignInRequested();
 }
 
+class ProfileUpdated extends AuthEvent {
+  final String gender;
+  final String phone;
+  final bool locationPermission;
+
+  const ProfileUpdated({
+    required this.gender,
+    required this.phone,
+    required this.locationPermission,
+  });
+
+  @override
+  List<Object> get props => [gender, phone, locationPermission];
+}
+
+
 

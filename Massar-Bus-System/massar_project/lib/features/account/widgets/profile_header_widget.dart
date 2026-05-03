@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:massar_project/core/theme/app_colors.dart';
-import 'package:massar_project/core/constants/dummy_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
+import 'package:massar_project/features/auth/bloc/auth_state.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   const ProfileHeaderWidget({super.key});
@@ -8,43 +9,61 @@ class ProfileHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20, top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/defulte.jpg'),
-            radius: 30,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  DummyData.userName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: theme.textTheme.bodyLarge?.color,
-                  ),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        String name = 'User';
+        String email = '';
+        String? avatarUrl;
+
+        if (state is AuthAuthenticated) {
+          name = state.name;
+          email = state.email;
+          avatarUrl = state.avatarUrl;
+        }
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 20, top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundImage: avatarUrl != null && avatarUrl.startsWith('http')
+                    ? NetworkImage(avatarUrl) as ImageProvider
+                    : const AssetImage('assets/images/defulte.jpg'),
+                radius: 30,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: theme.textTheme.bodyLarge?.color,
+                      ),
+                    ),
+                    if (email.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        email,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  DummyData.userEmail,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: theme.textTheme.bodyMedium?.color,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

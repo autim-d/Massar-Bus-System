@@ -50,3 +50,12 @@ class ProfileUpdateSuccess extends AuthState {
   const ProfileUpdateSuccess();
 }
 
+class AuthProfileIncomplete extends AuthState {
+  final Map<String, dynamic> user;
+  const AuthProfileIncomplete(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+

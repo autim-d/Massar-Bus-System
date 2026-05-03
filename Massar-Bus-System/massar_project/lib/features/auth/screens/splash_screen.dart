@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,7 +28,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     Future.delayed(const Duration(milliseconds: splashDurationMs), () async {
       await _animController.forward();
       if (!mounted) return;
-      context.go('/onboarding');
+      
+      final prefs = await SharedPreferences.getInstance();
+      final bool showOnboarding = prefs.getBool('show_onboarding') ?? true;
+      
+      if (showOnboarding) {
+        context.go('/onboarding');
+      } else {
+        context.go('/login');
+      }
     });
   }
 

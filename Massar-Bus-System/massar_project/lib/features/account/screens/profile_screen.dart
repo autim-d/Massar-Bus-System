@@ -113,7 +113,9 @@ class ProfileScreen extends ConsumerWidget {
                           radius: 35,
                           backgroundImage: profileState.image != null
                               ? FileImage(profileState.image!) as ImageProvider
-                              : const AssetImage(DummyData.userAvatarPath),
+                              : (profileState.avatarUrl != null && profileState.avatarUrl!.startsWith('http')
+                                  ? NetworkImage(profileState.avatarUrl!) as ImageProvider
+                                  : const AssetImage(DummyData.userAvatarPath)),
                         ),
                       ],
                     ),

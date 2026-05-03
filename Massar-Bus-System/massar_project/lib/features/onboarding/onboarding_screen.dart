@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/theme/app_colors.dart';
 
 import 'widgets/onboarding_header.dart';
@@ -62,6 +63,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'image': 'assets/images/Illustration Buy Ticket .png',
     },
   ];
+
+  Future<void> _completeOnboarding(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('show_onboarding', false);
+    if (context.mounted) {
+      context.go('/login');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +139,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         width: 120,
                         height: 52,
                         child: OutlinedButton(
-                          onPressed: () => context.go('/login'),
+                          onPressed: () => _completeOnboarding(context),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Colors.white, width: 1.2),
                             shape: RoundedRectangleBorder(
@@ -161,7 +170,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 curve: Curves.easeInOut,
                               );
                             } else {
-                              context.go('/login');
+                              _completeOnboarding(context);
                             }
                           },
                           style: ElevatedButton.styleFrom(

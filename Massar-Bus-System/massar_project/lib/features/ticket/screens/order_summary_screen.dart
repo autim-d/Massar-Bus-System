@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:massar_project/features/home/models/trip_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../auth/bloc/auth_bloc.dart';
+import '../../auth/bloc/auth_state.dart';
 
 // import '../models/trip_model.dart';
 
@@ -381,83 +384,62 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10),
-                  child: Container(
-                    width: 350,
-                    height: 110,
-                    decoration: BoxDecoration(
-                      color: theme.cardTheme.color,
-                      border: Border.all(
-                        color: theme.dividerColor,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                "خليل سيلان",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 19,
-                                  color: theme.textTheme.titleLarge?.color,
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                left: 20,
-                                top: 10,
-                              ),
-                              child: Icon(Icons.edit_square, color: AppColors.iconOf, size: 30),
-                            )
-                          ],
+                  child: BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      String name = 'User';
+                      String email = '';
+                      String phone = '';
+                      
+                      if (state is AuthAuthenticated) {
+                        name = state.name;
+                        email = state.email;
+                        // For phone, we might need to fetch it from SQL if not in BLoC
+                        // But for now, let's assume it's available or use a placeholder
+                      }
+
+                      return Container(
+                        width: 350,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.cardTheme.color,
+                          border: Border.all(
+                            color: theme.dividerColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                "khalilabraheem053@gmail.com",
-                                style: TextStyle(
-                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
-                                  fontSize: 16,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  name,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 19,
+                                    color: theme.textTheme.titleLarge?.color,
+                                  ),
                                 ),
+                                const Icon(Icons.edit_square, color: AppColors.iconOf, size: 24),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              email,
+                              style: TextStyle(
+                                color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                top: 10,
-                              ),
-                              child: Text(
-                                " 776463185 967+",
-                                style: TextStyle(
-                                  color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xff667085),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
+
 
                 const SizedBox(height: 20),
                 Divider(

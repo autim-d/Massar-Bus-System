@@ -58,7 +58,7 @@ class _QuickActionSectionState extends ConsumerState<QuickActionSection> {
           return ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             scrollDirection: Axis.horizontal,
-            reverse: true, // Right-to-left scrolling behavior usually desired for RTL
+            reverse: false, // Directionality handles RTL
             itemCount: displayPlaces.length,
             separatorBuilder: (context, index) => const SizedBox(width: 12),
             itemBuilder: (context, index) {

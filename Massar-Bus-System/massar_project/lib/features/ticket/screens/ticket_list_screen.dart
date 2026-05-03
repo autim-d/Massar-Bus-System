@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:massar_project/core/theme/app_colors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
+import 'package:massar_project/core/widgets/location_map_card.dart';
+import 'package:massar_project/core/constants/api_constants.dart';
 
 class TicketListScreen extends StatefulWidget {
   const TicketListScreen({super.key});
@@ -9,6 +14,75 @@ class TicketListScreen extends StatefulWidget {
 }
 
 class _TicketListScreenState extends State<TicketListScreen> {
+  Position? _currentPosition;
+  String _locationName = 'جاري تحديد الموقع...';
+  bool _isLoadingLocation = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _determinePosition();
+  }
+
+  Future<void> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (mounted) setState(() => _isLoadingLocation = false);
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (mounted) setState(() => _isLoadingLocation = false);
+        return;
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      if (mounted) setState(() => _isLoadingLocation = false);
+      return;
+    } 
+
+    final position = await Geolocator.getCurrentPosition();
+    if (mounted) {
+      setState(() {
+        _currentPosition = position;
+      });
+      _getPlaceName(position.latitude, position.longitude);
+    }
+  }
+
+  Future<void> _getPlaceName(double lat, double lng) async {
+    try {
+      final url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=${ApiConstants.mapboxPublicToken}&language=ar';
+      final response = await http.get(Uri.parse(url));
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['features'] != null && data['features'].isNotEmpty) {
+          final placeName = data['features'][0]['place_name'];
+          if (mounted) {
+            setState(() {
+              _locationName = placeName;
+              _isLoadingLocation = false;
+            });
+          }
+          return;
+        }
+      }
+      if (mounted) setState(() => _locationName = 'موقع مجهول');
+    } catch (e) {
+      if (mounted) setState(() => _locationName = 'خطأ في تحديد الموقع');
+    } finally {
+      if (mounted) setState(() => _isLoadingLocation = false);
+    }
+  }
+
   final List<Map<String, dynamic>> savedPlaces = [
     {'label': 'بيتنا', 'icon': Icons.home},
     {'label': 'مكتبي', 'icon': Icons.work},
@@ -108,107 +182,12 @@ class _TicketListScreenState extends State<TicketListScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 90),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: theme.cardTheme.color,
-                            borderRadius: BorderRadius.circular(_cardRadius),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.04),
-                                blurRadius: 10,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(_cardRadius),
-                                  topRight: Radius.circular(_cardRadius),
-                                ),
-                                child: Container(
-                                  height: 120,
-                                  color: isDark
-                                      ? Colors.white.withValues(alpha: 0.05)
-                                      : Colors.grey.shade100,
-                                  child: Stack(
-                                    children: [
-                                      Positioned.fill(
-                                        child: Image.asset(
-                                          'assets/images/map.png',
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) =>
-                                              Container(
-                                            color: isDark
-                                                ? Colors.white.withValues(alpha: 0.05)
-                                                : Colors.grey.shade100,
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.map,
-                                                size: 48,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 20,
-                                        top: 18,
-                                        child: Container(
-                                          width: 16,
-                                          height: 16,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF2E9BFF),
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: 3,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0,
-                                  vertical: 12.0,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      'موقعك الحالي',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontFamily: 'AirStripArabic',
-                                        fontSize: w * 0.038,
-                                        fontWeight: FontWeight.w700,
-                                        color: theme.textTheme.bodyLarge?.color,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'المساكن · فوق، مدينة الملا · حضرموت',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontFamily: 'AirStripArabic',
-                                        fontSize: w * 0.032,
-                                        color: theme.textTheme.bodyMedium?.color,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        LocationMapCard(
+                          title: 'موقعك الحالي',
+                          locationDetails: _locationName,
+                          position: _currentPosition,
+                          mapboxPublicToken: ApiConstants.mapboxPublicToken,
+                          isLoading: _isLoadingLocation,
                         ),
                         const SizedBox(height: 14),
                         GestureDetector(

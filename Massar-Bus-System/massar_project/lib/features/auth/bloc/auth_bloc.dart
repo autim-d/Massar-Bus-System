@@ -59,11 +59,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final result = await _authRepository.signInWithGoogle();
         if (result['success'] && result['user'] != null) {
           final user = result['user'];
-          emit(AuthAuthenticated(
-            name: '${user['first_name']} ${user['last_name']}',
-            email: user['email'],
-            avatarUrl: user['avatar_url'] ?? 'assets/images/adnan.jpg',
-          ));
+          final bool isComplete = result['isProfileComplete'] ?? false;
+
+          if (!isComplete) {
+            // New user or missing info -> show profile completion flow
+            emit(AuthProfileIncomplete(user));
+          } else {
+            // Full user -> home
+            // Safe extraction with fallbacks
+            final String firstName = user['first_name'] ?? 'User';
+            final String lastName = user['last_name'] ?? '';
+            final String fullName = lastName.isEmpty ? firstName : '$firstName $lastName';
+
+            emit(AuthAuthenticated(
+              name: fullName,
+              email: user['email'] ?? '',
+              avatarUrl: user['avatar_url'] ?? 'assets/images/adnan.jpg',
+            ));
+          }
+
         } else {
           emit(AuthError(result['message'] ?? 'فشل تسجيل الدخول عبر جوجل'));
         }
@@ -71,6 +85,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError('خطأ غير متوقع: ${e.toString()}'));
       }
     });
+
+    on<ProfileUpdated>((event, emit) async {
+      emit(const AuthLoading());
+      try {
+        final result = await _authRepository.completeProfile(
+          gender: event.gender,
+          phone: event.phone,
+          locationPermission: event.locationPermission,
+        );
+
+        if (result['success']) {
+          final dashboard = await _authRepository.getDashboardData();
+          if (dashboard['success']) {
+            final user = dashboard['user'];
+            final String firstName = user?['first_name'] ?? 'User';
+            final String lastName = user?['last_name'] ?? '';
+            final String fullName = lastName.isEmpty ? firstName : '$firstName $lastName';
+
+            emit(AuthAuthenticated(
+              name: fullName,
+              email: user?['email'] ?? '',
+              avatarUrl: user?['avatar_url'] ?? 'assets/images/adnan.jpg',
+            ));
+          }
+        } else {
+          emit(AuthError(result['message'] ?? 'فشل تحديث البيانات'));
+        }
+      } catch (e) {
+        emit(AuthError('خطأ غير متوقع: ${e.toString()}'));
+      }
+    });
+
+
 
 
   }

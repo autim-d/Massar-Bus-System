@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../widgets/home_header.dart';
 import '../widgets/home_search_bar.dart';
 import '../widgets/quick_action_section.dart';
@@ -23,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Position? _currentPosition;
+  String _locationName = 'جاري تحديد الموقع...';
   bool _isLoadingLocation = true;
 
   @override
@@ -59,8 +62,34 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       setState(() {
         _currentPosition = position;
-        _isLoadingLocation = false;
       });
+      _getPlaceName(position.latitude, position.longitude);
+    }
+  }
+
+  Future<void> _getPlaceName(double lat, double lng) async {
+    try {
+      final url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=${ApiConstants.mapboxPublicToken}&language=ar';
+      final response = await http.get(Uri.parse(url));
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['features'] != null && data['features'].isNotEmpty) {
+          final placeName = data['features'][0]['place_name'];
+          if (mounted) {
+            setState(() {
+              _locationName = placeName;
+              _isLoadingLocation = false;
+            });
+          }
+          return;
+        }
+      }
+      if (mounted) setState(() => _locationName = 'موقع مجهول');
+    } catch (e) {
+      if (mounted) setState(() => _locationName = 'خطأ في تحديد الموقع');
+    } finally {
+      if (mounted) setState(() => _isLoadingLocation = false);
     }
   }
 
@@ -92,51 +121,59 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Main Content
-            SafeArea(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        String name = 'أحمد باجردانه';
-                        if (state is AuthAuthenticated) {
-                          name = state.name;
-                        } else if (state is AuthGuest) {
-                          name = 'زائر';
-                        }
-                        return HomeHeader(
-                          notificationCount: 12,
-                          greeting: 'صباح الخير',
-                          userName: name,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    HomeSearchBar(
-                      onTap: () => context.pushNamed('homeSearch'),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: LocationMapCard(
-                        title: 'موقعك الحالي',
-                        locationDetails: _isLoadingLocation ? 'جاري تحديد الموقع...' : (_currentPosition != null ? null : 'لم نتمكن من تحديد الموقع'),
-                        position: _currentPosition,
-                        mapboxPublicToken: ApiConstants.mapboxPublicToken,
-                        isLoading: _isLoadingLocation,
+            Positioned.fill(
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          String name = 'User';
+                          if (state is AuthAuthenticated) {
+                            name = state.name;
+                          } else if (state is AuthGuest) {
+                            name = 'زائر';
+                          } else if (state is AuthLoading) {
+                            name = 'جاري التحميل...';
+                          }
+                          
+                          return HomeHeader(
+                            notificationCount: 12,
+                            greeting: 'صباح الخير',
+                            userName: name,
+                          );
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    QuickActionSection(currentPosition: _currentPosition),
-                    const SizedBox(height: 32),
-                    const ActiveTicketCard(),
-                    const SizedBox(height: 48), // Bottom padding
-                  ],
+  
+                      const SizedBox(height: 16),
+                      HomeSearchBar(
+                        onTap: () => context.pushNamed('homeSearch'),
+                      ),
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: LocationMapCard(
+                          key: ValueKey(_currentPosition?.latitude ?? 0.0),
+                          title: 'موقعك الحالي',
+                          locationDetails: _locationName,
+                          position: _currentPosition,
+                          mapboxPublicToken: ApiConstants.mapboxPublicToken,
+                          isLoading: _isLoadingLocation,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      QuickActionSection(currentPosition: _currentPosition),
+                      const SizedBox(height: 32),
+                      const ActiveTicketCard(),
+                      const SizedBox(height: 48), // Bottom padding
+                    ],
+                  ),
                 ),
               ),
             ),
+
           ],
         ),
       ),
