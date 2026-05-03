@@ -1,53 +1,67 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/bus_ticket_model.dart';
+import '../models/bus_search_criteria.dart';
 import '../models/location_model.dart';
 
-// Provides mock data based on the current date for the UI
-final busSearchProvider = FutureProvider<List<BusTicketModel>>((ref) async {
-  // Simulate network delay
-  await Future.delayed(const Duration(seconds: 1));
+final busSearchProvider = FutureProvider.family<List<BusTicketModel>, BusSearchCriteria>((
+  ref,
+  criteria,
+) async {
+  final supabase = Supabase.instance.client;
 
-  final today = DateTime.now();
+  final String formattedDate =
+      "${criteria.date.year}-${criteria.date.month.toString().padLeft(2, '0')}-${criteria.date.day.toString().padLeft(2, '0')}";
 
-  return [
-    BusTicketModel(
-      id: '1',
-      busName: 'باص 01',
-      date: today,
-      departureTime: '15:00', // Mock actual departure
-      arrivalTime: '03:45 PM', // Matches UI Mockup arrival text format
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isFastest: true,
-      isMixed: true,
-    ),
-    BusTicketModel(
-      id: '2',
-      busName: 'باص 21',
-      date: today,
-      departureTime: '15:30',
-      arrivalTime: '04:00 PM',
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isCheapest: true,
-      isMenOnly: true,
-    ),
-    BusTicketModel(
-      id: '3',
-      busName: 'باص 03',
-      date: today,
-      departureTime: '15:45',
-      arrivalTime: '04:15 PM',
-      fromStation: LocationModel(id: 'l1', name: 'K. Bali', description: 'محطة'),
-      toStation: LocationModel(id: 'l2', name: 'Senen', description: 'محطة'),
-      durationText: 'المدة: 30 دقيقة',
-      price: 10000,
-      isFastest: true,
-      isLadiesOnly: true,
-    ),
-  ];
+  try {
+    // 1. Build query
+    var query = supabase
+        .from('trips')
+        .select('*, route:routes!inner(*, origin:stations!origin_station_id(*), destination:stations!destination_station_id(*)), bus:buses(*)');
+
+    // 2. Add filters
+    query = query
+        .gte('departure_time', '$formattedDate 00:00:00')
+        .lte('departure_time', '$formattedDate 23:59:59');
+
+    if (criteria.fromId != null && criteria.fromId!.isNotEmpty) {
+      query = query.eq('route.origin_station_id', int.parse(criteria.fromId!));
+    }
+    if (criteria.toId != null && criteria.toId!.isNotEmpty) {
+      query = query.eq('route.destination_station_id', int.parse(criteria.toId!));
+    }
+
+    final response = await query;
+
+    // 3. Map to Model
+    return (response as List).map((json) {
+      final route = json['route'] ?? {};
+      final bus = json['bus'] ?? {};
+      final origin = route['origin'] ?? {};
+      final destination = route['destination'] ?? {};
+
+      // Calculate duration text from minutes
+      final minutes = route['estimated_duration_minutes'] ?? 0;
+      final hours = minutes ~/ 60;
+      final remainingMinutes = minutes % 60;
+      final durationText = hours > 0 
+          ? '$hours ساعة ${remainingMinutes > 0 ? 'و$remainingMinutes دقيقة' : ''}'
+          : '$remainingMinutes دقيقة';
+
+      return BusTicketModel(
+        id: json['id'].toString(),
+        busName: bus['bus_name'] ?? 'باص ماسار',
+        date: DateTime.parse(json['departure_time']),
+        departureTime: (json['departure_time'] as String).split(' ').last.substring(0, 5),
+        arrivalTime: (json['arrival_time'] as String).split(' ').last.substring(0, 5),
+        fromStation: LocationModel(id: origin['id'].toString(), name: origin['name'] ?? ''),
+        toStation: LocationModel(id: destination['id'].toString(), name: destination['name'] ?? ''),
+        durationText: durationText,
+        price: 50.0, // Assuming a default price or you can add a price column to trips/routes
+      );
+    }).toList();
+  } catch (e) {
+    print('Search Error: $e');
+    throw Exception('فشل الاتصال بالخادم أو لا توجد بيانات متاحة.');
+  }
 });

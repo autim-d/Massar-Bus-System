@@ -1,28 +1,22 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:massar_project/core/constants/api_constants.dart';
 import 'package:massar_project/core/models/station_model.dart';
-import 'package:massar_project/core/services/http_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 final stationRepositoryProvider = Provider<StationRepository>((ref) {
-  final httpService = ref.watch(httpServiceProvider);
-  return StationRepository(httpService);
+  return StationRepository(Supabase.instance.client);
 });
 
 class StationRepository {
-  final HttpService _http;
+  final SupabaseClient _supabase;
 
-  StationRepository(this._http);
+  StationRepository(this._supabase);
 
   Future<List<StationModel>> getStations() async {
-    final response = await _http.get('${ApiConstants.baseUrl}/stations');
-
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      final List<dynamic> data = jsonResponse['data'];
-      return data.map((item) => StationModel.fromJson(item)).toList();
-    } else {
-      throw Exception('Failed to load stations: ${response.statusCode}');
+    try {
+      final response = await _supabase.from('stations').select();
+      return response.map((item) => StationModel.fromJson(item)).toList();
+    } catch (e) {
+      throw Exception('Failed to load stations: $e');
     }
   }
 }
