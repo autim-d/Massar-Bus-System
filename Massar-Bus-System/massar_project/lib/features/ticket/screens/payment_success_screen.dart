@@ -11,7 +11,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   String _formatArabicDateTime(DateTime date) {
     const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
     final period = date.hour >= 12 ? 'مساءً' : 'صباحاً';
-    final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+    final hour = date.hour > 12 ? date.hour - 12 : date.hour == 0 ? 12 : date.hour;
     final minute = date.minute.toString().padLeft(2, '0');
     
     return '${date.day} ${months[date.month - 1]}، ${date.year} الساعة $hour:$minute $period';
@@ -222,3 +222,4 @@ class PaymentSuccessScreen extends StatelessWidget {
     );
   }
 }
+

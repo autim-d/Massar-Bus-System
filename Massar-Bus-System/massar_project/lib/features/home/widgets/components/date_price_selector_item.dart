@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class DatePriceSelectorItem extends StatelessWidget {
@@ -33,7 +34,7 @@ class DatePriceSelectorItem extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: isSelected ? const Color(0xFF1570EF) : Colors.transparent,
+              color: isSelected ? AppColors.mainButton : Colors.transparent,
               width: 3,
             ),
           ),
@@ -44,7 +45,7 @@ class DatePriceSelectorItem extends StatelessWidget {
               dateStr,
               style: TextStyle(
                 fontSize: 12,
-                color: isSelected ? const Color(0xFF1D2939) : const Color(0xFF667085),
+                color: isSelected ? const Color(0xFF1D2939) : AppColors.textSecondary,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
@@ -53,7 +54,7 @@ class DatePriceSelectorItem extends StatelessWidget {
               '${price.toInt()} ر.ي',
               style: TextStyle(
                 fontSize: 14,
-                color: isSelected ? const Color(0xFF1570EF) : const Color(0xFF1D2939),
+                color: isSelected ? AppColors.mainButton : const Color(0xFF1D2939),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -63,3 +64,5 @@ class DatePriceSelectorItem extends StatelessWidget {
     );
   }
 }
+
+

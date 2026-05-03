@@ -97,9 +97,11 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ في معالجة الصورة: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('خطأ في معالجة الصورة: $e')),
+        );
+      }
     }
   }
 

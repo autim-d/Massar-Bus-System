@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontFamily: 'ReadexPro',
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1D1D1D),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontFamily: 'ReadexPro',
                           fontSize: 14,
-                          color: const Color(0xFF6B7683),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _isPasswordVisible
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: const Color(0xFF6B7683),
+                                color: AppColors.textSecondary,
                                 size: 20,
                               ),
                               onPressed: () {
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontFamily: 'ReadexPro',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1570EF),
+                                  color: AppColors.mainButton,
                                 ),
                               ),
                             ),
@@ -258,19 +258,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       Row(
                         children: [
-                          Expanded(child: Divider(color: const Color(0xFFEAECF0))),
+                          Expanded(child: Divider(color: AppColors.grey200)),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               'أو الاستمرار باستخدام',
                               style: TextStyle(
                                 fontFamily: 'ReadexPro',
-                                color: const Color(0xFF6B7683),
+                                color: AppColors.textSecondary,
                                 fontSize: 14,
                               ),
                             ),
                           ),
-                          Expanded(child: Divider(color: const Color(0xFFEAECF0))),
+                          Expanded(child: Divider(color: AppColors.grey200)),
                         ],
                       ),
                       const SizedBox(height: 24),
@@ -312,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontFamily: 'ReadexPro',
                             fontSize: 16,
-                            color: const Color(0xFF1D1D1D),
+                            color: AppColors.textPrimary,
                             decoration: TextDecoration.underline,
                           ),
                         ),
@@ -326,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontFamily: 'ReadexPro',
                               fontSize: 14,
-                              color: const Color(0xFF6B7683),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           GestureDetector(
@@ -341,7 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontFamily: 'ReadexPro',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF1570EF),
+                                color: AppColors.mainButton,
                               ),
                             ),
                           ),
@@ -369,7 +369,7 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Colors.white,
           shape: BoxShape.circle,
           border: Border.all(
-            color: const Color(0xFFEAECF0),
+            color: AppColors.grey200,
           ),
           boxShadow: [
             BoxShadow(
@@ -384,6 +384,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
 
 
 

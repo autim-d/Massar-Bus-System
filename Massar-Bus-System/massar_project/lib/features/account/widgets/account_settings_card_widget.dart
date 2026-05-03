@@ -32,7 +32,7 @@ class AccountSettingsCardWidget extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (builder) => const Profile(),
+                          builder: (context) => const ProfileScreen(),
                         ),
                       );
                     },
@@ -68,3 +68,5 @@ class AccountSettingsCardWidget extends StatelessWidget {
     );
   }
 }
+
+

@@ -46,7 +46,7 @@ class VerificationMethodScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => context.pop(),
                         icon: const Icon(Icons.arrow_back, size: 24),
                       ),
                       const Spacer(),
@@ -203,3 +203,6 @@ class VerificationMethodScreen extends StatelessWidget {
     );
   }
 }
+
+
+

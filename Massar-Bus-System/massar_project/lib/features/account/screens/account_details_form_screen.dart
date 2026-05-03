@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -31,25 +32,20 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    
-
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: BorderSide(color: const Color(0xFFEAECF0)),
+      borderSide: BorderSide(color: AppColors.grey200),
     );
 
     final inputDecoration = InputDecoration(
       filled: true,
-      fillColor:
-          Colors.white ??
-          (const Color(0xFFF5F7FB)),
+      fillColor: Colors.white,
       enabledBorder: border,
       focusedBorder: border.copyWith(
         borderSide: const BorderSide(color: Color(0xFF0053D9), width: 1.4),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      hintStyle: TextStyle(color: const Color(0xFF6B7683)),
+      hintStyle: TextStyle(color: AppColors.textSecondary),
     );
 
     return BlocConsumer<AuthBloc, AuthState>(
@@ -81,14 +77,14 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new,
-                color: const Color(0xFF1D1D1D),
+                color: AppColors.textPrimary,
               ),
               onPressed: () => context.pop(),
             ),
             title: Text(
               'بيانات الحساب',
               style: TextStyle(
-                color: const Color(0xFF1D1D1D),
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -105,7 +101,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -113,7 +109,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     'ساعدنا على التعرف عليك بشكل أفضل لضمان تجربة سفر سلسة.',
                     style: TextStyle(
                       fontSize: 15,
-                      color: const Color(0xFF6B7683),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -124,7 +120,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                   TextField(
                     controller: _nameController,
                     enabled: !isLoading,
-                    style: TextStyle(color: const Color(0xFF1D1D1D)),
+                    style: TextStyle(color: AppColors.textPrimary),
                     decoration: inputDecoration.copyWith(
                       hintText: 'أدخل اسمك الرباعي',
                     ),
@@ -139,7 +135,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     controller: _emailController,
                     enabled: !isLoading,
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(color: const Color(0xFF1D1D1D)),
+                    style: TextStyle(color: AppColors.textPrimary),
                     decoration: inputDecoration.copyWith(
                       hintText: 'example@email.com',
                     ),
@@ -154,7 +150,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                     controller: _idController,
                     enabled: !isLoading,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: const Color(0xFF1D1D1D)),
+                    style: TextStyle(color: AppColors.textPrimary),
                     decoration: inputDecoration.copyWith(
                       hintText: '784-1987-1234567-1',
                     ),
@@ -168,7 +164,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                   DropdownButtonFormField<String>(
                     decoration: inputDecoration,
                     dropdownColor: Colors.white,
-                    style: TextStyle(color: const Color(0xFF1D1D1D)),
+                    style: TextStyle(color: AppColors.textPrimary),
                     value: _selectedNationality,
                     items:
                         [
@@ -182,7 +178,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                             child: Text(
                               val,
                               style: TextStyle(
-                                color: const Color(0xFF1D1D1D),
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           );
@@ -226,7 +222,7 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
                       child: Text(
                         'سأكمل لاحقًا',
                         style: TextStyle(
-                          color: const Color(0xFF6B7683),
+                          color: AppColors.textSecondary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -280,6 +276,3 @@ class _AccountDetailsFormScreenState extends State<AccountDetailsFormScreen> {
     context.read<AuthBloc>().add(UpdateProfileSubmitted(user: updatedUser));
   }
 }
-
-
-

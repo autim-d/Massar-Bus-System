@@ -1,5 +1,5 @@
-qimport 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:massar_project/core/theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -63,13 +63,13 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'ReadexPro',
             fontSize: 14,
-            color: const Color(0xFF1D1D1D),
+            color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
               fontFamily: 'ReadexPro',
-              color: const Color(0xFF6B7683),
+              color: AppColors.textSecondary,
               fontSize: 14,
             ),
             contentPadding:
@@ -87,7 +87,7 @@ class CustomTextField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide:
-                  const BorderSide(color: AppColors.primaryBlue, width: 1.5),
+                  const BorderSide(color: AppColors.mainButton, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -105,7 +105,7 @@ class CustomTextField extends StatelessWidget {
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                  color: const Color(0xFFEAECF0),
+                  color: AppColors.grey200,
                   width: 1),
             ),
           ),
@@ -115,6 +115,9 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+
+
 
 
 

@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,26 +43,9 @@ import 'package:massar_project/features/account/screens/edit_photo_screen.dart';
 import 'package:massar_project/features/account/screens/account_details_form_screen.dart';
 import 'package:massar_project/features/account/screens/settings_screen.dart';
 import 'package:massar_project/features/account/screens/change_password_screen.dart';
-import 'package:massar_project/features/account/screens/appearance_screen.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 /// The centralized GoRouter for the Massar Bus System.
-///
-/// Architecture:
-///   • Auth stack  (/, /onboarding, /login, /login/phone, /verification, /otp)
-///     pushed outside the shell so no bottom nav is visible.
-///   • Main shell  (StatefulShellRoute – 5 tabs)
-///     Branch 0 → /home          (الصفحة الرئيسية)
-///     Branch 1 → /tickets        (تذكرتي)
-///     Branch 2 → /buy            (شراء — shortcut to SearchBusScreen)
-///     Branch 3 → /booking        (حجز)
-///     Branch 4 → /account        (الحساب)
-///
-/// Data passing strategy:
-///   • Non-serialisable payloads (phone, image path) → GoRouterState.extra
-///   • Ticket state is managed by ticketProvider (Riverpod) — no extra needed
-///     for DetailTicketScreen.
-// ─────────────────────────────────────────────────────────────────────────────
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
@@ -71,7 +55,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: 'splash',
-      // No transition override — default is fine for the very first frame.
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
@@ -113,7 +96,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/verification',
       name: 'verification',
-      // extra: String — the full phone number (e.g. "+967 777777777")
       pageBuilder: (context, state) => MassarTransitions.fade(
         context: context,
         state: state,
@@ -125,7 +107,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/otp',
       name: 'otp',
-      // extra: String — phone number forwarded from verification screen
       pageBuilder: (context, state) => MassarTransitions.fade(
         context: context,
         state: state,
@@ -143,7 +124,7 @@ final GoRouter appRouter = GoRouter(
         return ShellNavigationScreen(navigationShell: navigationShell);
       },
       branches: [
-        // ── Branch 0: Home (الصفحة الرئيسية) ──────────────────────────────────
+        // ── Branch 0: Home ────────────────────────────────────────────────────
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -202,7 +183,7 @@ final GoRouter appRouter = GoRouter(
           ],
         ),
 
-        // ── Branch 1: Tickets (تذكرتي) ──────────────────────────────────────────
+        // ── Branch 1: Tickets ─────────────────────────────────────────────────
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -228,7 +209,6 @@ final GoRouter appRouter = GoRouter(
                 GoRoute(
                   path: 'order-summary',
                   name: 'orderSummary',
-                  // extra: TripModel — passed from results screen
                   pageBuilder: (context, state) => MassarTransitions.parallaxSlideUp(
                     context: context,
                     state: state,
@@ -264,7 +244,7 @@ final GoRouter appRouter = GoRouter(
           ],
         ),
 
-        // ── Branch 2: Buy / شراء (direct entry to SearchBusScreen) ────────────
+        // ── Branch 2: Buy ─────────────────────────────────────────────────────
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -279,7 +259,7 @@ final GoRouter appRouter = GoRouter(
           ],
         ),
 
-        // ── Branch 3: Booking / حجز ───────
+        // ── Branch 3: Booking ─────────────────────────────────────────────────
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -294,7 +274,7 @@ final GoRouter appRouter = GoRouter(
           ],
         ),
 
-        // ── Branch 4: Account / الحساب ──────────────────────────────────────────
+        // ── Branch 4: Account ─────────────────────────────────────────────────
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -303,13 +283,9 @@ final GoRouter appRouter = GoRouter(
               pageBuilder: (context, state) => MassarTransitions.fade(
                 context: context,
                 state: state,
-                // AccountScreen is the visual shell root: profile header +
-                // settings cards. It no longer owns a BottomNavigationBar
-                // (to be removed in Phase C).
                 child: const AccountScreen(),
               ),
               routes: [
-                // Personal-fields editor (Riverpod-backed ProfileScreen)
                 GoRoute(
                   path: 'profile',
                   name: 'accountProfile',
@@ -319,7 +295,6 @@ final GoRouter appRouter = GoRouter(
                     child: const ProfileScreen(),
                   ),
                 ),
-                // Full edit-profile form (EditProfileScreen)
                 GoRoute(
                   path: 'edit',
                   name: 'editProfile',
@@ -329,8 +304,6 @@ final GoRouter appRouter = GoRouter(
                     child: const EditProfileScreen(),
                   ),
                 ),
-                // Avatar / photo editor
-                // extra: String — current image asset/file path
                 GoRoute(
                   path: 'edit-photo',
                   name: 'editPhoto',
@@ -343,7 +316,6 @@ final GoRouter appRouter = GoRouter(
                     ),
                   ),
                 ),
-                // Account details / passenger info form
                 GoRoute(
                   path: 'details-form',
                   name: 'accountDetailsForm',
@@ -371,15 +343,6 @@ final GoRouter appRouter = GoRouter(
                         child: const ChangePasswordScreen(),
                       ),
                     ),
-                    GoRoute(
-                      path: 'appearance',
-                      name: 'appearance',
-                      pageBuilder: (context, state) => MassarTransitions.slideLeft(
-                        context: context,
-                        state: state,
-                        child: const AppearanceScreen(),
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -390,47 +353,3 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 );
-
-// ─────────────────────────────────────────────────────────────────────────────
-/// Temporary placeholder shown for the Promotions tab until a real screen
-/// is designed and implemented.
-// ─────────────────────────────────────────────────────────────────────────────
-class _PromotionsPlaceholderScreen extends StatelessWidget {
-  const _PromotionsPlaceholderScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF6F7F9),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.local_offer_outlined,
-              size: 72,
-              color: const Color(0xFF1570EF).withOpacity(0.4),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'الترويج',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1D2939),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'قريبًا',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF667085),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

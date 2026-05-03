@@ -23,7 +23,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.white,
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is AuthGuest) {
@@ -84,3 +84,5 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
+
+

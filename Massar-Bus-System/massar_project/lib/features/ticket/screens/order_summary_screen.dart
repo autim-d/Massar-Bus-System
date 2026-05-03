@@ -40,7 +40,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: const Color(0xFF1D1D1D)),
+              icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
               onPressed: () => context.pop(),
             ),
             title: Padding(
@@ -54,7 +54,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF1D1D1D),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -67,7 +67,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(thickness: 1.5, color: const Color(0xFFEAECF0)),
+                Divider(thickness: 1.5, color: AppColors.grey200),
                 const SizedBox(height: 35),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -103,7 +103,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 16,
-                                  color: const Color(0xFF1D1D1D),
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                             ),
@@ -114,14 +114,11 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           padding: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.directions_bus,
-                                color: Color(0xff667085),
-                              ),
+                              const Icon(Icons.directions_bus, color: AppColors.mainButton, size: 20),
                               const SizedBox(width: 6),
                               Text(
                                 "${_trip.busName} - الوصول في ${_trip.arrivalTime} الى ${_trip.to}",
-                                style: const TextStyle(color: Color(0xff667085)),
+                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                               ),
                             ],
                           ),
@@ -156,18 +153,18 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                  color: const Color(0xFFEAECF0),
+                                  color: AppColors.grey200,
                                 ),
                               ),
                               child: Text(
                                 "مختلط",
-                                style: TextStyle(color: const Color(0xFF6B7683)),
+                                style: TextStyle(color: AppColors.textSecondary),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 16),
-                        Divider(thickness: .7, indent: 0, endIndent: 0, color: const Color(0xFFEAECF0)),
+                        Divider(thickness: .7, indent: 0, endIndent: 0, color: AppColors.grey200),
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: Row(
@@ -186,7 +183,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     child: Text(
                                       "العمل",
                                       style: TextStyle(
-                                        color: const Color(0xff667085),
+                                        color: AppColors.textSecondary,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -196,7 +193,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF1D1D1D),
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -214,14 +211,14 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                             width: 60,
                             height: 23,
                             decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xFFEAECF0)),
+                              border: Border.all(color: AppColors.grey200),
                               borderRadius: BorderRadius.circular(15),
                               color: const Color(0xffF9FAFB),
                             ),
                             child: Center(
                               child: Text(
                                 "10 دقائق",
-                                style: TextStyle(fontSize: 10, color: const Color(0xFF6B7683)),
+                                style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
                               ),
                             ),
                           ),
@@ -247,7 +244,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     child: Text(
                                       "الوقوف",
                                       style: TextStyle(
-                                        color: const Color(0xff667085),
+                                        color: AppColors.textSecondary,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -261,7 +258,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF1D1D1D),
+                                        color: AppColors.textPrimary,
                                       ),
                                     ),
                                   ),
@@ -270,7 +267,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     height: 23,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: const Color(0xFFEAECF0),
+                                        color: AppColors.grey200,
                                       ),
                                       borderRadius: BorderRadius.circular(15),
                                       color: const Color(0xffF9FAFB),
@@ -278,7 +275,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     child: Center(
                                       child: Text(
                                         "10 دقائق",
-                                        style: TextStyle(fontSize: 10, color: const Color(0xFF6B7683)),
+                                        style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
                                       ),
                                     ),
                                   ),
@@ -304,7 +301,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     child: Text(
                                       "اليوم",
                                       style: TextStyle(
-                                        color: const Color(0xff667085),
+                                        color: AppColors.textSecondary,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -314,7 +311,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF1D1D1D),
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -344,7 +341,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -406,7 +403,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
-                            color: const Color(0xFFEAECF0),
+                            color: AppColors.grey200,
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(15),
@@ -423,18 +420,18 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 19,
-                                      color: const Color(0xFF1D1D1D),
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ),
-                                const Icon(Icons.edit_square, color: AppColors.iconOf, size: 30),
+                                const Icon(Icons.edit, color: AppColors.textEdit),
                               ],
                             ),
                             const SizedBox(height: 10),
                             Text(
                               email,
                               style: TextStyle(
-                                color: const Color(0xff667085),
+                                color: AppColors.textSecondary,
                                 fontSize: 16,
                               ),
                             ),
@@ -442,7 +439,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                             Text(
                               phone,
                               style: TextStyle(
-                                color: const Color(0xff667085),
+                                color: AppColors.textSecondary,
                                 fontSize: 16,
                               ),
                             ),
@@ -473,7 +470,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFF1D1D1D),
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ),
@@ -481,9 +478,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                       const SizedBox(height: 10),
 
                       _buildPriceRow(context, "سعر التذكرة", " ${_trip.price.toInt()} ريال يمني"),
-                      Divider(height: 15, color: const Color(0xFFEAECF0)),
+                      Divider(height: 15, color: AppColors.grey200),
                       _buildPriceRow(context, "الحماية", " 1000 ريال يمني"), // Sample dynamic add-on text could go here
-                      Divider(height: 15, color: const Color(0xFFEAECF0)),
+                      Divider(height: 15, color: AppColors.grey200),
                       _buildPriceRow(context, "راحة", " 1000 ريال يمني"),
 
                       _buildPriceRow(
@@ -512,12 +509,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   backgroundColor: AppColors.mainButton,
                 ),
                 child: const Text(
-                  "اختيار طريقة الدفع",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.textSave,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  "متابعة الدفع",
+                  style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -538,8 +531,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             title,
             style: TextStyle(
               color: isTotal
-                  ? const Color(0xFF1D1D1D)
-                  : (const Color(0xff667085)),
+                  ? AppColors.textPrimary
+                  : AppColors.textSecondary,
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.w600 : FontWeight.w400,
             ),
@@ -550,7 +543,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             style: TextStyle(
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w400,
-              color: isTotal ? AppColors.textEdit : const Color(0xFF1D1D1D),
+              color: isTotal ? AppColors.textEdit : AppColors.textPrimary,
             ),
           ),
         ],
@@ -558,6 +551,12 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     );
   }
 }
+
+
+
+
+
+
 
 
 

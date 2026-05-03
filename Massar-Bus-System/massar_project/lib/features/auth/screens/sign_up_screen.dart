@@ -41,8 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     // استخدام BlocConsumer للاستماع لحالة السيرفر
     return BlocConsumer<AuthBloc, AuthState>(
@@ -68,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         final isLoading = state is AuthLoading;
 
         return Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
+          backgroundColor: Colors.white,
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontFamily: 'ReadexPro',
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: theme.textTheme.bodyLarge?.color,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -129,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: TextStyle(
                           fontFamily: 'ReadexPro',
                           fontSize: 14,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 32),
@@ -188,9 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               fontFamily: 'ReadexPro',
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: isDark
-                                  ? const Color(0xFFD0D5DD)
-                                  : const Color(0xFF344054),
+                              color: const Color(0xFF344054),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -229,9 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               fontFamily: 'ReadexPro',
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: isDark
-                                  ? const Color(0xFFD0D5DD)
-                                  : const Color(0xFF344054),
+                              color: const Color(0xFF344054),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -243,14 +239,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   horizontal: 12,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? const Color(0xFF1D2939)
-                                      : Colors.white,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.1)
-                                        : const Color(0xFFD0D5DD),
+                                    color: const Color(0xFFD0D5DD),
                                   ),
                                 ),
                                 child: DropdownButtonHideUnderline(
@@ -272,10 +264,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             fontFamily: 'ReadexPro',
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600,
-                                            color: theme
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.color,
+                                            color: AppColors.textPrimary,
                                           ),
                                         ),
                                       );
@@ -325,7 +314,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _isPasswordVisible
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
-                            color: const Color(0xFF667085),
+                            color: AppColors.textSecondary,
                             size: 20,
                           ),
                           onPressed: () {
@@ -406,7 +395,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: TextStyle(
                               fontFamily: 'ReadexPro',
                               fontSize: 14,
-                              color: theme.textTheme.bodyMedium?.color,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           GestureDetector(
@@ -417,9 +406,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 fontFamily: 'ReadexPro',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: isDark
-                                    ? const Color(0xFF5491F5)
-                                    : const Color(0xFF1570EF),
+                                color: AppColors.mainButton,
                               ),
                             ),
                           ),
@@ -444,7 +431,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required IconData icon,
     required bool isLoading,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     final isSelected = _selectedGender == value;
     return GestureDetector(
       onTap: isLoading ? null : () => setState(() => _selectedGender = value),
@@ -453,14 +440,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? const Color(0xFF3B82F6)
-              : (isDark ? const Color(0xFF1D2939) : Colors.white),
+              : Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected
                 ? const Color(0xFF3B82F6)
-                : (isDark
-                      ? Colors.white.withOpacity(0.1)
-                      : const Color(0xFFD0D5DD)),
+                : const Color(0xFFD0D5DD),
           ),
         ),
         child: Row(
@@ -471,9 +456,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               size: 20,
               color: isSelected
                   ? Colors.white
-                  : (isDark
-                        ? const Color(0xFF98A2B3)
-                        : const Color(0xFF667085)),
+                  : AppColors.textSecondary,
             ),
             const SizedBox(width: 8),
             Text(
@@ -484,9 +467,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? Colors.white
-                    : (isDark
-                          ? const Color(0xFF98A2B3)
-                          : const Color(0xFF667085)),
+                    : AppColors.textSecondary,
               ),
             ),
           ],
@@ -495,3 +476,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+
+
+
+
+
+
+

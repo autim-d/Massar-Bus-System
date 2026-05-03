@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/bus_ticket_model.dart';
@@ -37,8 +38,8 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     // Determine a dynamic convenience fee based on ticket price (e.g. 5%)
     final double convenienceFee = widget.ticket.price * 0.05;
@@ -47,28 +48,28 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: theme.appBarTheme.backgroundColor,
+          backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
           title: Text(
             'تذكرة اختيارك',
             style: TextStyle(
-              color: theme.textTheme.titleLarge?.color,
+              color: AppColors.textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.bold,
               fontFamily: 'ReadexPro',
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color, size: 20),
+            icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20),
             onPressed: () => context.pop(),
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(
-              color: theme.dividerColor,
+              color: AppColors.grey200,
               height: 1.0,
             ),
           ),
@@ -131,7 +132,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: theme.textTheme.titleLarge?.color,
+                    color: AppColors.textPrimary,
                     fontFamily: 'ReadexPro',
                   ),
                 ),
@@ -144,7 +145,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       'سعر التذكرة',
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -152,7 +153,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       '${widget.ticket.price.toInt()} ريال يمني',
                       style: TextStyle(
                         fontSize: 14,
-                        color: theme.textTheme.bodyLarge?.color,
+                        color: AppColors.textPrimary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -167,7 +168,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       'رسوم الراحه',
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -175,7 +176,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       '${convenienceFee.toInt()} ريال يمني',
                       style: TextStyle(
                         fontSize: 14,
-                        color: theme.textTheme.bodyLarge?.color,
+                        color: AppColors.textPrimary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -191,7 +192,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: theme.textTheme.titleLarge?.color,
+                        color: AppColors.textPrimary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -200,7 +201,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1570EF),
+                        color: AppColors.mainButton,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -223,7 +224,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1570EF),
+                      color: AppColors.mainButton,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -258,9 +259,9 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          color: theme.cardTheme.color,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFF1570EF)),
+                          border: Border.all(color: AppColors.mainButton),
                         ),
                         alignment: Alignment.center,
                         child: isLoading
@@ -272,7 +273,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                             : const Text(
                                 'حجز مؤقت',
                                 style: TextStyle(
-                                  color: Color(0xFF1570EF),
+                                  color: AppColors.mainButton,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'ReadexPro',
                                   fontSize: 16,
@@ -291,3 +292,10 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
     );
   }
 }
+
+
+
+
+
+
+

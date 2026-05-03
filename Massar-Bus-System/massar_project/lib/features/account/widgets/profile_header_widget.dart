@@ -97,7 +97,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1D1D1D),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -107,7 +107,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF6B7683),
+                    color: AppColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -119,4 +119,6 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
     );
   }
 }
+
+
 

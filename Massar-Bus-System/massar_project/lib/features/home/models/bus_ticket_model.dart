@@ -47,7 +47,7 @@ class BusTicketModel {
       fromStation: LocationModel.fromJson(json['fromStation'] ?? {}),
       toStation: LocationModel.fromJson(json['toStation'] ?? {}),
       durationText: json['durationText'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
       isFastest: json['isFastest'] ?? false,
       isCheapest: json['isCheapest'] ?? false,
       isMenOnly: json['isMenOnly'] ?? false,
@@ -80,3 +80,5 @@ class BusTicketModel {
     );
   }
 }
+
+

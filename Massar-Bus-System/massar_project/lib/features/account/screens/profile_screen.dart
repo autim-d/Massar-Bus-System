@@ -44,16 +44,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             '${AppStrings.editPrefix} $title',
             style: TextStyle(
               fontFamily: 'Cairo',
-              color: const Color(0xFF1D1D1D),
+              color: AppColors.textPrimary,
             ),
           ),
           content: TextField(
             controller: controller,
-            style: TextStyle(color: const Color(0xFF1D1D1D)),
+            style: TextStyle(color: AppColors.textPrimary),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: '${AppStrings.enterNew} $title',
-              labelStyle: TextStyle(color: const Color(0xFF6B7683)),
+              labelStyle: TextStyle(color: AppColors.textSecondary),
             ),
           ),
           actions: [
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     fontFamily: 'Cairo',
-                    color: const Color(0xFF1D1D1D),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Cairo',
-                    color: const Color(0xFF6B7683),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: Text(
                 AppStrings.myAccount,
                 style: TextStyle(
-                  color: const Color(0xFF1D1D1D),
+                  color: AppColors.textPrimary,
                   fontFamily: 'Cairo',
                 ),
               ),
@@ -227,9 +227,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const SizedBox(height: 20),
                   // قسم الصورة الشخصية
-                  _buildPhotoSection(context, theme, currentUser),
+                  _buildPhotoSection(context, currentUser),
                   const SizedBox(height: 10),
-                  Divider(thickness: 1, color: const Color(0xFFEAECF0)),
+                  Divider(thickness: 1, color: AppColors.grey200),
 
                   // عرض الاسم الكامل
                   _buildRow(
@@ -246,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  _buildDivider(theme),
+                  _buildDivider(),
 
                   // عرض البريد
                   _buildRow(context, AppStrings.emailLabel, currentUser.email, () {
@@ -258,7 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       currentUser,
                     );
                   }),
-                  _buildDivider(theme),
+                  _buildDivider(),
 
                   // عرض رقم الهاتف
                   _buildRow(
@@ -275,7 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  _buildDivider(theme),
+                  _buildDivider(),
                 ],
               ),
             ),
@@ -287,7 +287,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildPhotoSection(
     BuildContext context,
-    ThemeData theme,
     UserModel user,
   ) {
     return Padding(
@@ -308,7 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(40),
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundColor: const Color(0xFFEAECF0).withOpacity(0.2),
+                  backgroundColor: AppColors.grey200.withOpacity(0.2),
                   backgroundImage: user.profileImage.isNotEmpty
                       ? (user.profileImage.startsWith('http')
                           ? NetworkImage(user.profileImage)
@@ -317,7 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               : FileImage(File(user.profileImage)) as ImageProvider))
                       : null,
                   child: user.profileImage.isEmpty
-                      ? Icon(Icons.person, size: 40, color: const Color(0xFFEAECF0))
+                      ? Icon(Icons.person, size: 40, color: AppColors.grey200)
                       : null,
                 ),
               ),
@@ -328,7 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cairo',
-                  color: const Color(0xFF1D1D1D),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -352,11 +351,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildDivider(ThemeData theme) => Padding(
+  Widget _buildDivider() => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Divider(height: 1, color: const Color(0xFFEAECF0).withOpacity(0.4)),
+    child: Divider(height: 1, color: AppColors.grey200.withOpacity(0.4)),
   );
 }
+
+
+
+
 
 
 

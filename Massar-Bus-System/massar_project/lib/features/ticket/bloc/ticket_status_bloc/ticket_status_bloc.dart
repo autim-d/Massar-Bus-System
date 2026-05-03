@@ -23,7 +23,7 @@ class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
     
     try {
       final bookingsJson = await _bookingRepository.getBookings();
-      final tickets = bookingsJson.map((json) => TicketStatusModel.fromJson(json)).toList();
+      final List<TicketStatusModel> tickets = bookingsJson.map((json) => TicketStatusModel.fromJson(json)).toList();
 
       emit(TicketStatusLoaded(
         allTickets: tickets,
@@ -72,3 +72,4 @@ class TicketStatusBloc extends Bloc<TicketStatusEvent, TicketStatusState> {
     }
   }
 }
+

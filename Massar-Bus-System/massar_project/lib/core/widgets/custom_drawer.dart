@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,10 +23,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final drawerBgColor = isDark
-        ? const Color(0xFF1E2939).withOpacity(0.5)
-        : const Color(0xFF1570EF).withOpacity(0.5);
+    
+    final drawerBgColor = AppColors.mainButton.withOpacity(0.5);
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -55,7 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         alignment: Alignment.topRight,
                         child: IconButton(
                           icon: const Icon(LucideIcons.x, color: Colors.white),
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => context.pop(),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -232,3 +231,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 }
+
+
+
+
+
+
+

@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MassarBottomNavBar extends StatelessWidget {
@@ -23,8 +24,8 @@ class MassarBottomNavBar extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 12,
         unselectedFontSize: 12,
-        selectedItemColor: const Color(0xff1570EF),
-        unselectedItemColor: const Color(0xff667085),
+        selectedItemColor: AppColors.mainButton,
+        unselectedItemColor: AppColors.textSecondary,
         showUnselectedLabels: true,
         items: [
           _buildStandardItem(Icons.home, "الرئيسية"),
@@ -48,7 +49,7 @@ class MassarBottomNavBar extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           decoration: const BoxDecoration(
-            color: Color(0xff1570EF),
+            color: AppColors.mainButton,
             shape: BoxShape.circle,
           ),
           child: const Icon(Icons.confirmation_number, color: Colors.white),
@@ -58,3 +59,5 @@ class MassarBottomNavBar extends StatelessWidget {
     );
   }
 }
+
+

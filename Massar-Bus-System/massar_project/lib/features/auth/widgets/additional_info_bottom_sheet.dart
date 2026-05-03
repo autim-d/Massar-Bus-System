@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/core/widgets/custom_text_field.dart';
@@ -26,8 +27,8 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return Container(
       padding: EdgeInsets.only(
@@ -37,7 +38,7 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
+        color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Directionality(
@@ -62,17 +63,20 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
                 const SizedBox(height: 24),
                 Text(
                   'نحتاج إلى بعض المعلومات الإضافية',
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: TextStyle(
                     fontFamily: 'ReadexPro',
                     fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'يرجى إكمال البيانات التالية لإنشاء حسابك',
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: TextStyle(
                     fontFamily: 'ReadexPro',
-                    color: Colors.grey,
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -98,9 +102,11 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
                 // Gender Selector
                 Text(
                   'الجنس',
-                  style: theme.textTheme.titleSmall?.copyWith(
+                  style: TextStyle(
                     fontFamily: 'ReadexPro',
                     fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -130,32 +136,35 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
                 // Location Selection
                 Text(
                   'الموقع',
-                  style: theme.textTheme.titleSmall?.copyWith(
+                  style: TextStyle(
                     fontFamily: 'ReadexPro',
                     fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade50,
+                    color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200,
+                      color: Colors.grey.shade200,
                     ),
                   ),
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.location_on_outlined, color: theme.primaryColor),
+                          Icon(Icons.location_on_outlined, color: AppColors.mainButton),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               'يرجى تحديد موقعك',
-                              style: theme.textTheme.bodyMedium?.copyWith(
+                              style: TextStyle(
                                 fontFamily: 'ReadexPro',
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ),
@@ -211,8 +220,8 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
     required IconData icon,
     required bool isSelected,
   }) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return InkWell(
       onTap: () => setState(() => _selectedGender = value),
@@ -221,13 +230,13 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? theme.primaryColor
-              : (isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade50),
+              ? AppColors.mainButton
+              : Colors.grey.shade50,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
-                ? theme.primaryColor
-                : (isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200),
+                ? AppColors.mainButton
+                : Colors.grey.shade200,
           ),
         ),
         child: Column(
@@ -251,3 +260,9 @@ class _AdditionalInfoBottomSheetState extends State<AdditionalInfoBottomSheet> {
     );
   }
 }
+
+
+
+
+
+

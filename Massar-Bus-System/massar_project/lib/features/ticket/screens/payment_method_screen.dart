@@ -45,8 +45,8 @@ class PaymentMethodScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return BlocListener<CheckoutBloc, CheckoutState>(
       listener: (context, state) {
@@ -76,12 +76,12 @@ class PaymentMethodScreen extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: theme.appBarTheme.backgroundColor,
+              backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+                icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
                 onPressed: () => context.pop(),
               ),
               title: Column(
@@ -91,7 +91,7 @@ class PaymentMethodScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: theme.textTheme.titleLarge?.color,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   Text(
@@ -99,7 +99,7 @@ class PaymentMethodScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: theme.textTheme.bodySmall?.color,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -119,7 +119,7 @@ class PaymentMethodScreen extends StatelessWidget {
                     height: 50,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xff1570EF), Color(0xff2E90FA)],
+                        colors: [AppColors.mainButton, Color(0xff2E90FA)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -165,11 +165,9 @@ class PaymentMethodScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
+                        color: Colors.white,
                         border: Border.all(
-                          color: isDark
-                              ? Colors.white.withOpacity(0.1)
-                              : const Color(0xffE5D2D2),
+                          color: const Color(0xffE5D2D2),
                           width: .7,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -182,7 +180,7 @@ class PaymentMethodScreen extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 16,
-                              color: theme.textTheme.bodyLarge?.color,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -200,9 +198,7 @@ class PaymentMethodScreen extends StatelessWidget {
                                   Text(
                                     "التوقف الحالي",
                                     style: TextStyle(
-                                      color: isDark
-                                          ? theme.textTheme.bodySmall?.color
-                                          : const Color(0xff667085),
+                                      color: AppColors.textSecondary,
                                       fontSize: 10,
                                     ),
                                   ),
@@ -210,7 +206,7 @@ class PaymentMethodScreen extends StatelessWidget {
                                     ticket.fromStation.name,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: theme.textTheme.bodyLarge?.color,
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -222,21 +218,17 @@ class PaymentMethodScreen extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? Colors.white.withOpacity(0.05)
-                                      : const Color(0xffF9FAFB),
+                                  color: const Color(0xffF9FAFB),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.1)
-                                        : const Color(0xffE5D2D2),
+                                    color: const Color(0xffE5D2D2),
                                   ),
                                 ),
                                 child: Text(
                                   "الوصول المتوقع: ${ticket.arrivalTime}",
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: theme.textTheme.bodySmall?.color,
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                               ),
@@ -253,9 +245,7 @@ class PaymentMethodScreen extends StatelessWidget {
                                   Text(
                                     "الوجهة",
                                     style: TextStyle(
-                                      color: isDark
-                                          ? theme.textTheme.bodySmall?.color
-                                          : const Color(0xff667085),
+                                      color: AppColors.textSecondary,
                                       fontSize: 10,
                                     ),
                                   ),
@@ -263,7 +253,7 @@ class PaymentMethodScreen extends StatelessWidget {
                                     ticket.toStation.name,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: theme.textTheme.bodyLarge?.color,
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -299,9 +289,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: const Color(0xffF2F4F7),
                   ),
 
                   // Payment Method Selector
@@ -317,7 +305,7 @@ class PaymentMethodScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: theme.textTheme.titleLarge?.color,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ),
@@ -328,9 +316,9 @@ class PaymentMethodScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: theme.dividerColor),
+                        border: Border.all(color: AppColors.grey200),
                       ),
                       child: Column(
                         children: [
@@ -346,7 +334,7 @@ class PaymentMethodScreen extends StatelessWidget {
                                 "Mandiri VA",
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: theme.textTheme.bodyLarge?.color,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                               const Spacer(),
@@ -362,16 +350,14 @@ class PaymentMethodScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Divider(thickness: 0.3, color: theme.dividerColor),
+                          Divider(thickness: 0.3, color: AppColors.grey200),
                           Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   "استخدام الحساب الافتراضي سيضيف رسوم إضافية",
                                   style: TextStyle(
-                                    color: isDark
-                                        ? theme.textTheme.bodySmall?.color
-                                        : const Color(0xff667085),
+                                    color: AppColors.textSecondary,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -382,17 +368,15 @@ class PaymentMethodScreen extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: isDark
-                                      ? Colors.white.withOpacity(0.05)
-                                      : const Color(0xffF9FAFB),
-                                  border: Border.all(color: theme.dividerColor),
+                                  color: const Color(0xffF9FAFB),
+                                  border: Border.all(color: AppColors.grey200),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
                                   " 800+ ريال",
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: theme.textTheme.bodyMedium?.color,
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                               ),
@@ -407,9 +391,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: const Color(0xffF2F4F7),
                   ),
 
                   // Promo Code
@@ -420,8 +402,8 @@ class PaymentMethodScreen extends StatelessWidget {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
-                        border: Border.all(color: theme.dividerColor),
+                        color: Colors.white,
+                        border: Border.all(color: AppColors.grey200),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: ListTile(
@@ -453,8 +435,8 @@ class PaymentMethodScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
-                        border: Border.all(color: theme.dividerColor),
+                        color: Colors.white,
+                        border: Border.all(color: AppColors.grey200),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
@@ -464,7 +446,7 @@ class PaymentMethodScreen extends StatelessWidget {
                             "معلومة مهمة",
                             style: TextStyle(
                               fontSize: 14,
-                              color: theme.textTheme.bodyLarge?.color,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -473,9 +455,7 @@ class PaymentMethodScreen extends StatelessWidget {
                             "الدفع يتم فقط عن طريق بنك بن دول ولا يمكن استبداله",
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark
-                                  ? theme.textTheme.bodySmall?.color
-                                  : const Color(0xff667085),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -488,7 +468,7 @@ class PaymentMethodScreen extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          color: theme.textTheme.bodySmall?.color,
+                          color: AppColors.textSecondary,
                           fontSize: 12,
                         ),
                         children: const [
@@ -518,9 +498,7 @@ class PaymentMethodScreen extends StatelessWidget {
                   Divider(
                     height: 20,
                     thickness: 8,
-                    color: isDark
-                        ? Colors.black.withOpacity(0.3)
-                        : const Color(0xffF2F4F7),
+                    color: const Color(0xffF2F4F7),
                   ),
 
                   // Price Breakdown
@@ -536,7 +514,7 @@ class PaymentMethodScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Container(
-              color: theme.scaffoldBackgroundColor,
+              color: Colors.white,
               padding: const EdgeInsets.all(16),
               child: BlocBuilder<CheckoutBloc, CheckoutState>(
                 builder: (context, state) {
@@ -556,7 +534,7 @@ class PaymentMethodScreen extends StatelessWidget {
                               );
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff1570EF),
+                        backgroundColor: AppColors.mainButton,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -596,9 +574,15 @@ class PaymentMethodScreen extends StatelessWidget {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 12,
-          color: Color(0xff1570EF),
+          color: AppColors.mainButton,
         ),
       ),
     );
   }
 }
+
+
+
+
+
+

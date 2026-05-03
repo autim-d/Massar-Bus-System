@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart'; // تأكد من إضافة مكتبة lucide_icons
 
@@ -8,8 +9,8 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -19,12 +20,10 @@ class HomeSearchBar extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           decoration: BoxDecoration(
-            color: theme.cardTheme.color,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(12.0),
             border: Border.all(
-              color: isDark
-                  ? Colors.white.withOpacity(0.1)
-                  : const Color(0xFFE4E7EC),
+              color: const Color(0xFFE4E7EC),
               width: 1,
             ),
             boxShadow: [
@@ -45,7 +44,7 @@ class HomeSearchBar extends StatelessWidget {
                   Icon(
                     LucideIcons.search,
                     size: 20,
-                    color: isDark ? Colors.grey[400] : const Color(0xFF667085),
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 12),
                   Text(
@@ -53,7 +52,7 @@ class HomeSearchBar extends StatelessWidget {
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: 15,
-                      color: theme.textTheme.bodyMedium?.color?.withOpacity(
+                      color: AppColors.textSecondary?.withOpacity(
                         0.7,
                       ),
                       fontWeight: FontWeight.w500,
@@ -66,7 +65,7 @@ class HomeSearchBar extends StatelessWidget {
               Icon(
                 LucideIcons.slidersHorizontal,
                 size: 18,
-                color: const Color(0xFF1570EF).withOpacity(0.6),
+                color: AppColors.mainButton.withOpacity(0.6),
               ),
             ],
           ),
@@ -75,3 +74,7 @@ class HomeSearchBar extends StatelessWidget {
     );
   }
 }
+
+
+
+

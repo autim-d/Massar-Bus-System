@@ -68,7 +68,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xff1570EF), Color(0xff2E90FA)],
+                      colors: [AppColors.mainButton, Color(0xff2E90FA)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -204,7 +204,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                                       Text(
                                         "التوقف الحالي",
                                         style: TextStyle(
-                                          color: Color(0xff667085),
+                                          color: AppColors.textSecondary,
                                           fontSize: 10,
                                         ),
                                       ),
@@ -264,7 +264,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                                                   child: Text(
                                                     "الوجهة",
                                                     style: TextStyle(
-                                                      color: Color(0xff667085),
+                                                      color: AppColors.textSecondary,
                                                       fontSize: 10,
                                                     ),
                                                   ),
@@ -391,7 +391,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                               child: Text(
                                 "استخدام الحساب الافتراضي سيضيف رسوم إضافية",
                                 style: TextStyle(
-                                  color: Color(0xff667085),
+                                  color: AppColors.textSecondary,
                                   fontSize: 12,
                                 ),
                               ),
@@ -405,7 +405,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: Color(0xffF9FAFB),
                                   border: Border.all(
-                                    color: Color(0xffEAECF0),
+                                    color: AppColors.grey200,
                                     width: 1,
                                   ),
                                   borderRadius: BorderRadius.circular(20),
@@ -435,7 +435,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                     width: 360,
                     height: 55,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffEAECF0), width: 1),
+                      border: Border.all(color: AppColors.grey200, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListTile(
@@ -469,7 +469,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                         width: 375,
                         height: 70,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xffEAECF0), width: 1),
+                          border: Border.all(color: AppColors.grey200, width: 1),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Column(
@@ -494,7 +494,7 @@ class PaymentContinuationScreen extends StatelessWidget {
                               "الدفع يتم فقط عن طريق بنك بن دول ولا يمكن استبداله ",
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Color(0xff667085),
+                                color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w200,
                               ),
                             ),
@@ -582,10 +582,13 @@ class PaymentContinuationScreen extends StatelessWidget {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (builder)=>PaymentSuccessPage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PaymentSuccessScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff1570EF),
+                  backgroundColor: AppColors.mainButton,
                 ),
                 child: const Text(
                   "الدفع باستخدام بن دول باي",
@@ -608,7 +611,7 @@ class PaymentContinuationScreen extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: isTotal ?  Colors.black :Color(0xff667085) , 
+              color: isTotal ?  Colors.black :AppColors.textSecondary , 
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.w600 : FontWeight.w400,
             ),
@@ -619,7 +622,7 @@ class PaymentContinuationScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 17 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w400,
-              color: isTotal ? Color(0xff1570EF) : Colors.black,
+              color: isTotal ? AppColors.mainButton : Colors.black,
             ),
           ),
         ],
@@ -673,3 +676,6 @@ class PaymentContinuationScreen extends StatelessWidget {
     );
   }
 }
+
+
+

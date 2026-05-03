@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // إضافة الاستيراد
@@ -76,11 +77,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFF1D1D1D),
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.close, color: const Color(0xFF1D1D1D)),
+                          icon: Icon(Icons.close, color: AppColors.textPrimary),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
@@ -88,12 +89,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: 12),
                     Text(
                       'الاسم الأول',
-                      style: TextStyle(color: const Color(0xFF1D1D1D)),
+                      style: TextStyle(color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _firstController,
-                      style: TextStyle(color: const Color(0xFF1D1D1D)),
+                      style: TextStyle(color: AppColors.textPrimary),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -105,13 +106,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'الاسم الأخير',
-                      style: TextStyle(color: const Color(0xFF1D1D1D)),
+                      style: TextStyle(color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _lastController,
                       enabled: !noLastName,
-                      style: TextStyle(color: const Color(0xFF1D1D1D)),
+                      style: TextStyle(color: AppColors.textPrimary),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -131,7 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Text(
                           'ليس لدي اسم أخير',
                           style: TextStyle(
-                            color: const Color(0xFF6B7683),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -196,7 +197,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Text(
                 'تعديل رقم الجوال',
                 style: TextStyle(
-                  color: const Color(0xFF1D1D1D),
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -204,7 +205,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               TextField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                style: TextStyle(color: const Color(0xFF1D1D1D)),
+                style: TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -261,13 +262,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               title: Text(
                 'حسابي',
                 style: TextStyle(
-                  color: const Color(0xFF1D1D1D),
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               backgroundColor: Colors.white,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: const Color(0xFF1D1D1D)),
+                icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -277,7 +278,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSectionHeader(
-                    theme,
                     'صورتي',
                     () => _openEditPhotoPage(user.profileImage),
                   ),
@@ -295,7 +295,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   const SizedBox(height: 12),
                   _buildSectionHeader(
-                    theme,
                     'اسمك',
                     () => _openEditNameSheet(user),
                   ),
@@ -303,12 +302,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     '${user.firstName} ${user.lastName}'.trim(),
                     style: TextStyle(
                       fontSize: 16,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 12),
                   _buildSectionHeader(
-                    theme,
                     'رقم الجوال',
                     () => _openEditPhoneSheet(user),
                   ),
@@ -316,7 +314,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     user.phoneNumber,
                     style: TextStyle(
                       fontSize: 16,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ],
@@ -329,13 +327,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildSectionHeader(
-    ThemeData theme,
     String title,
     VoidCallback onEdit,
   ) {
     return Column(
       children: [
-        Container(height: 1, color: const Color(0xFFEAECF0)),
+        Container(height: 1, color: AppColors.grey200),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -344,7 +341,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF1D1D1D),
+                color: AppColors.textPrimary,
               ),
             ),
             TextButton(
@@ -360,6 +357,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 }
+
+
+
+
+
+
 
 
 

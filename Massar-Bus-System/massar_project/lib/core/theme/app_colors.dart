@@ -36,4 +36,7 @@ class AppColors {
   static const Color mainButton = Color(0xFF1570EF);
   static const Color grey200 = Color(0xFFE9ECEF);
   static const Color buttonPhone = Color(0xFFffffff);
+  static const Color secondaryOrange = Color(0xFFFF9D00);
+  static const Color indicatorInactive = Color(0xFFD1D1D1);
+  static const Color primaryBlue = Color(0xFF1570EF);
 }

@@ -1,5 +1,7 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // إضافة الاستيراد
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
 import 'package:massar_project/features/auth/bloc/auth_event.dart';
 import 'package:massar_project/features/auth/bloc/auth_state.dart';
@@ -32,29 +34,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: theme.appBarTheme.backgroundColor,
+          backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
           title: Text(
             'تغيير كلمة المرور',
             style: TextStyle(
-              color: theme.textTheme.titleLarge?.color,
+              color: AppColors.textPrimary,
               fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'ReadexPro',
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: theme.iconTheme.color),
-            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
+            onPressed: () => context.pop(),
           ),
         ),
         // استخدام BlocConsumer للاستماع للنتائج وتغيير الواجهة
@@ -93,9 +92,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       'الرجاء إدخال كلمة المرور الحالية وكلمة المرور الجديدة.',
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark
-                            ? theme.textTheme.bodySmall?.color
-                            : const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                         fontFamily: 'ReadexPro',
                       ),
                     ),
@@ -120,7 +117,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _isCurrentPasswordVisible
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: AppColors.textSecondary,
                           size: 20,
                         ),
                         onPressed: () => setState(
@@ -153,7 +150,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _isNewPasswordVisible
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: AppColors.textSecondary,
                           size: 20,
                         ),
                         onPressed: () => setState(
@@ -185,7 +182,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _isConfirmPasswordVisible
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: AppColors.textSecondary,
                           size: 20,
                         ),
                         onPressed: () => setState(
@@ -213,7 +210,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1570EF),
+                        backgroundColor: AppColors.mainButton,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

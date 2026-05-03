@@ -26,24 +26,24 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
     final locationState = ref.watch(searchLocationProvider);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'البحث عن الباص',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
-            color: theme.textTheme.titleLarge?.color ?? AppColors.textPrimary,
+            color: AppColors.textPrimary ?? AppColors.textPrimary,
           ),
         ),
-        backgroundColor: theme.appBarTheme.backgroundColor,
+        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        iconTheme: theme.iconTheme,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -52,9 +52,9 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.cardTheme.color,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: theme.dividerColor),
+                border: Border.all(color: AppColors.grey200),
               ),
               child: Column(
                 children: [
@@ -106,7 +106,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
-                  color: theme.textTheme.bodyLarge?.color,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -114,13 +114,13 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: theme.cardTheme.color,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.dividerColor),
+                border: Border.all(color: AppColors.grey200),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.location_on, color: theme.iconTheme.color),
+                  Icon(Icons.location_on, color: AppColors.textPrimary),
                   const SizedBox(width: 12),
                   const Text(
                     'المساكن',
@@ -133,7 +133,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
                   Text(
                     'حفظ الموقع',
                     style: TextStyle(
-                      color: theme.textTheme.bodySmall?.color,
+                      color: AppColors.textSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -161,7 +161,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
             itemBuilder: (context, index) {
               final place = fallbackPlaces[index];
               return ListTile(
-                leading: const Icon(Icons.location_on, color: AppColors.primaryBlue),
+                leading: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
                 title: Text(
                   place,
                   style: const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w500),
@@ -183,7 +183,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
     required String value,
     required VoidCallback onTap,
   }) {
-    final theme = Theme.of(context);
+    
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -195,7 +195,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
               label,
               style: TextStyle(
                 fontSize: 14,
-                color: theme.textTheme.bodySmall?.color,
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 4),
@@ -204,7 +204,7 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: theme.textTheme.bodyLarge?.color,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -213,3 +213,10 @@ class _SearchBusScreenState extends ConsumerState<SearchBusScreen> {
     );
   }
 }
+
+
+
+
+
+
+

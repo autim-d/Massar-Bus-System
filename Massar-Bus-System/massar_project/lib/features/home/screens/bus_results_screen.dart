@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,8 +29,8 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     // تم التعديل هنا: تمرير criteria إلى الـ Provider لجلب بيانات التاريخ المحدد
     final ticketsAsync = ref.watch(busSearchProvider(searchCriteria));
@@ -37,9 +38,9 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl, // تغيير الاتجاه للعربية
       child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: isDark ? const Color(0xFF1D2939) : Colors.white,
+          backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.close),
@@ -54,7 +55,7 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
           children: [
             // شريط اختيار التاريخ
             Container(
-              color: isDark ? const Color(0xFF1D2939) : Colors.white,
+              color: Colors.white,
               height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -109,7 +110,7 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
                 },
                 // حالة التحميل (Loading)
                 loading: () => const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF1570EF)),
+                  child: CircularProgressIndicator(color: AppColors.mainButton),
                 ),
                 // حالة الخطأ (Error)
                 error: (error, stack) => Center(
@@ -162,3 +163,9 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
     );
   }
 }
+
+
+
+
+
+

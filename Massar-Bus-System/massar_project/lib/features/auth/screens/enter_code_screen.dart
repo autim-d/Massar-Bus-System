@@ -199,8 +199,8 @@ class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
           backgroundColor: AppColors.backgroundDark,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.secondaryColor),
-            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
+            onPressed: () => context.pop(),
           ),
         ),
         body: SafeArea(
@@ -215,21 +215,14 @@ class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'لقد أرسلنا رسالة إلى رقمك',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                  ),
+                  'لقد أرسلنا رمز المكون من 4 أرقام إلى',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   phone,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.secondaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 28),
@@ -248,7 +241,7 @@ class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
 
                 // عرض مؤشر التحميل أثناء الانتظار، أو زر إعادة الإرسال
                 if (_isLoading)
-                  const CircularProgressIndicator(color: AppColors.mainButton)
+                  const CircularProgressIndicator()
                 else
                   Center(
                     child: RichText(
@@ -263,8 +256,9 @@ class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
                           TextSpan(
                             text: 'أعد الإرسال',
                             style: const TextStyle(
-                              color: AppColors.textEdit,
-                              fontWeight: FontWeight.w700,
+                              color: AppColors.mainButton,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = _onResend,
@@ -282,3 +276,7 @@ class _EnterCodeScreenState extends ConsumerState<EnterCodeScreen> {
     );
   }
 }
+
+
+
+

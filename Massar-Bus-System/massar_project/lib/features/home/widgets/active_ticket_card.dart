@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:massar_project/features/home/widgets/e_ticket_modal.dart';
@@ -9,8 +10,8 @@ class ActiveTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
@@ -36,19 +37,17 @@ class ActiveTicketCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: theme.textTheme.bodyLarge?.color,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: theme.cardTheme.color,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
                   border: Border.all(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.1)
-                        : const Color(0xFFE4E7EC),
+                    color: const Color(0xFFE4E7EC),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -68,7 +67,7 @@ class ActiveTicketCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: theme.textTheme.bodyLarge?.color,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -101,20 +100,16 @@ class ActiveTicketCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF1D2939)
-                                : Colors.white,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(6.0),
                             border: Border.all(
-                              color: isDark
-                                  ? Colors.white.withOpacity(0.1)
-                                  : const Color(0xFFE4E7EC),
+                              color: const Color(0xFFE4E7EC),
                             ),
                           ),
                           child: Text(
                             'مختلط',
                             style: TextStyle(
-                              color: theme.textTheme.bodyMedium?.color,
+                              color: AppColors.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -148,9 +143,7 @@ class ActiveTicketCard extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     height: 1.5,
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.1)
-                                        : const Color(0xFFF2F4F7),
+                                    color: const Color(0xFFF2F4F7),
                                   ),
                                 ),
                                 Container(
@@ -159,14 +152,10 @@ class ActiveTicketCard extends StatelessWidget {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: isDark
-                                        ? const Color(0xFF1D2939)
-                                        : const Color(0xFFF9FAFB),
+                                    color: const Color(0xFFF9FAFB),
                                     borderRadius: BorderRadius.circular(12.0),
                                     border: Border.all(
-                                      color: isDark
-                                          ? Colors.white.withOpacity(0.1)
-                                          : const Color(0xFFE4E7EC),
+                                      color: const Color(0xFFE4E7EC),
                                     ),
                                   ),
                                   child: Text(
@@ -174,16 +163,14 @@ class ActiveTicketCard extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w600,
-                                      color: theme.textTheme.bodyMedium?.color,
+                                      color: AppColors.textSecondary,
                                     ),
                                   ),
                                 ),
                                 Expanded(
                                   child: Container(
                                     height: 1.5,
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.1)
-                                        : const Color(0xFFF2F4F7),
+                                    color: const Color(0xFFF2F4F7),
                                   ),
                                 ),
                               ],
@@ -209,7 +196,7 @@ class ActiveTicketCard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.directions_bus_rounded,
-                          color: theme.textTheme.bodyMedium?.color,
+                          color: AppColors.textSecondary,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
@@ -218,7 +205,7 @@ class ActiveTicketCard extends StatelessWidget {
                             busInfo,
                             style: TextStyle(
                               fontSize: 13,
-                              color: theme.textTheme.bodyMedium?.color,
+                              color: AppColors.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -236,7 +223,7 @@ class ActiveTicketCard extends StatelessWidget {
                           ETicketModal.show(context, bookingCode: bookingCode);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1570EF),
+                          backgroundColor: AppColors.mainButton,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -271,7 +258,7 @@ class ActiveTicketCard extends StatelessWidget {
     required String subtitle,
     required CrossAxisAlignment crossAxisAlignment,
   }) {
-    final theme = Theme.of(context);
+    
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +274,7 @@ class ActiveTicketCard extends StatelessWidget {
               title,
               style: TextStyle(
                 fontSize: 11,
-                color: theme.textTheme.bodyMedium?.color,
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -295,7 +282,7 @@ class ActiveTicketCard extends StatelessWidget {
               subtitle,
               style: TextStyle(
                 fontSize: 14,
-                color: theme.textTheme.bodyLarge?.color,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -321,3 +308,7 @@ class ActiveTicketCard extends StatelessWidget {
     );
   }
 }
+
+
+
+

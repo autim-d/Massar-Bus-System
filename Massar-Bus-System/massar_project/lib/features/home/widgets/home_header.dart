@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -14,7 +15,7 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
@@ -46,7 +47,7 @@ class HomeHeader extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.light_mode_outlined,
-                    color: const Color(0xFF1D1D1D),
+                    color: AppColors.textPrimary,
                     size: 24,
                   ),
                 ),
@@ -72,7 +73,7 @@ class HomeHeader extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.notifications_none_rounded,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                       size: 24,
                     ),
                   ),
@@ -117,7 +118,7 @@ class HomeHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF6B7683),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -126,7 +127,7 @@ class HomeHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1D1D1D),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ],
@@ -152,7 +153,7 @@ class HomeHeader extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.menu_rounded,
-                    color: const Color(0xFF1D1D1D),
+                    color: AppColors.textPrimary,
                     size: 24,
                   ),
                 ),
@@ -164,3 +165,6 @@ class HomeHeader extends StatelessWidget {
     );
   }
 }
+
+
+

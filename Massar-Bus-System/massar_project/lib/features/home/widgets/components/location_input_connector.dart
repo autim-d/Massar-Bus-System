@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class LocationInputConnector extends StatelessWidget {
@@ -22,14 +23,14 @@ class LocationInputConnector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
     return Container(
       decoration: BoxDecoration(
-        color: theme.cardTheme.color,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+          color: const Color(0xFFE4E7EC),
         ),
         boxShadow: [
           BoxShadow(
@@ -54,13 +55,13 @@ class LocationInputConnector extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: 'موقعك الحالي',
                       hintStyle: TextStyle(
-                        color: theme.textTheme.bodyLarge?.color,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                       border: InputBorder.none,
                     ),
                     style: TextStyle(
-                      color: theme.textTheme.bodyLarge?.color,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -85,7 +86,7 @@ class LocationInputConnector extends StatelessWidget {
               Expanded(
                 child: Container(
                   height: 1,
-                  color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+                  color: const Color(0xFFE4E7EC),
                   margin: const EdgeInsets.only(left: 44),
                 ),
               ),
@@ -99,7 +100,7 @@ class LocationInputConnector extends StatelessWidget {
                       width: 2,
                       height: 3,
                       margin: const EdgeInsets.only(bottom: 2),
-                      color: isDark ? Colors.white.withOpacity(0.2) : const Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                     ),
                   ),
                 ),
@@ -121,12 +122,12 @@ class LocationInputConnector extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: 'البحث عن وجهة',
                       hintStyle: TextStyle(
-                        color: isDark ? theme.textTheme.bodySmall?.color : const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                       ),
                       border: InputBorder.none,
                     ),
                     style: TextStyle(
-                      color: theme.textTheme.bodyLarge?.color,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -135,7 +136,7 @@ class LocationInputConnector extends StatelessWidget {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: theme.cardTheme.color,
+                    color: Colors.white,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: const Color(0xFFE85C0D), // Orange
@@ -151,3 +152,7 @@ class LocationInputConnector extends StatelessWidget {
     );
   }
 }
+
+
+
+

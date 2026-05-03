@@ -114,6 +114,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     UpdateProfileSubmitted event,
     Emitter<AuthState> emit,
   ) async {
+    final previousState = state;
     emit(const AuthLoading());
 
     try {
@@ -127,8 +128,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(AuthError(message: e.toString().replaceAll('Exception: ', '')));
       // في حال الخطأ، نعيد المستخدم لحالته السابقة إذا كان لدينا بيانات قديمة
-      if (state is ProfileUpdateSuccess) {
-         emit(AuthAuthenticated.fromModel((state as ProfileUpdateSuccess).user));
+      if (previousState is AuthAuthenticated) {
+        emit(previousState);
+      } else if (previousState is ProfileUpdateSuccess) {
+        emit(AuthAuthenticated.fromModel(previousState.user));
       }
     }
   }
@@ -256,3 +259,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 }
+

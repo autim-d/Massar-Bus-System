@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -47,8 +48,8 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +59,7 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: theme.textTheme.titleLarge?.color,
+            color: AppColors.textPrimary,
             fontFamily: 'ReadexPro',
           ),
         ),
@@ -66,10 +67,10 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
         Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: theme.cardTheme.color,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16.0),
             border: Border.all(
-              color: isDark ? Colors.white.withOpacity(0.1) : const Color(0xFFE4E7EC),
+              color: const Color(0xFFE4E7EC),
             ),
             boxShadow: [
               BoxShadow(
@@ -89,7 +90,7 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
                   prefixIcon: const Icon(LucideIcons.user),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: theme.dividerColor),
+                    borderSide: BorderSide(color: AppColors.grey200),
                   ),
                 ),
               ),
@@ -103,7 +104,7 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
                   prefixIcon: const Icon(LucideIcons.phone),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: theme.dividerColor),
+                    borderSide: BorderSide(color: AppColors.grey200),
                   ),
                 ),
               ),
@@ -140,3 +141,7 @@ class _PassengerInfoCardState extends State<PassengerInfoCard> {
     );
   }
 }
+
+
+
+

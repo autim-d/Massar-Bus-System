@@ -39,7 +39,7 @@ class TripModel {
       arrivalTime: json['arrivalTime'] ?? '',
       from: json['fromStation']?['name'] ?? '',
       to: json['toStation']?['name'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
       type: (json['isMixed'] == true)
           ? 'مختلط'
           : (json['isLadiesOnly'] == true)
@@ -89,3 +89,5 @@ class TripModel {
     );
   }
 }
+
+

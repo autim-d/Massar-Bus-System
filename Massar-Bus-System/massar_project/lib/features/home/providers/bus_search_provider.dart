@@ -34,7 +34,7 @@ final busSearchProvider = FutureProvider.family<List<BusTicketModel>, BusSearchC
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       // Laravel Resource::collection يغلف النتائج داخل مفتاح 'data'
-      final List data = decoded is List ? decoded : (decoded['data'] ?? []);
+      final List data = decoded is List ? decoded : decoded['data'] ?? [];
       return data.map((json) => BusTicketModel.fromJson(json)).toList();
     }
 
@@ -43,3 +43,4 @@ final busSearchProvider = FutureProvider.family<List<BusTicketModel>, BusSearchC
     throw Exception('فشل الاتصال بالخادم أو لا توجد بيانات متاحة.');
   }
 });
+

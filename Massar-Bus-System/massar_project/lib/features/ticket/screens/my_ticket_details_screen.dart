@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +24,8 @@ class MyTicketDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     // For demo purposes, we'll hardcode some of the route data since it's an E-Ticket view.
     final String dateString = _formatArabicDate(session.transactionDate);
@@ -43,12 +44,12 @@ class MyTicketDetailsScreen extends StatelessWidget {
             );
           },
           child: Scaffold(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: theme.appBarTheme.backgroundColor,
+              backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
+                icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -60,7 +61,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
               title: Text(
                 "تفاصيل التذكرة",
                 style: TextStyle(
-                    color: theme.textTheme.titleLarge?.color,
+                    color: AppColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -78,7 +79,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Divider(
                         thickness: 2,
-                        color: theme.dividerColor),
+                        color: AppColors.grey200),
                     const SizedBox(height: 20),
 
                     // 2. Route Top Summary
@@ -87,7 +88,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 16,
-                          color: theme.textTheme.titleLarge?.color),
+                          color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -99,13 +100,13 @@ class MyTicketDetailsScreen extends StatelessWidget {
                           children: [
                             Text("موقف",
                                 style: TextStyle(
-                                    color: theme.textTheme.bodySmall?.color,
+                                    color: AppColors.textSecondary,
                                     fontSize: 10)),
                             Text("K. Bali",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: theme.textTheme.bodyLarge?.color)),
+                                    color: AppColors.textPrimary)),
                           ],
                         ),
                         const Spacer(),
@@ -113,14 +114,14 @@ class MyTicketDetailsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF9FAFB),
+                            color: const Color(0xffF9FAFB),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: theme.dividerColor),
+                            border: Border.all(color: AppColors.grey200),
                           ),
                           child: Text("الوقت المقدر: 30 دقيقة",
                               style: TextStyle(
                                   fontSize: 10,
-                                  color: theme.textTheme.bodySmall?.color)),
+                                  color: AppColors.textSecondary)),
                         ),
                         const Spacer(),
                         const Icon(Icons.place,
@@ -131,13 +132,13 @@ class MyTicketDetailsScreen extends StatelessWidget {
                           children: [
                             Text("موقف",
                                 style: TextStyle(
-                                    color: theme.textTheme.bodySmall?.color,
+                                    color: AppColors.textSecondary,
                                     fontSize: 10)),
                             Text("Senen",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: theme.textTheme.bodyLarge?.color)),
+                                    color: AppColors.textPrimary)),
                           ],
                         ),
                       ],
@@ -146,18 +147,18 @@ class MyTicketDetailsScreen extends StatelessWidget {
                     Row(
                       children: [
                         Icon(Icons.directions_bus,
-                            color: theme.textTheme.bodySmall?.color, size: 20),
+                            color: AppColors.textSecondary, size: 20),
                         const SizedBox(width: 8),
                         Text("باص 01",
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: theme.textTheme.bodyLarge?.color)),
+                                color: AppColors.textPrimary)),
                         const SizedBox(width: 16),
                         Text("الوصول الساعة 15:30 إلى موقف كامبونج بالي",
                             style: TextStyle(
                                 fontSize: 12,
-                                color: theme.textTheme.bodySmall?.color)),
+                                color: AppColors.textSecondary)),
                       ],
                     ),
 
@@ -168,7 +169,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: theme.textTheme.titleLarge?.color)),
+                            color: AppColors.textPrimary)),
                     const SizedBox(height: 10),
                     const MapPlaceholderCard(),
 
@@ -178,7 +179,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: theme.dividerColor),
+                        border: Border.all(color: AppColors.grey200),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -191,9 +192,9 @@ class MyTicketDetailsScreen extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: theme.textTheme.titleLarge?.color)),
+                                      color: AppColors.textPrimary)),
                               Icon(Icons.keyboard_arrow_down,
-                                  color: theme.textTheme.bodySmall?.color),
+                                  color: AppColors.textSecondary),
                             ],
                           ),
                           const SizedBox(height: 20),
@@ -213,7 +214,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: theme.textTheme.titleLarge?.color)),
+                            color: AppColors.textPrimary)),
                     const SizedBox(height: 10),
                     BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
@@ -231,7 +232,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                         return Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            border: Border.all(color: theme.dividerColor),
+                            border: Border.all(color: AppColors.grey200),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -241,17 +242,17 @@ class MyTicketDetailsScreen extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: theme.textTheme.bodyLarge?.color)),
+                                      color: AppColors.textPrimary)),
                               const SizedBox(height: 4),
                               Text(email,
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: theme.textTheme.bodySmall?.color)),
+                                      color: AppColors.textSecondary)),
                               const SizedBox(height: 4),
                               Text(phone,
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: theme.textTheme.bodySmall?.color)),
+                                      color: AppColors.textSecondary)),
                             ],
                           ),
                         );
@@ -264,9 +265,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: isDark
-                                ? Colors.orange.shade800
-                                : Colors.orange.shade300),
+                            color: Colors.orange.shade300),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -295,7 +294,7 @@ class MyTicketDetailsScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Icon(Icons.verified_user_outlined,
-                                    color: theme.textTheme.bodyLarge?.color),
+                                    color: AppColors.textPrimary),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
@@ -304,13 +303,13 @@ class MyTicketDetailsScreen extends StatelessWidget {
                                       Text("رضا العميل",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: theme.textTheme.bodyLarge?.color)),
+                                              color: AppColors.textPrimary)),
                                       const SizedBox(height: 4),
                                       Text(
                                         "احصل على استرداد يصل إلى 100% في حال واجهت تجربة سيئة خلال رحلتك.",
                                         style: TextStyle(
                                             fontSize: 11,
-                                            color: theme.textTheme.bodySmall?.color),
+                                            color: AppColors.textSecondary),
                                       ),
                                     ],
                                   ),
@@ -342,3 +341,8 @@ class MyTicketDetailsScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+

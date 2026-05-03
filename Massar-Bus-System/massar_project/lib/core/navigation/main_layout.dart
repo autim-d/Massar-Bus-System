@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/ticket/screens/ticket_list_screen.dart';
@@ -15,12 +16,12 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    Home(),
-    TicketScreen(),
-    DetailTicketScreen(),
-    Center(child: Text("Promotion Screen Placeholder")), // Replace with actal later
-    Acount(),
+  final List<Widget> _pages = [
+    const HomeScreen(),
+    const TicketListScreen(),
+    const DetailTicketScreen(),
+    const Center(child: Text("Promotion Screen Placeholder")), // Replace with actual later
+    const AccountScreen(),
   ];
 
   @override
@@ -45,8 +46,8 @@ class _MainLayoutState extends State<MainLayout> {
           type: BottomNavigationBarType.fixed,
           selectedFontSize: 12,
           unselectedFontSize: 12,
-          selectedItemColor: const Color(0xff1570EF),
-          unselectedItemColor: const Color(0xff667085),
+          selectedItemColor: AppColors.mainButton,
+          unselectedItemColor: AppColors.textSecondary,
           showUnselectedLabels: true,
           items: [
             const BottomNavigationBarItem(
@@ -63,7 +64,7 @@ class _MainLayoutState extends State<MainLayout> {
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
-                    color: Color(0xff1570EF),
+                    color: AppColors.mainButton,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.confirmation_number, color: Colors.white),
@@ -85,3 +86,5 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 }
+
+

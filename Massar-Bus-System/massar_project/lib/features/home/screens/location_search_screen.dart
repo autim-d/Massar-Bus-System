@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -106,7 +107,6 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     final stationsAsync = ref.watch(stationsProvider);
 
     return Directionality(
@@ -118,14 +118,14 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.close, color: const Color(0xFF1D1D1D)),
+              icon: Icon(Icons.close, color: AppColors.textPrimary),
               onPressed: () => context.pop(),
             ),
             title: Text(
               "اين تريد الذهاب ؟",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF1D1D1D),
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -152,9 +152,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: false 
-                          ? Colors.white.withOpacity(0.1) 
-                          : const Color(0xFFE4E7EC),
+                      color: const Color(0xFFE4E7EC),
                     ),
                   ),
                   child: Column(
@@ -176,7 +174,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                           prefixIcon: const Icon(Icons.person_outline),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: const Color(0xFFEAECF0)),
+                            borderSide: BorderSide(color: AppColors.grey200),
                           ),
                         ),
                       ),
@@ -190,7 +188,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                           prefixIcon: const Icon(Icons.phone_outlined),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: const Color(0xFFEAECF0)),
+                            borderSide: BorderSide(color: AppColors.grey200),
                           ),
                         ),
                       ),
@@ -219,7 +217,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
 
                       return ListView.separated(
                         itemCount: displayList.length,
-                        separatorBuilder: (_, __) => Divider(color: const Color(0xFFEAECF0)),
+                        separatorBuilder: (context, index) => Divider(color: AppColors.grey200),
                         itemBuilder: (context, index) {
                           final station = displayList[index];
                           return ListTile(
@@ -257,7 +255,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1570EF),
+                    backgroundColor: AppColors.mainButton,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
@@ -278,6 +276,3 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
     );
   }
 }
-
-
-

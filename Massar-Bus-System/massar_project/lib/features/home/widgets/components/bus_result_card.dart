@@ -1,3 +1,4 @@
+import 'package:massar_project/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/bus_ticket_model.dart';
@@ -18,8 +19,8 @@ class BusResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    
+    
 
     return GestureDetector(
       onTap: () {
@@ -34,12 +35,10 @@ class BusResultCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: theme.cardTheme.color,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16.0),
           border: Border.all(
-              color: isDark
-                  ? Colors.white.withOpacity(0.1)
-                  : const Color(0xFFE4E7EC)),
+              color: const Color(0xFFE4E7EC)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -95,7 +94,7 @@ class BusResultCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.directions_bus_rounded,
-                      color: theme.textTheme.bodyMedium?.color,
+                      color: AppColors.textSecondary,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
@@ -106,7 +105,7 @@ class BusResultCard extends StatelessWidget {
                           ticket.busName,
                           style: TextStyle(
                             fontSize: 14,
-                            color: theme.textTheme.bodyLarge?.color,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -114,7 +113,7 @@ class BusResultCard extends StatelessWidget {
                           'وصول في ${ticket.arrivalTime}',
                           style: TextStyle(
                             fontSize: 12,
-                            color: theme.textTheme.bodyMedium?.color,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -136,7 +135,7 @@ class BusResultCard extends StatelessWidget {
                       '/مسافر',
                       style: TextStyle(
                         fontSize: 12,
-                        color: theme.textTheme.bodyMedium?.color,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -149,7 +148,7 @@ class BusResultCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFF1570EF),
+                color: AppColors.mainButton,
                 borderRadius: BorderRadius.circular(8),
               ),
               alignment: Alignment.center,
@@ -169,3 +168,7 @@ class BusResultCard extends StatelessWidget {
     );
   }
 }
+
+
+
+
