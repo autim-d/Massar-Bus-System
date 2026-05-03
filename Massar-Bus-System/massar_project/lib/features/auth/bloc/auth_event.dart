@@ -41,4 +41,29 @@ class GoogleSignInRequested extends AuthEvent {
   const GoogleSignInRequested();
 }
 
+class GetUserDataEvent extends AuthEvent {
+  const GetUserDataEvent();
+}
+
+class SendOtpRequested extends AuthEvent {
+  final String phone;
+  const SendOtpRequested({required this.phone});
+
+  @override
+  List<Object> get props => [phone];
+}
+
+class ChangePasswordRequested extends AuthEvent {
+  final String currentPassword;
+  final String newPassword;
+
+  const ChangePasswordRequested({
+    required this.currentPassword,
+    required this.newPassword,
+  });
+
+  @override
+  List<Object> get props => [currentPassword, newPassword];
+}
+
 

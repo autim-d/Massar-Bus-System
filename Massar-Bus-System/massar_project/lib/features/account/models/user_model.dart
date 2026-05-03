@@ -6,6 +6,7 @@ class UserModel {
   final String email;
   final String nationality;
   final String nationalId;
+  final int unreadNotificationsCount;
 
   UserModel({
     required this.firstName,
@@ -15,6 +16,7 @@ class UserModel {
     required this.email,
     this.nationality = '',
     this.nationalId = '',
+    this.unreadNotificationsCount = 0,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class UserModel {
       email: json['email'] ?? '',
       nationality: json['nationality'] ?? '',
       nationalId: json['identity_number'] ?? '',
+      unreadNotificationsCount: json['unread_notifications_count'] ?? 0,
     );
   }
 
@@ -37,6 +40,7 @@ class UserModel {
     String? email,
     String? nationality,
     String? nationalId,
+    int? unreadNotificationsCount,
   }) {
     return UserModel(
       firstName: firstName ?? this.firstName,
@@ -46,6 +50,7 @@ class UserModel {
       email: email ?? this.email,
       nationality: nationality ?? this.nationality,
       nationalId: nationalId ?? this.nationalId,
+      unreadNotificationsCount: unreadNotificationsCount ?? this.unreadNotificationsCount,
     );
   }
 }

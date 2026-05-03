@@ -7,7 +7,8 @@ import '../providers/search_location_provider.dart';
 import '../models/location_model.dart';
 
 class LocationSearchScreen extends ConsumerStatefulWidget {
-  const LocationSearchScreen({super.key});
+  final bool isOriginInitialFocus;
+  const LocationSearchScreen({super.key, this.isOriginInitialFocus = true});
 
   @override
   ConsumerState<LocationSearchScreen> createState() => _LocationSearchScreenState();
@@ -16,6 +17,8 @@ class LocationSearchScreen extends ConsumerStatefulWidget {
 class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
   late TextEditingController originController;
   late TextEditingController destinationController;
+  late FocusNode originFocusNode;
+  late FocusNode destinationFocusNode;
 
   @override
   void initState() {
@@ -23,12 +26,24 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
     final state = ref.read(searchLocationProvider);
     originController = TextEditingController(text: state.currentLocation?.name ?? '');
     destinationController = TextEditingController(text: state.destination?.name ?? '');
+    originFocusNode = FocusNode();
+    destinationFocusNode = FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.isOriginInitialFocus) {
+        originFocusNode.requestFocus();
+      } else {
+        destinationFocusNode.requestFocus();
+      }
+    });
   }
 
   @override
   void dispose() {
     originController.dispose();
     destinationController.dispose();
+    originFocusNode.dispose();
+    destinationFocusNode.dispose();
     super.dispose();
   }
 
@@ -74,6 +89,10 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
                 LocationInputConnector(
                   originController: originController,
                   destinationController: destinationController,
+                  originFocusNode: originFocusNode,
+                  destinationFocusNode: destinationFocusNode,
+                  onOriginTap: () {},
+                  onDestinationTap: () {},
                   onDestinationSubmitted: _onDestinationSubmitted,
                 ),
                 const SizedBox(height: 16),

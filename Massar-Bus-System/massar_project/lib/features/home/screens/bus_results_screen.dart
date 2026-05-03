@@ -9,7 +9,8 @@ import '../widgets/components/bus_result_card.dart';
 import '../widgets/components/date_price_selector_item.dart';
 
 class BusResultsScreen extends ConsumerStatefulWidget {
-  const BusResultsScreen({super.key});
+  final BusSearchCriteria? criteria;
+  const BusResultsScreen({super.key, this.criteria});
 
   @override
   ConsumerState<BusResultsScreen> createState() => _BusResultsScreenState();
@@ -23,11 +24,15 @@ class _BusResultsScreenState extends ConsumerState<BusResultsScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final locationState = ref.watch(searchLocationProvider);
-    final ticketsAsync = ref.watch(busSearchProvider(BusSearchCriteria(
-      fromId: locationState.currentLocation?.id,
-      toId: locationState.destination?.id,
-      date: selectedDate,
-    )));
+    final searchCriteria = widget.criteria?.copyWith(date: selectedDate) ??
+        BusSearchCriteria(
+          fromId: locationState.currentLocation?.id,
+          toId: locationState.destination?.id,
+          from: locationState.currentLocation?.name ?? '',
+          to: locationState.destination?.name ?? '',
+          date: selectedDate,
+        );
+    final ticketsAsync = ref.watch(busSearchProvider(searchCriteria));
 
     final destinationName =
         locationState.destination?.name ?? 'Monumen Nasional';

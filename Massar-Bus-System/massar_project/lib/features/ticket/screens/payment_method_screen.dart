@@ -427,7 +427,11 @@ class PaymentMethodScreen extends StatelessWidget {
                       onPressed: isLoading
                           ? null
                           : () {
-                              context.read<CheckoutBloc>().add(ProcessPaymentRequested());
+                              context.read<CheckoutBloc>().add(ProcessPaymentRequested(
+                                    tripId: ticket.id,
+                                    passengerName: ticket.passengerName,
+                                    passengerPhone: ticket.passengerPhone,
+                                  ));
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff1570EF),

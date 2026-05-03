@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // إضافة الاستيراد
+import 'package:massar_project/core/widgets/custom_text_field.dart';
 import 'package:massar_project/features/auth/bloc/auth_bloc.dart';
 import 'package:massar_project/features/auth/bloc/auth_event.dart';
 import 'package:massar_project/features/auth/bloc/auth_state.dart';
-import '../../../core/widgets/custom_text_field.dart';
+// import '../../../core/widgets/custom_text_field.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
